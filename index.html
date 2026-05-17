@@ -554,7 +554,27 @@
             document.getElementById('flashcard-content').textContent = data.flashcard.content;
             document.getElementById('flashcard-example').textContent = data.flashcard.example;
             document.getElementById('flashcard-image').src = data.flashcard.image;
-            
+            // Import the functions you need from the SDKs you need
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+  apiKey: "AIzaSyD8rGanWoHluo_k3xVOavwXsLig6up5ZsM",
+  authDomain: "detetives-da-internet.firebaseapp.com",
+  projectId: "detetives-da-internet",
+  storageBucket: "detetives-da-internet.firebasestorage.app",
+  messagingSenderId: "265636817567",
+  appId: "1:265636817567:web:14497a555866ecdba990aa",
+  measurementId: "G-GF09F1DW5D"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
             window.showScreen('flashcard-screen');
         };
 
@@ -575,10 +595,7 @@
                 optionsContainer.appendChild(btn);
             });
 {
-  /* Visit https://firebase.google.com/docs/database/security to learn more about security rules. */
-  "rules": {
-    ".read": false,
-    ".write": false
+https://detetives-da-internet-default-rtdb.firebaseio.com/
   }
 }
             window.showScreen('quiz-screen');
