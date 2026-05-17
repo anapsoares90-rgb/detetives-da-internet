@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -937,97 +936,105 @@
         }
 
         function saveStudentLocal(data) {
-            if (!state.student.docId) {
-                state.student.docId = 'mock-s-' + Date.now();
-                window.mockStudents.push({ id: state.student.docId, ...data });
-            } else {
-                const idx = window.mockStudents.findIndex(s => s.id === state.student.docId);
-                if(idx > -1) window.mockStudents[idx] = { id: state.student.docId, ...data };
-            }
+        if (!state.student.docId) {
+            state.student.docId = 'mock-s-' + Date.now();
+            window.mockStudents.push({ id: state.student.docId, ...data });
+        } else {
+            const idx = window.mockStudents.findIndex(s => s.id === state.student.docId);
+            if(idx > -1) window.mockStudents[idx] = { id: state.student.docId, ...data };
         }
-    </script>
+    }
+</script>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, collection, addDoc, updateDoc, doc, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getDatabase, ref, set, push, get, update, child } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
-        let app, db, auth;
-        try {
-            const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
-            if (firebaseConfig) {
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-            } else {
-                window.useMockDb = true;
-            }
-        } catch (e) {
-            window.useMockDb = true;
+    // =========================================================================
+    // COLE AS SUAS CHAVES AQUI DENTRO (Repare na nova linha 'databaseURL'):
+    const firebaseConfig = {
+        apiKey: "COLE_SUA_API_KEY_AQUI",
+        authDomain: "COLE_SEU_AUTH_DOMAIN_AQUI",
+        databaseURL: "COLE_O_LINK_DO_REALTIME_DATABASE_AQUI", // <-- COLE O LINK QUE COMEÇA COM HTTPS:// AQUI
+        projectId: "COLE_SEU_PROJECT_ID_AQUI",
+        storageBucket: "COLE_SEU_STORAGE_BUCKET_AQUI",
+        messagingSenderId: "COLE_SEU_MESSAGING_SENDER_ID_AQUI",
+        appId: "COLE_SEU_APP_ID_AQUI"
+    };
+    // =========================================================================
+
+    let app, db, auth;
+    try {
+        app = initializeApp(firebaseConfig);
+        db = getDatabase(app);
+        auth = getAuth(app);
+        window.useMockDb = false; 
+    } catch (e) {
+        console.log("Firebase não configurado corretamente. Voltando ao modo offline.", e);
+        window.useMockDb = true;
+    }
+
+    async function initAuth() {
+        if (!auth) return false;
+        if (!auth.currentUser) {
+            await signInAnonymously(auth);
         }
+        return !!auth.currentUser;
+    }
 
-        async function initAuth() {
-            if (!auth) return false;
-            if (!auth.currentUser) {
-                if (typeof __initial_auth_token !== 'undefined') {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-            }
-            return !!auth.currentUser;
-        }
-
-        // Funções DB seguindo Regras Estritas do Contexto (paths com 3 partes: /artifacts/{appId}/public/data/{collection})
+    window.firebaseSaveStudent = async function(data) {
+        if (window.useMockDb) throw new Error("Mock ativo");
+        const hasAuth = await initAuth();
+        if (!hasAuth) throw new Error("Sem auth");
         
-        window.firebaseSaveStudent = async function(data) {
-            if (window.useMockDb) throw new Error("Mock ativo");
-            const hasAuth = await initAuth();
-            if (!hasAuth) throw new Error("Sem auth");
-            
-            const collPath = collection(db, 'artifacts', window.appId, 'public', 'data', 'students');
-            
-            if (!state.student.docId) {
-                const docRef = await addDoc(collPath, data);
-                state.student.docId = docRef.id;
-            } else {
-                const docRef = doc(db, 'artifacts', window.appId, 'public', 'data', 'students', state.student.docId);
-                await updateDoc(docRef, data);
-            }
-        };
+        if (!state.student.docId) {
+            const newListRef = push(ref(db, `artifacts/${window.appId}/students`));
+            state.student.docId = newListRef.key;
+            await set(newListRef, data);
+        } else {
+            await update(ref(db, `artifacts/${window.appId}/students/${state.student.docId}`), data);
+        }
+    };
 
-        window.firebaseFetchStudents = async function() {
-            if (window.useMockDb) throw new Error("Mock ativo");
-            const hasAuth = await initAuth();
-            if (!hasAuth) throw new Error("Sem auth");
-            
-            const collPath = collection(db, 'artifacts', window.appId, 'public', 'data', 'students');
-            const snapshot = await getDocs(collPath);
-            const data = [];
-            snapshot.forEach(doc => data.push({ id: doc.id, ...doc.data() }));
-            return data;
-        };
+    window.firebaseFetchStudents = async function() {
+        if (window.useMockDb) throw new Error("Mock ativo");
+        const hasAuth = await initAuth();
+        if (!hasAuth) throw new Error("Sem auth");
+        
+        const snapshot = await get(child(ref(db), `artifacts/${window.appId}/students`));
+        const data = [];
+        if (snapshot.exists()) {
+            snapshot.forEach((childSnapshot) => {
+                data.push({ id: childSnapshot.key, ...childSnapshot.val() });
+            });
+        }
+        return data;
+    };
 
-        window.firebaseSaveTeacher = async function(data) {
-            if (window.useMockDb) throw new Error("Mock ativo");
-            const hasAuth = await initAuth();
-            if (!hasAuth) throw new Error("Sem auth");
-            
-            const collPath = collection(db, 'artifacts', window.appId, 'public', 'data', 'teachers');
-            await addDoc(collPath, data);
-        };
+    window.firebaseSaveTeacher = async function(data) {
+        if (window.useMockDb) throw new Error("Mock ativo");
+        const hasAuth = await initAuth();
+        if (!hasAuth) throw new Error("Sem auth");
+        
+        const newListRef = push(ref(db, `artifacts/${window.appId}/teachers`));
+        await set(newListRef, data);
+    };
 
-        window.firebaseFetchTeachers = async function() {
-            if (window.useMockDb) throw new Error("Mock ativo");
-            const hasAuth = await initAuth();
-            if (!hasAuth) throw new Error("Sem auth");
-            
-            const collPath = collection(db, 'artifacts', window.appId, 'public', 'data', 'teachers');
-            const snapshot = await getDocs(collPath);
-            const data = [];
-            snapshot.forEach(doc => data.push({ id: doc.id, ...doc.data() }));
-            return data;
-        };
-    </script>
+    window.firebaseFetchTeachers = async function() {
+        if (window.useMockDb) throw new Error("Mock ativo");
+        const hasAuth = await initAuth();
+        if (!hasAuth) throw new Error("Sem auth");
+        
+        const snapshot = await get(child(ref(db), `artifacts/${window.appId}/teachers`));
+        const data = [];
+        if (snapshot.exists()) {
+            snapshot.forEach((childSnapshot) => {
+                data.push({ id: childSnapshot.key, ...childSnapshot.val() });
+            });
+        }
+        return data;
+    };
+</script>
 </body>
 </html>
