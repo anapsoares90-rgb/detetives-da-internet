@@ -1,77 +1,40 @@
 <!-- ... existing code ... -->
-        const state = {
-            student: { name: '', school: '', class: '', avatar: '', level: 1, acertos: 0, erros: 0, mistakes: [], scoredLevels: [], docId: null, profId: null },
-            teacher: null, 
-            currentLevel: 1,
-            totalLevels: 30
-        };
-        const avatars = ['🕵️', '👩‍💻', '🦊', '🦉', '🚀', '🤖', '👾', '🦄', '🦖'];
+                <div class="bg-blue-50 border-2 border-blue-100 rounded-2xl p-6 mb-6">
+                    <h4 class="font-black text-slate-800 mb-3 flex items-center gap-2"><i class="fas fa-bolt text-secondary text-xl"></i> Exemplo Prático</h4>
+                    <p id="flashcard-example" class="text-slate-700 font-medium"></p>
+                </div>
+
+                <div class="w-full flex justify-center mb-2">
+                    <img id="flashcard-image" src="" alt="Ilustração" onerror="this.style.display='none'" class="rounded-xl shadow-md border-4 border-white max-h-48 object-cover w-full sm:w-auto">
+                </div>
+            </div>
+
+            <div class="p-6 border-t border-slate-100 bg-white shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)]">
 <!-- ... existing code ... -->
-        document.addEventListener('DOMContentLoaded', () => {
-            window.appId = typeof __app_id !== 'undefined' ? __app_id : 'detetives-app-vfinal';
-            const params = new URLSearchParams(window.location.search);
-            const escolaParam = params.get('escola');
-            const profParam = params.get('prof');
+        window.useMockDb = false; 
+        window.mockStudents = []; 
+        window.mockTeachers = [];
+        
+        const getImgUrl = (text) => `https://placehold.co/600x300/e0e7ff/0052ff.png?text=${encodeURIComponent(text)}&font=Montserrat`;
+
+        const levelsData = [
+<!-- ... existing code ... -->
+        window.startLevel = function(level) {
+            if (level > state.student.level) return;
+            state.currentLevel = level;
+            const data = levelsData[level - 1];
             
-            if(profParam) {
-                state.student.profId = profParam;
-            }
+            document.getElementById('flashcard-icon').textContent = data.flashcard.icon;
+            document.getElementById('flashcard-title').textContent = data.flashcard.title;
+            document.getElementById('flashcard-content').textContent = data.flashcard.content;
+            document.getElementById('flashcard-example').textContent = data.flashcard.example;
+            
+            const imgEl = document.getElementById('flashcard-image');
+            imgEl.style.display = 'block';
+            imgEl.src = data.flashcard.image;
 
-            if(escolaParam) {
-                const schoolInput = document.getElementById('student-school');
-<!-- ... existing code ... -->
-        async function saveProgressToDb() {
-            const data = {
-                name: state.student.name, school: state.student.school, class: state.student.class,
-                avatar: state.student.avatar, level: state.student.level, 
-                acertos: state.student.acertos, erros: state.student.erros, 
-                mistakes: state.student.mistakes || [], scoredLevels: state.student.scoredLevels || [],
-                profId: state.student.profId || null,
-                timestamp: new Date().toISOString()
-            };
-            try {
-<!-- ... existing code ... -->
-                if (found) {
-                    state.teacher = found;
-                    document.getElementById('dashboard-teacher-info').textContent = `Prof. ${found.name} | ${found.school}`;
-                    
-                    let currentUrl = window.location.href.split('?')[0];
-                    if (currentUrl.includes('about:')) currentUrl = "https://seusite.com/jogo";
-                    const schoolParam = encodeURIComponent(found.school);
-                    document.getElementById('game-share-link').value = `${currentUrl}?escola=${schoolParam}&prof=${found.id}`;
-
-                    window.showScreen('teacher-dashboard');
-                    window.refreshTeacherData();
-                } else {
-<!-- ... existing code ... -->
-        window.simulateStudentLink = function() {
-            if (!state.teacher) return;
-            window.showScreen('student-login-screen');
-            const schoolInput = document.getElementById('student-school');
-            schoolInput.value = state.teacher.school;
-            schoolInput.readOnly = true;
-            schoolInput.classList.add('bg-blue-50', 'text-slate-600', 'cursor-not-allowed', 'border-blue-200');
-            state.student.profId = state.teacher.id;
-            state.teacher = null;
+            window.showScreen('flashcard-screen');
         };
 
-        window.refreshTeacherData = async function() {
-            if (!state.teacher) return;
-            const tbody = document.getElementById('students-table-body');
-            tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-primary font-bold">Buscando inteligência e dados no servidor...</td></tr>';
-            
-            try {
-                const allStudents = await apiGet('students');
-                const myStudents = allStudents.filter(s => 
-                    s.profId === state.teacher.id || 
-                    (!s.profId && s.school.toLowerCase() === state.teacher.school.toLowerCase())
-                );
-                myStudents.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-                
-                tbody.innerHTML = '';
+        window.showQuiz = function() {
 <!-- ... existing code ... -->
-```
-
-*Obs: Mantive uma "trava de segurança" no código para que os alunos que já jogaram antes dessa atualização (e não tinham o ID) não sumam do seu painel. Mas daqui para frente, todos os novos alunos estarão rigidamente amarrados à sua conta através do novo link!* 
-
-Pode fazer o teste copiando o seu novo link lá na Área do Professor! Você verá que ele agora termina com um código especial (`&prof=...`).
