@@ -16,10 +16,9 @@
             overflow-x: hidden;
         }
         
-        /* Paleta de cores Lúdica (Azul Vibrante e Amarelo Elétrico) */
-        .bg-primary { background-color: #0052FF; } /* Azul Forte */
+        .bg-primary { background-color: #0052FF; }
         .text-primary { color: #0052FF; }
-        .bg-secondary { background-color: #FFD500; } /* Amarelo Elétrico */
+        .bg-secondary { background-color: #FFD500; }
         .text-secondary { color: #D4AF37; }
         
         .btn-clean {
@@ -52,20 +51,11 @@
         .screen { display: none; min-height: calc(100vh - 72px); }
         .active-screen { display: flex; flex-direction: column; }
 
-        .trail-container {
-            position: relative;
-            padding: 60px 0;
-        }
+        .trail-container { position: relative; padding: 60px 0; }
         .trail-line {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            left: 50%;
-            width: 12px;
-            background-color: #E2E8F0;
-            transform: translateX(-50%);
-            z-index: 0;
-            border-radius: 10px;
+            position: absolute; top: 0; bottom: 0; left: 50%;
+            width: 12px; background-color: #E2E8F0;
+            transform: translateX(-50%); z-index: 0; border-radius: 10px;
         }
         
         .level-node { z-index: 10; position: relative; transition: all 0.3s; }
@@ -73,12 +63,8 @@
         .level-completed { border-color: #0052FF; background-color: #E0E7FF; color: #0052FF; }
         .level-locked { background-color: #F1F5F9; color: #94A3B8; border-color: #CBD5E1; cursor: not-allowed; }
         
-        @keyframes pulse-ring {
-            0% { box-shadow: 0 0 0 0 rgba(255, 213, 0, 0.7); }
-            100% { box-shadow: 0 0 0 15px rgba(255, 213, 0, 0); }
-        }
+        @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(255, 213, 0, 0.7); } 100% { box-shadow: 0 0 0 15px rgba(255, 213, 0, 0); } }
         .pulse-active { animation: pulse-ring 2s infinite; }
-        
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
     </style>
@@ -142,7 +128,6 @@
                 <h2 class="text-3xl font-black text-slate-900">Novo Recruta</h2>
                 <p class="text-slate-500 mt-2 font-semibold">Preencha sua credencial</p>
             </div>
-
             <div class="space-y-5">
                 <div>
                     <label class="block text-sm font-bold text-slate-700 mb-2">Nome Completo</label>
@@ -157,7 +142,6 @@
                     <input type="text" id="student-class" placeholder="Ex: 5º Ano B" class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-primary focus:bg-white outline-none transition font-semibold text-slate-800">
                 </div>
             </div>
-
             <button onclick="window.goToAvatarSelection()" class="w-full bg-primary text-white font-black text-xl py-4 rounded-xl btn-clean mt-8">
                 Continuar <i class="fas fa-chevron-right ml-2"></i>
             </button>
@@ -168,15 +152,9 @@
         <div class="bg-white p-10 rounded-3xl shadow-xl w-full max-w-lg border border-slate-100 text-center">
             <h2 class="text-3xl font-black text-slate-900 mb-2">Escolha seu Avatar</h2>
             <p class="text-slate-500 mb-8 font-semibold">Quem vai representar você no mapa?</p>
-
-            <div class="grid grid-cols-3 gap-6 mb-10" id="avatar-container">
-                <!-- Avatares gerados via JS -->
-            </div>
-
+            <div class="grid grid-cols-3 gap-6 mb-10" id="avatar-container"></div>
             <div class="flex gap-4">
-                <button onclick="window.showScreen('student-login-screen')" class="w-1/3 bg-slate-100 text-slate-600 font-bold py-4 rounded-xl hover:bg-slate-200 transition">
-                    Voltar
-                </button>
+                <button onclick="window.showScreen('student-login-screen')" class="w-1/3 bg-slate-100 text-slate-600 font-bold py-4 rounded-xl hover:bg-slate-200 transition">Voltar</button>
                 <button onclick="window.registerStudent()" class="w-2/3 bg-secondary text-slate-900 font-black text-xl py-4 rounded-xl btn-clean">
                     Ir pro Mapa! <i class="fas fa-map-marked-alt ml-2"></i>
                 </button>
@@ -194,16 +172,13 @@
                 </div>
             </div>
         </div>
-
         <div class="max-w-md mx-auto w-full flex-1 overflow-y-auto no-scrollbar relative p-6 pb-20">
             <div class="text-center mb-12 mt-4">
                 <h2 class="text-3xl font-black text-slate-800">Trilha de Pesquisa</h2>
                 <p class="text-slate-500 font-semibold mt-1">Complete as 30 missões!</p>
             </div>
-
             <div class="trail-container flex flex-col-reverse items-center gap-14" id="levels-container">
                 <div class="trail-line"></div>
-                <!-- Fases geradas via JS -->
             </div>
         </div>
     </main>
@@ -218,23 +193,19 @@
                 <div id="flashcard-icon" class="text-6xl mb-4 drop-shadow-md"></div>
                 <h3 id="flashcard-title" class="text-3xl font-black leading-tight">Título</h3>
             </div>
-            
             <div class="p-6 sm:p-8 overflow-y-auto flex-1 bg-slate-50">
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
                     <h4 class="font-black text-primary mb-3 uppercase tracking-wide flex items-center gap-2"><i class="fas fa-book-open"></i> O que é?</h4>
                     <p id="flashcard-content" class="text-slate-700 text-lg font-medium leading-relaxed"></p>
                 </div>
-                
                 <div class="bg-blue-50 border-2 border-blue-100 rounded-2xl p-6 mb-6">
                     <h4 class="font-black text-slate-800 mb-3 flex items-center gap-2"><i class="fas fa-bolt text-secondary text-xl"></i> Exemplo Prático</h4>
                     <p id="flashcard-example" class="text-slate-700 font-medium"></p>
                 </div>
-
                 <div class="w-full flex justify-center mb-2">
                     <img id="flashcard-image" src="" alt="Ilustração" class="rounded-xl shadow-md border-4 border-white max-h-48 object-cover w-full sm:w-auto">
                 </div>
             </div>
-
             <div class="p-6 border-t border-slate-100 bg-white shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)]">
                 <button onclick="window.showQuiz()" class="w-full bg-secondary text-slate-900 font-black text-xl py-5 rounded-2xl btn-clean">
                     Ir para o Desafio <i class="fas fa-arrow-right ml-2"></i>
@@ -246,17 +217,12 @@
     <main id="quiz-screen" class="screen items-center justify-center p-4 sm:p-6 bg-slate-50">
         <div class="bg-white p-6 sm:p-10 rounded-3xl shadow-xl w-full max-w-2xl border-2 border-slate-100 relative overflow-hidden">
             <div class="absolute top-0 left-0 w-full h-2 bg-primary"></div>
-            
             <div class="flex justify-between items-center mb-10 mt-2">
                 <span class="font-black text-primary text-sm bg-blue-50 px-4 py-2 rounded-lg border border-blue-100 uppercase tracking-wider" id="quiz-level-indicator">MISSÃO 1</span>
                 <button onclick="window.showScreen('map-screen')" class="text-slate-400 hover:text-red-500 font-bold bg-slate-50 px-3 py-1 rounded-lg"><i class="fas fa-times mr-1"></i> Sair</button>
             </div>
-            
             <h2 id="quiz-question" class="text-2xl sm:text-3xl font-black text-slate-800 mb-10 leading-tight">Pergunta?</h2>
-            
-            <div id="quiz-options" class="flex flex-col gap-4">
-                <!-- Opções via JS -->
-            </div>
+            <div id="quiz-options" class="flex flex-col gap-4"></div>
         </div>
     </main>
 
@@ -364,125 +330,90 @@
     </main>
 
     <script>
-        const state = {
-            student: { name: '', school: '', class: '', avatar: '', level: 1, docId: null },
-            teacher: null, 
-            currentLevel: 1,
-            totalLevels: 30
-        };
+        const state = { student: { name: '', school: '', class: '', avatar: '', level: 1, docId: null }, teacher: null, currentLevel: 1, totalLevels: 30 };
         const avatars = ['🕵️', '👩‍💻', '🦊', '🦉', '🚀', '🤖', '👾', '🦄', '🦖'];
-        
         window.useMockDb = false; 
-        window.mockStudents = []; 
-        window.mockTeachers = [];
+        window.mockStudents = []; window.mockTeachers = [];
         
         const getImgUrl = (text) => `https://placehold.co/600x300/e0e7ff/0052ff?text=${encodeURIComponent(text)}&font=montserrat`;
 
         const levelsData = [
-            { level: 1, flashcard: { icon: '📰', title: 'O que são Fake News?', content: 'Fake News são notícias falsas ou mentirosas criadas para enganar as pessoas, causar medo ou ganhar cliques.', example: 'Uma mensagem no grupo da família dizendo que o mundo vai acabar amanhã se você não mandar a mensagem para 10 pessoas.', image: getImgUrl('Mentira ou Verdade?') }, question: 'Você recebe um link no WhatsApp dizendo "Ganhe um celular grátis clicando aqui!". O que você faz?', options: [ { text: 'Clico rápido para ganhar o celular.', correct: false, explanation: 'Isso é perigoso! Pode ser um vírus ou um golpe.' }, { text: 'Não clico e apago a mensagem.', correct: true, explanation: 'Excelente! Você evitou cair em uma Fake News.' } ] },
-            { level: 2, flashcard: { icon: '📝', title: 'Plágio é Roubo', content: 'Copiar o trabalho de outra pessoa da internet e dizer que é seu se chama Plágio.', example: 'Copiar a página da Wikipédia inteira para o trabalho escolar.', image: getImgUrl('Dê o Crédito') }, question: 'Como você usa a internet num trabalho de história?', options: [ { text: 'Leio, entendo e escrevo com minhas palavras.', correct: true, explanation: 'Perfeito! Assim você aprende de verdade.' }, { text: 'Copio o texto e colo no Word.', correct: false, explanation: 'Isso é plágio. O trabalho tem que ser feito por você.' } ] },
-            { level: 3, flashcard: { icon: '🔑', title: 'Senhas Seguras', content: 'Uma senha é como a chave da sua casa. Ela deve ser forte, misturando letras, números e símbolos.', example: 'Senha Forte: "Gat0@Branc022!"', image: getImgUrl('Crie Senhas Fortes') }, question: 'Seu amigo pede a senha do seu jogo para "te ajudar". Você:', options: [ { text: 'Digo que senhas são secretas e não passo.', correct: true, explanation: 'Boa! Senha é pessoal.' }, { text: 'Passo a senha, ele é meu amigo.', correct: false, explanation: 'Senhas não devem ser compartilhadas com NINGUÉM.' } ] },
-            { level: 4, flashcard: { icon: '🤐', title: 'Privacidade de Dados', content: 'Endereço e telefone são DADOS PESSOAIS. Não espalhe isso em chats públicos de jogos.', example: 'Um estranho no Roblox pergunta: "Onde você estuda?". Não responda.', image: getImgUrl('Proteja seus Dados') }, question: 'No chat do jogo alguém diz: "Mora onde? Vou mandar um presente".', options: [ { text: 'Passo o nome do meu bairro.', correct: false, explanation: 'Nunca passe informações de onde você mora.' }, { text: 'Ignoro a mensagem ou bloqueio a pessoa.', correct: true, explanation: 'Isso aí! Segurança em primeiro lugar.' } ] },
-            { level: 5, flashcard: { icon: '🔍', title: 'Palavras-Chave', content: 'No Google, não digite frases inteiras. Use "Palavras-Chave" (os termos mais importantes).', example: 'Em vez de "o que ursos comem no inverno", busque "alimentação urso inverno".', image: getImgUrl('Busca Inteligente') }, question: 'Como buscar sobre o sistema solar para um trabalho?', options: [ { text: '"planetas sistema solar"', correct: true, explanation: 'Direto ao ponto! Traz resultados melhores.' }, { text: '"trabalho sobre todos os planetas do sistema solar"', correct: false, explanation: 'Muito longo!' } ] },
-            { level: 6, flashcard: { icon: '🔒', title: 'O Cadeado (HTTPS)', content: 'Antes de colocar dados, olhe a barra de endereços. Tem que ter um "Cadeado" fechado.', example: 'https://escola.edu.br (Seguro).', image: getImgUrl('Procure o Cadeado') }, question: 'O site para comprar um jogo não tem cadeado. O que fazer?', options: [ { text: 'Saio do site imediatamente.', correct: true, explanation: 'Certíssimo! Seus dados podem ser roubados.' }, { text: 'Compro mesmo assim.', correct: false, explanation: 'Sem segurança, seus dados podem ser roubados.' } ] },
-            { level: 7, flashcard: { icon: '🤝', title: 'Cyberbullying', content: 'Ofender alguém online é Cyberbullying. É crime e machuca.', example: 'Fazer montagens de fotos de um colega para rir dele.', image: getImgUrl('Diga NÃO ao Cyberbullying') }, question: 'Colegas fazem piadas maldosas no WhatsApp sobre uma menina. Você:', options: [ { text: 'Não participo e aviso um professor/adulto.', correct: true, explanation: 'Ação de herói!' }, { text: 'Apenas ignoro.', correct: false, explanation: 'Ficar calado ajuda o agressor. Peça ajuda.' } ] },
-            { level: 8, flashcard: { icon: '📸', title: 'Fotos e Pegada Digital', content: 'Tudo na internet fica lá para sempre. Pense antes de postar fotos suas ou de amigos.', example: 'Foto de uniforme da escola mostra para estranhos onde você estuda.', image: getImgUrl('Pense Antes de Postar') }, question: 'Quer postar uma foto engraçada do amigo. O que fazer antes?', options: [ { text: 'Peço permissão para ele.', correct: true, explanation: 'Exato! Consentimento é fundamental.' }, { text: 'Posto logo para ter curtidas!', correct: false, explanation: 'E se ele não gostar? Respeite a imagem dos outros.' } ] },
-            { level: 9, flashcard: { icon: '🎣', title: 'Phishing (Pescaria)', content: 'Phishing é fingir ser uma empresa (banco, jogo) para roubar sua senha.', example: 'E-mail: "Seu jogo foi bloqueado. Digite a senha aqui".', image: getImgUrl('Cuidado com Golpes') }, question: 'Recebe e-mail da Netflix pedindo senha urgente. Você:', options: [ { text: 'Não clico, abro o site oficial para checar.', correct: true, explanation: 'Gênio! Empresas reais não pedem senhas assim.' }, { text: 'Clico rápido.', correct: false, explanation: 'Isso é golpe para roubar a senha.' } ] },
-            { level: 10, flashcard: { icon: '🎓', title: 'Fontes .gov e .edu', content: 'Sites terminados em .gov (Governo) ou .edu (Educação) têm informações mais seguras.', example: 'Site do Ministério da Saúde (.gov.br).', image: getImgUrl('Fontes Oficiais') }, question: 'Onde achar informação correta sobre vacinas?', options: [ { text: 'No site www.saude.gov.br.', correct: true, explanation: 'Sim! Fontes seguras.' }, { text: 'No blog "SaudeMisteriosa.com".', correct: false, explanation: 'Qualquer um cria blog. Vá nas fontes oficiais.' } ] },
-            { level: 11, flashcard: { icon: '📢', title: 'Anúncio vs Conteúdo', content: 'Propagandas se disfarçam de notícias ou botões de download.', example: 'Botão gigante "Download" num site de jogos.', image: getImgUrl('Isso é Propaganda?') }, question: 'Na página tem um botão gigante verde "DOWNLOAD". Você:', options: [ { text: 'Procuro letras escritas "Anúncio".', correct: true, explanation: 'Visão afiada!' }, { text: 'Clico no botão.', correct: false, explanation: 'Pode ser propaganda.' } ] },
-            { level: 12, flashcard: { icon: '👣', title: 'Sua Pegada Digital', content: 'Tudo que você posta e pesquisa deixa um rastro.', example: 'Comentários maldosos hoje podem prejudicar no futuro.', image: getImgUrl('Rastros na Rede') }, question: 'O que faz parte da Pegada Digital?', options: [ { text: 'Meus comentários, fotos e sites que visito.', correct: true, explanation: 'Exato. Aja com responsabilidade.' }, { text: 'Só arquivos baixados.', correct: false, explanation: 'Não, interações sociais também contam.' } ] },
-            { level: 13, flashcard: { icon: '⬇️', title: 'Downloads Seguros', content: 'Baixar jogos piratas traz vírus. Use lojas oficiais.', example: 'Play Store ou App Store.', image: getImgUrl('Cuidado ao Baixar') }, question: 'Quer jogar um jogo pago que um site dá de graça. Você:', options: [ { text: 'Não baixo para não pegar vírus.', correct: true, explanation: 'Decisão segura!' }, { text: 'Baixo para jogar de graça!', correct: false, explanation: 'Risco enorme de vírus.' } ] },
-            { level: 14, flashcard: { icon: '©️', title: 'Direitos Autorais', content: 'Imagens têm dono. Não pegue do Google sem permissão para seus projetos.', example: 'Use bancos gratuitos (Pixabay).', image: getImgUrl('Copyright') }, question: 'Precisa de fotos para um blog. Onde procurar?', options: [ { text: 'Sites de Imagens de Domínio Público.', correct: true, explanation: 'Perfeito!' }, { text: 'Copio do Google Imagens.', correct: false, explanation: 'Muitas têm direitos autorais.' } ] },
-            { level: 15, flashcard: { icon: '📶', title: 'Wi-Fi Público', content: 'Wi-Fi de shopping não é seguro para colocar senhas.', example: 'Entrar no banco no Wi-Fi da praça de alimentação.', image: getImgUrl('Perigos do Wi-Fi') }, question: 'No Wi-Fi sem senha do shopping. O que é seguro?', options: [ { text: 'Apenas navegar em notícias/vídeos.', correct: true, explanation: 'Ótima prática.' }, { text: 'Entrar no e-mail e comprar.', correct: false, explanation: 'Hackers podem roubar os dados.' } ] },
-            { level: 16, flashcard: { icon: '🔄', title: 'Atualizações', content: 'Atualizar celular/PC protege contra vírus novos.', example: 'Aviso: "Atualização de sistema".', image: getImgUrl('Mantenha Atualizado') }, question: 'Celular pede para atualizar. Você:', options: [ { text: 'Atualizo assim que possível.', correct: true, explanation: 'Melhora e protege o aparelho.' }, { text: 'Ignoro.', correct: false, explanation: 'Deixa vulnerável a vírus.' } ] },
-            { level: 17, flashcard: { icon: '⏰', title: 'Tempo de Tela', content: 'Ficar no celular à noite prejudica o sono.', example: 'Usar no escuro até as 3 da manhã.', image: getImgUrl('Equilíbrio') }, question: 'Qual a melhor prática à noite?', options: [ { text: 'Desligar telas uma hora antes de dormir.', correct: true, explanation: 'O sono será melhor.' }, { text: 'Ver vídeos até pegar no sono.', correct: false, explanation: 'A luz prejudica o sono.' } ] },
-            { level: 18, flashcard: { icon: '👥', title: 'Amigos Online', content: 'Amigo de jogo ainda é ESTRANHO. Pessoas fingem quem são.', example: 'Foto de criança pode ser adulto.', image: getImgUrl('Quem é?') }, question: 'Amigo do jogo chama para encontrar na praça. Você:', options: [ { text: 'Aviso os pais. Nunca vou sozinho.', correct: true, explanation: 'Segurança em primeiro lugar.' }, { text: 'Vou, pois jogamos muito.', correct: false, explanation: 'Muito perigoso.' } ] },
-            { level: 19, flashcard: { icon: '🛡️', title: 'Autenticação 2FA', content: 'A Verificação em 2 Etapas é uma segunda fechadura (código por SMS).', example: 'Ativar PIN no WhatsApp.', image: getImgUrl('Fechadura Dupla') }, question: 'Como tornar contas mais seguras?', options: [ { text: 'Ativando a verificação em duas etapas (2FA).', correct: true, explanation: 'Segurança de Elite!' }, { text: 'Trocando a senha a cada 10 anos.', correct: false, explanation: 'Não é suficiente.' } ] },
-            { level: 20, flashcard: { icon: '⚖️', title: 'Checagem', content: 'Cheque se a notícia está em jornais confiáveis.', example: 'Ver em vários sites.', image: getImgUrl('Confira as Fontes') }, question: 'Lê: "Extraterrestres pousaram". Você:', options: [ { text: 'Pesquiso em jornais grandes. Se não tem, é fake.', correct: true, explanation: 'Checar é essencial.' }, { text: 'Repasso.', correct: false, explanation: 'Não espalhe sem checar.' } ] },
-            { level: 21, flashcard: { icon: '📚', title: 'Pesquisar não é Copiar', content: 'Pesquisar é ler várias fontes, entender e explicar com suas palavras.', example: 'Ler 3 sites sobre dinossauros e fazer um resumo.', image: getImgUrl('Como Pesquisar') }, question: 'Trabalho sobre Ciclo da Água. Atitude correta:', options: [ { text: 'Leio 3 sites e escrevo com minhas palavras.', correct: true, explanation: 'Isso é construir conhecimento!' }, { text: 'Copio o primeiro texto do Google.', correct: false, explanation: 'Isso é cópia.' } ] },
-            { level: 22, flashcard: { icon: '🎯', title: 'Foco no Tema', content: 'Seja específico na busca para não se perder.', example: 'Buscar "reciclagem garrafa PET" em vez de só "plástico".', image: getImgUrl('Mire no Alvo') }, question: 'Tema: "Alimentação do Leão". Como buscar?', options: [ { text: '"o que leões comem na natureza"', correct: true, explanation: 'Busca direta e focada.' }, { text: '"tudo sobre leões e curiosidades"', correct: false, explanation: 'Muito amplo.' } ] },
-            { level: 23, flashcard: { icon: '🏷️', title: 'Aspas no Google', content: 'Usar aspas "" busca a frase EXATA.', example: 'Buscar "planeta marte" (com aspas).', image: getImgUrl('Use Aspas') }, question: 'Achar o poema com a frase exata: Minha terra tem palmeiras.', options: [ { text: '"Minha terra tem palmeiras" poema', correct: true, explanation: 'Força achar a frase inteira.' }, { text: 'Minha terra tem palmeiras poema', correct: false, explanation: 'Traz resultados bagunçados.' } ] },
-            { level: 24, flashcard: { icon: '👤', title: 'Regra do Autor', content: 'Procure saber QUEM escreveu (cientista? governo?). Textos sem autor são suspeitos.', example: 'Texto da NASA vs. Blog anônimo.', image: getImgUrl('Quem Escreveu?') }, question: 'Achou texto incrível sem autor. O que fazer?', options: [ { text: 'Desconfio e procuro em site com autor.', correct: true, explanation: 'Autoria é responsabilidade.' }, { text: 'Uso assim mesmo.', correct: false, explanation: 'Pode ser falso.' } ] },
-            { level: 25, flashcard: { icon: '🌐', title: 'Segredo da Wikipédia', content: 'Use a Wikipédia para o resumo, mas clique nas "Referências" [1] no final da página para as fontes oficiais.', example: 'Ir do resumo do Egito para o site do historiador.', image: getImgUrl('Além da Wiki') }, question: 'Como pesquisador usa a Wikipédia?', options: [ { text: 'Clico nas referências do final para ver fontes originais.', correct: true, explanation: 'É um trampolim.' }, { text: 'Copio tudo pro trabalho.', correct: false, explanation: 'Não é a fonte final.' } ] },
-            { level: 26, flashcard: { icon: '👀', title: 'Ler Lateralmente', content: 'Abra outra aba e pesquise o que falam SOBRE o site.', example: 'Buscar: "Site XYZ é confiável?".', image: getImgUrl('Olhe para os Lados') }, question: 'Achou notícia chocante no site "VerdadesOcultas".', options: [ { text: 'Pesquiso no Google se o site é confiável.', correct: true, explanation: 'Ler lateralmente!' }, { text: 'Leio a página "Sobre Nós" do site.', correct: false, explanation: 'Qualquer um pode mentir.' } ] },
-            { level: 27, flashcard: { icon: '📝', title: 'Citação Direta', content: 'Copiar uma frase marcante? Coloque entre "aspas" e diga o autor.', example: 'Segundo Einstein: "A imaginação é...".', image: getImgUrl('Cópia Certa') }, question: 'Vai usar uma frase genial de um livro:', options: [ { text: 'Coloco entre aspas e o nome do autor.', correct: true, explanation: 'Ética nota 1000.' }, { text: 'Escrevo como se fosse minha.', correct: false, explanation: 'Isso é plágio.' } ] },
-            { level: 28, flashcard: { icon: '🗣️', title: 'Paráfrase', content: 'Escrever com SUAS palavras ainda exige dar crédito ao autor original.', example: 'Segundo a Fiocruz, lavar as mãos...', image: getImgUrl('Ideia Deles') }, question: 'Leu no livro que a água ferve a 100 graus e escreveu com suas palavras.', options: [ { text: 'Coloco: Segundo o livro de Física...', correct: true, explanation: 'Respeitou a ideia original.' }, { text: 'Não preciso citar.', correct: false, explanation: 'É plágio de ideia.' } ] },
-            { level: 29, flashcard: { icon: '📑', title: 'Referências', content: 'A lista final de sites e livros usados no trabalho.', example: 'Os "créditos" do seu trabalho.', image: getImgUrl('Os Créditos') }, question: 'O que é a página de Referências?', options: [ { text: 'Lista no final com as fontes que usei.', correct: true, explanation: 'Prova de pesquisa real.' }, { text: 'Escrever Google no final.', correct: false, explanation: 'Google não é autor.' } ] },
-            { level: 30, flashcard: { icon: '🧩', title: 'Referência de Site', content: 'Exige: Autor, Título, Link e Data de Acesso.', example: 'G1. Título. Link. Acesso em 15 mai.', image: getImgUrl('Montando') }, question: 'Qual a forma completa de referenciar um site?', options: [ { text: 'Nome do Autor, Título, Link e Data de acesso.', correct: true, explanation: 'Mestre da Pesquisa!' }, { text: 'Apenas colar o link solto.', correct: false, explanation: 'Incompleto.' } ] }
+            { level: 1, flashcard: { icon: '📰', title: 'O que são Fake News?', content: 'Notícias falsas criadas para enganar pessoas.', example: 'Mensagem dizendo que o mundo vai acabar.', image: getImgUrl('Mentira ou Verdade?') }, question: 'Você recebe um link: "Ganhe um celular grátis!". O que faz?', options: [ { text: 'Clico rápido.', correct: false, explanation: 'Pode ser vírus.' }, { text: 'Não clico e apago.', correct: true, explanation: 'Você evitou um golpe.' } ] },
+            { level: 2, flashcard: { icon: '📝', title: 'Plágio é Roubo', content: 'Copiar o trabalho de outra pessoa e dizer que é seu.', example: 'Copiar a página da Wikipédia inteira.', image: getImgUrl('Dê o Crédito') }, question: 'Como você usa a internet num trabalho de história?', options: [ { text: 'Leio e escrevo com minhas palavras.', correct: true, explanation: 'Assim você aprende.' }, { text: 'Copio e colo no Word.', correct: false, explanation: 'Isso é plágio.' } ] },
+            { level: 3, flashcard: { icon: '🔑', title: 'Senhas Seguras', content: 'Sua senha deve ser forte.', example: 'Senha: "Gat0@Branc022!"', image: getImgUrl('Crie Senhas Fortes') }, question: 'Seu amigo pede sua senha para "te ajudar". Você:', options: [ { text: 'Digo que é secreta.', correct: true, explanation: 'Senha é pessoal.' }, { text: 'Passo a senha.', correct: false, explanation: 'Não compartilhe com ninguém.' } ] },
+            { level: 4, flashcard: { icon: '🤐', title: 'Privacidade de Dados', content: 'Endereço e telefone são DADOS PESSOAIS.', example: 'Não responda estranhos.', image: getImgUrl('Proteja seus Dados') }, question: 'No jogo alguém pergunta: "Mora onde?".', options: [ { text: 'Passo meu bairro.', correct: false, explanation: 'Nunca passe informações.' }, { text: 'Ignoro ou bloqueio.', correct: true, explanation: 'Segurança em primeiro lugar.' } ] },
+            { level: 5, flashcard: { icon: '🔍', title: 'Palavras-Chave', content: 'No Google, use termos importantes.', example: 'Busque "alimentação urso inverno".', image: getImgUrl('Busca Inteligente') }, question: 'Como buscar sobre o sistema solar?', options: [ { text: '"planetas sistema solar"', correct: true, explanation: 'Traz resultados melhores.' }, { text: '"trabalho sobre todos os planetas do sistema solar"', correct: false, explanation: 'Muito longo!' } ] },
+            { level: 6, flashcard: { icon: '🔒', title: 'O Cadeado (HTTPS)', content: 'Olhe a barra de endereços para ver o cadeado.', example: 'https://escola.edu.br', image: getImgUrl('Procure o Cadeado') }, question: 'O site para comprar não tem cadeado.', options: [ { text: 'Saio imediatamente.', correct: true, explanation: 'Seus dados podem ser roubados.' }, { text: 'Compro mesmo assim.', correct: false, explanation: 'Sem segurança é perigoso.' } ] },
+            { level: 7, flashcard: { icon: '🤝', title: 'Cyberbullying', content: 'Ofender alguém online é Cyberbullying.', example: 'Fazer montagens maldosas.', image: getImgUrl('Diga NÃO ao Cyberbullying') }, question: 'Fazem piadas maldosas no WhatsApp sobre um colega.', options: [ { text: 'Aviso um professor/adulto.', correct: true, explanation: 'Ação de herói!' }, { text: 'Apenas ignoro.', correct: false, explanation: 'Ficar calado não ajuda.' } ] },
+            { level: 8, flashcard: { icon: '📸', title: 'Fotos e Pegada Digital', content: 'Tudo na internet fica lá para sempre.', example: 'Pense antes de postar.', image: getImgUrl('Pense Antes de Postar') }, question: 'Quer postar uma foto engraçada do amigo.', options: [ { text: 'Peço permissão.', correct: true, explanation: 'Consentimento é fundamental.' }, { text: 'Posto logo.', correct: false, explanation: 'Respeite a imagem dos outros.' } ] },
+            { level: 9, flashcard: { icon: '🎣', title: 'Phishing (Pescaria)', content: 'Golpes que fingem ser empresas.', example: 'E-mail pedindo senha.', image: getImgUrl('Cuidado com Golpes') }, question: 'Recebe e-mail pedindo senha urgente.', options: [ { text: 'Não clico.', correct: true, explanation: 'Empresas reais não pedem senhas assim.' }, { text: 'Clico rápido.', correct: false, explanation: 'Isso é golpe.' } ] },
+            { level: 10, flashcard: { icon: '🎓', title: 'Fontes .gov e .edu', content: 'Sites do Governo (.gov) ou Educação (.edu) são mais seguros.', example: 'Site do Ministério.', image: getImgUrl('Fontes Oficiais') }, question: 'Onde achar informação sobre vacinas?', options: [ { text: 'No site .gov.br.', correct: true, explanation: 'Fontes seguras.' }, { text: 'No blog desconhecido.', correct: false, explanation: 'Vá nas fontes oficiais.' } ] },
+            { level: 11, flashcard: { icon: '📢', title: 'Anúncio vs Conteúdo', content: 'Propagandas se disfarçam de botões.', example: 'Botão gigante "Download".', image: getImgUrl('Isso é Propaganda?') }, question: 'Na página tem um botão gigante "DOWNLOAD".', options: [ { text: 'Procuro letras "Anúncio".', correct: true, explanation: 'Visão afiada!' }, { text: 'Clico no botão.', correct: false, explanation: 'Pode ser propaganda.' } ] },
+            { level: 12, flashcard: { icon: '👣', title: 'Sua Pegada Digital', content: 'O que você posta deixa um rastro.', example: 'Comentários maldosos hoje prejudicam amanhã.', image: getImgUrl('Rastros na Rede') }, question: 'O que faz parte da Pegada Digital?', options: [ { text: 'Meus comentários e sites.', correct: true, explanation: 'Aja com responsabilidade.' }, { text: 'Só arquivos baixados.', correct: false, explanation: 'Interações sociais também contam.' } ] },
+            { level: 13, flashcard: { icon: '⬇️', title: 'Downloads Seguros', content: 'Baixar jogos piratas traz vírus.', example: 'Use lojas oficiais.', image: getImgUrl('Cuidado ao Baixar') }, question: 'Quer jogar um jogo pago que um site dá de graça.', options: [ { text: 'Não baixo.', correct: true, explanation: 'Decisão segura!' }, { text: 'Baixo para jogar de graça!', correct: false, explanation: 'Risco de vírus.' } ] },
+            { level: 14, flashcard: { icon: '©️', title: 'Direitos Autorais', content: 'Imagens têm dono.', example: 'Use bancos gratuitos.', image: getImgUrl('Copyright') }, question: 'Onde procurar fotos para um blog?', options: [ { text: 'Sites de Imagens de Domínio Público.', correct: true, explanation: 'Perfeito!' }, { text: 'Copio do Google Imagens.', correct: false, explanation: 'Muitas têm direitos autorais.' } ] },
+            { level: 15, flashcard: { icon: '📶', title: 'Wi-Fi Público', content: 'Wi-Fi de shopping não é seguro para senhas.', example: 'Evite banco no Wi-Fi livre.', image: getImgUrl('Perigos do Wi-Fi') }, question: 'No Wi-Fi sem senha do shopping:', options: [ { text: 'Apenas navegar em notícias.', correct: true, explanation: 'Ótima prática.' }, { text: 'Entrar no e-mail.', correct: false, explanation: 'Hackers podem roubar os dados.' } ] },
+            { level: 16, flashcard: { icon: '🔄', title: 'Atualizações', content: 'Atualizar celular/PC protege contra vírus.', example: 'Aviso: "Atualização de sistema".', image: getImgUrl('Mantenha Atualizado') }, question: 'Celular pede para atualizar.', options: [ { text: 'Atualizo.', correct: true, explanation: 'Melhora e protege o aparelho.' }, { text: 'Ignoro.', correct: false, explanation: 'Deixa vulnerável.' } ] },
+            { level: 17, flashcard: { icon: '⏰', title: 'Tempo de Tela', content: 'Ficar no celular à noite prejudica o sono.', example: 'Usar no escuro até as 3 da manhã.', image: getImgUrl('Equilíbrio') }, question: 'Qual a melhor prática à noite?', options: [ { text: 'Desligar telas antes de dormir.', correct: true, explanation: 'O sono será melhor.' }, { text: 'Ver vídeos até pegar no sono.', correct: false, explanation: 'A luz prejudica o sono.' } ] },
+            { level: 18, flashcard: { icon: '👥', title: 'Amigos Online', content: 'Amigo de jogo ainda é ESTRANHO.', example: 'Pessoas fingem quem são.', image: getImgUrl('Quem é?') }, question: 'Amigo do jogo chama para encontrar.', options: [ { text: 'Aviso os pais.', correct: true, explanation: 'Segurança em primeiro lugar.' }, { text: 'Vou, pois jogamos muito.', correct: false, explanation: 'Muito perigoso.' } ] },
+            { level: 19, flashcard: { icon: '🛡️', title: 'Autenticação 2FA', content: 'Verificação em 2 Etapas é uma segunda fechadura.', example: 'Ativar PIN.', image: getImgUrl('Fechadura Dupla') }, question: 'Como tornar contas mais seguras?', options: [ { text: 'Ativando a verificação (2FA).', correct: true, explanation: 'Segurança de Elite!' }, { text: 'Trocando a senha.', correct: false, explanation: 'Não é suficiente.' } ] },
+            { level: 20, flashcard: { icon: '⚖️', title: 'Checagem', content: 'Cheque notícias em jornais confiáveis.', example: 'Verifique a fonte.', image: getImgUrl('Confira as Fontes') }, question: 'Lê: "Extraterrestres pousaram".', options: [ { text: 'Pesquiso em jornais grandes.', correct: true, explanation: 'Checar é essencial.' }, { text: 'Repasso.', correct: false, explanation: 'Não espalhe sem checar.' } ] },
+            { level: 21, flashcard: { icon: '📚', title: 'Pesquisar não é Copiar', content: 'Entenda e explique com suas palavras.', example: 'Fazer um resumo.', image: getImgUrl('Como Pesquisar') }, question: 'Trabalho sobre Ciclo da Água.', options: [ { text: 'Leio e escrevo com minhas palavras.', correct: true, explanation: 'Isso é conhecimento!' }, { text: 'Copio o primeiro texto.', correct: false, explanation: 'Isso é cópia.' } ] },
+            { level: 22, flashcard: { icon: '🎯', title: 'Foco no Tema', content: 'Seja específico na busca.', example: 'Buscar "reciclagem garrafa PET".', image: getImgUrl('Mire no Alvo') }, question: 'Tema: "Alimentação do Leão".', options: [ { text: '"o que leões comem na natureza"', correct: true, explanation: 'Busca direta.' }, { text: '"tudo sobre leões"', correct: false, explanation: 'Muito amplo.' } ] },
+            { level: 23, flashcard: { icon: '🏷️', title: 'Aspas no Google', content: 'Usar aspas "" busca a frase EXATA.', example: 'Buscar "planeta marte".', image: getImgUrl('Use Aspas') }, question: 'Achar o poema exato: Minha terra tem palmeiras.', options: [ { text: '"Minha terra tem palmeiras" poema', correct: true, explanation: 'Força achar a frase.' }, { text: 'Minha terra tem palmeiras poema', correct: false, explanation: 'Bagunçado.' } ] },
+            { level: 24, flashcard: { icon: '👤', title: 'Regra do Autor', content: 'Procure saber QUEM escreveu.', example: 'Textos sem autor são suspeitos.', image: getImgUrl('Quem Escreveu?') }, question: 'Achou texto incrível sem autor.', options: [ { text: 'Desconfio e procuro outra fonte.', correct: true, explanation: 'Autoria é responsabilidade.' }, { text: 'Uso assim mesmo.', correct: false, explanation: 'Pode ser falso.' } ] },
+            { level: 25, flashcard: { icon: '🌐', title: 'Segredo da Wikipédia', content: 'Clique nas "Referências" [1] no final da página.', example: 'Ir para a fonte oficial.', image: getImgUrl('Além da Wiki') }, question: 'Como usar a Wikipédia?', options: [ { text: 'Clico nas referências do final.', correct: true, explanation: 'É um trampolim.' }, { text: 'Copio tudo pro trabalho.', correct: false, explanation: 'Não é a fonte final.' } ] },
+            { level: 26, flashcard: { icon: '👀', title: 'Ler Lateralmente', content: 'Pesquise o que falam SOBRE o site.', example: 'Buscar: "Site XYZ é confiável?".', image: getImgUrl('Olhe para os Lados') }, question: 'Notícia em site desconhecido.', options: [ { text: 'Pesquiso no Google se o site é confiável.', correct: true, explanation: 'Ler lateralmente!' }, { text: 'Leio a página "Sobre Nós".', correct: false, explanation: 'Eles podem mentir.' } ] },
+            { level: 27, flashcard: { icon: '📝', title: 'Citação Direta', content: 'Copiar frase? Coloque "aspas" e diga o autor.', example: 'Segundo Einstein: "A imaginação é...".', image: getImgUrl('Cópia Certa') }, question: 'Vai usar uma frase genial:', options: [ { text: 'Entre aspas e o nome do autor.', correct: true, explanation: 'Ética nota 1000.' }, { text: 'Escrevo como se fosse minha.', correct: false, explanation: 'Isso é plágio.' } ] },
+            { level: 28, flashcard: { icon: '🗣️', title: 'Paráfrase', content: 'Mesmo com suas palavras, dê crédito.', example: 'Segundo a Fiocruz...', image: getImgUrl('Ideia Deles') }, question: 'Escreveu a ideia de um livro com suas palavras.', options: [ { text: 'Coloco: Segundo o livro...', correct: true, explanation: 'Respeitou a ideia.' }, { text: 'Não preciso citar.', correct: false, explanation: 'É plágio de ideia.' } ] },
+            { level: 29, flashcard: { icon: '📑', title: 'Referências', content: 'A lista final de sites usados.', example: 'Os "créditos" do seu trabalho.', image: getImgUrl('Os Créditos') }, question: 'O que é a página de Referências?', options: [ { text: 'Lista com as fontes que usei.', correct: true, explanation: 'Prova de pesquisa real.' }, { text: 'Escrever Google no final.', correct: false, explanation: 'Google não é autor.' } ] },
+            { level: 30, flashcard: { icon: '🧩', title: 'Referência Completa', content: 'Autor, Título, Link e Data de Acesso.', example: 'G1. Título. Link. Acesso em 15 mai.', image: getImgUrl('Montando') }, question: 'Forma completa de referenciar um site?', options: [ { text: 'Nome do Autor, Título, Link e Data.', correct: true, explanation: 'Mestre da Pesquisa!' }, { text: 'Apenas colar o link solto.', correct: false, explanation: 'Incompleto.' } ] }
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
             window.appId = typeof __app_id !== 'undefined' ? __app_id : 'detetives-app-v3';
-            
             const params = new URLSearchParams(window.location.search);
             const escolaParam = params.get('escola');
             if(escolaParam) {
                 const schoolInput = document.getElementById('student-school');
-                schoolInput.value = escolaParam;
-                schoolInput.readOnly = true;
+                schoolInput.value = escolaParam; schoolInput.readOnly = true;
                 schoolInput.classList.add('bg-blue-50', 'text-slate-600', 'cursor-not-allowed', 'border-blue-200');
-                
-                const label = schoolInput.previousElementSibling;
-                if (!label.innerHTML.includes('fa-link')) {
-                    label.innerHTML += ' <span class="text-xs text-primary font-black ml-2 bg-blue-100 px-2 py-1 rounded-md"><i class="fas fa-link"></i> Da sua Professora!</span>';
-                }
             }
         });
 
         window.showScreen = function(screenId) {
-            document.querySelectorAll('.screen').forEach(s => {
-                s.classList.remove('active-screen');
-                s.style.display = 'none';
-            });
+            document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active-screen'); s.style.display = 'none'; });
             const screen = document.getElementById(screenId);
-            screen.style.display = 'flex';
-            screen.classList.add('active-screen');
-            window.scrollTo(0,0);
+            screen.style.display = 'flex'; screen.classList.add('active-screen'); window.scrollTo(0,0);
         };
 
         window.goToAvatarSelection = function() {
             const name = document.getElementById('student-name').value.trim();
             const school = document.getElementById('student-school').value.trim();
             const turma = document.getElementById('student-class').value.trim();
-
-            if (!name || !school || !turma) {
-                alert('Detetive, preencha todos os campos!');
-                return;
-            }
-            state.student.name = name;
-            state.student.school = school;
-            state.student.class = turma;
-            
-            renderAvatars();
-            window.showScreen('avatar-screen');
+            if (!name || !school || !turma) { alert('Detetive, preencha todos os campos!'); return; }
+            state.student.name = name; state.student.school = school; state.student.class = turma;
+            renderAvatars(); window.showScreen('avatar-screen');
         };
 
         function renderAvatars() {
-            const container = document.getElementById('avatar-container');
-            container.innerHTML = '';
+            const container = document.getElementById('avatar-container'); container.innerHTML = '';
             avatars.forEach(avatar => {
                 const btn = document.createElement('button');
                 btn.className = 'text-5xl p-4 bg-white rounded-2xl border-4 border-slate-100 avatar-option hover:bg-blue-50 transition shadow-sm';
                 btn.innerHTML = avatar;
                 btn.onclick = () => {
                     document.querySelectorAll('.avatar-option').forEach(b => b.classList.remove('selected'));
-                    btn.classList.add('selected');
-                    state.student.avatar = avatar;
+                    btn.classList.add('selected'); state.student.avatar = avatar;
                 };
                 container.appendChild(btn);
             });
         }
 
         window.registerStudent = async function() {
-            if (!state.student.avatar) {
-                alert('Escolha um avatar para continuar!');
-                return;
-            }
-            state.student.level = 1;
-            renderMap();
-            updateHud();
-            window.showScreen('map-screen');
-            await saveProgressToDb();
+            if (!state.student.avatar) { alert('Escolha um avatar para continuar!'); return; }
+            state.student.level = 1; renderMap(); updateHud();
+            window.showScreen('map-screen'); await saveProgressToDb();
         };
 
         function updateHud() {
@@ -492,60 +423,33 @@
         }
 
         function renderMap() {
-            const container = document.getElementById('levels-container');
-            container.innerHTML = '<div class="trail-line"></div>';
-
+            const container = document.getElementById('levels-container'); container.innerHTML = '<div class="trail-line"></div>';
             for (let i = state.totalLevels; i >= 1; i--) {
-                const isCompleted = i < state.student.level;
-                const isActive = i === state.student.level;
-                
+                const isCompleted = i < state.student.level; const isActive = i === state.student.level;
                 let btnClass = 'level-node w-16 h-16 rounded-full flex items-center justify-center font-black text-2xl border-4 ';
                 let iconHTML = i;
+                if (isCompleted) { btnClass += 'level-completed shadow-md cursor-pointer hover:scale-110'; iconHTML = `<i class="fas fa-check text-3xl"></i>`; } 
+                else if (isActive) { btnClass += 'level-active shadow-lg cursor-pointer hover:scale-110 pulse-active'; } 
+                else { btnClass += 'level-locked'; iconHTML = `<i class="fas fa-lock text-slate-400"></i>`; }
                 
-                if (isCompleted) {
-                    btnClass += 'level-completed shadow-md cursor-pointer hover:scale-110';
-                    iconHTML = `<i class="fas fa-check text-3xl"></i>`;
-                } else if (isActive) {
-                    btnClass += 'level-active shadow-lg cursor-pointer hover:scale-110 pulse-active';
-                } else {
-                    btnClass += 'level-locked';
-                    iconHTML = `<i class="fas fa-lock text-slate-400"></i>`;
-                }
-
                 let margins = i % 2 === 0 ? 'mr-32' : 'ml-32'; 
-
-                const wrapper = document.createElement('div');
-                wrapper.className = `flex flex-col items-center ${margins} relative z-10 group`;
-                
-                const btn = document.createElement('button');
-                btn.className = btnClass;
-                btn.innerHTML = iconHTML;
-                
-                if (isCompleted || isActive) {
-                    btn.onclick = () => window.startLevel(i);
-                }
-
-                const label = document.createElement('span');
-                label.className = `mt-3 text-sm font-black ${isActive ? 'text-secondary bg-slate-900' : 'text-slate-500 bg-white'} px-3 py-1 rounded-lg shadow-sm border border-slate-200 whitespace-nowrap`;
+                const wrapper = document.createElement('div'); wrapper.className = `flex flex-col items-center ${margins} relative z-10 group`;
+                const btn = document.createElement('button'); btn.className = btnClass; btn.innerHTML = iconHTML;
+                if (isCompleted || isActive) { btn.onclick = () => window.startLevel(i); }
+                const label = document.createElement('span'); label.className = `mt-3 text-sm font-black ${isActive ? 'text-secondary bg-slate-900' : 'text-slate-500 bg-white'} px-3 py-1 rounded-lg shadow-sm border border-slate-200 whitespace-nowrap`;
                 label.textContent = `Missão ${i}`;
-
-                wrapper.appendChild(btn);
-                wrapper.appendChild(label);
-                container.appendChild(wrapper);
+                wrapper.appendChild(btn); wrapper.appendChild(label); container.appendChild(wrapper);
             }
         }
 
         window.startLevel = function(level) {
             if (level > state.student.level) return;
-            state.currentLevel = level;
-            const data = levelsData[level - 1];
-            
+            state.currentLevel = level; const data = levelsData[level - 1];
             document.getElementById('flashcard-icon').textContent = data.flashcard.icon;
             document.getElementById('flashcard-title').textContent = data.flashcard.title;
             document.getElementById('flashcard-content').textContent = data.flashcard.content;
             document.getElementById('flashcard-example').textContent = data.flashcard.example;
             document.getElementById('flashcard-image').src = data.flashcard.image;
-            
             window.showScreen('flashcard-screen');
         };
 
@@ -553,62 +457,38 @@
             const data = levelsData[state.currentLevel - 1];
             document.getElementById('quiz-level-indicator').textContent = 'MISSÃO ' + data.level;
             document.getElementById('quiz-question').textContent = data.question;
-            
-            const optionsContainer = document.getElementById('quiz-options');
-            optionsContainer.innerHTML = '';
-            
+            const optionsContainer = document.getElementById('quiz-options'); optionsContainer.innerHTML = '';
             const shuffledOptions = [...data.options].sort(() => Math.random() - 0.5);
-
             shuffledOptions.forEach((opt) => {
                 const btn = document.createElement('button');
                 btn.className = 'w-full text-left p-6 bg-white border-4 border-slate-100 rounded-2xl font-black text-slate-700 text-lg hover:border-primary hover:bg-blue-50 transition shadow-sm';
-                btn.textContent = opt.text;
-                btn.onclick = () => window.handleAnswer(opt.correct, opt.explanation);
+                btn.textContent = opt.text; btn.onclick = () => window.handleAnswer(opt.correct, opt.explanation);
                 optionsContainer.appendChild(btn);
             });
-            
             window.showScreen('quiz-screen');
         };
 
         window.handleAnswer = async function(isCorrect, explanation) {
-            const title = document.getElementById('feedback-title');
-            const icon = document.getElementById('feedback-icon');
-            const message = document.getElementById('feedback-message');
-            const btn = document.getElementById('feedback-btn');
-
+            const title = document.getElementById('feedback-title'); const icon = document.getElementById('feedback-icon');
+            const message = document.getElementById('feedback-message'); const btn = document.getElementById('feedback-btn');
             message.textContent = explanation;
-
             if (isCorrect) {
-                title.textContent = 'Mandou Bem!';
-                title.className = 'text-4xl font-black mb-4 text-green-500';
-                icon.innerHTML = '🎉';
-                btn.textContent = 'Avançar no Mapa';
-                btn.className = 'w-full font-black text-xl py-5 rounded-2xl btn-clean text-white bg-green-500 hover:bg-green-600';
-                
+                title.textContent = 'Mandou Bem!'; title.className = 'text-4xl font-black mb-4 text-green-500'; icon.innerHTML = '🎉';
+                btn.textContent = 'Avançar no Mapa'; btn.className = 'w-full font-black text-xl py-5 rounded-2xl btn-clean text-white bg-green-500 hover:bg-green-600';
                 btn.onclick = async () => {
                     if (state.currentLevel === state.student.level) {
-                        if (state.student.level <= state.totalLevels) {
-                            state.student.level++;
-                            await saveProgressToDb();
-                        }
+                        if (state.student.level <= state.totalLevels) { state.student.level++; await saveProgressToDb(); }
                     }
-                    renderMap();
-                    updateHud();
-                    window.showScreen('map-screen');
-                    
+                    renderMap(); updateHud(); window.showScreen('map-screen');
                     if(state.student.level > state.totalLevels && state.currentLevel === state.totalLevels) {
-                        setTimeout(() => alert(`PARABÉNS ${state.student.name}! Você é um Mestre da Pesquisa!`), 800);
+                        setTimeout(() => alert(`PARABÉNS ${state.student.name}! Você é um Mestre!`), 800);
                     }
                 };
             } else {
-                title.textContent = 'Ops! Quase lá...';
-                title.className = 'text-4xl font-black mb-4 text-secondary';
-                icon.innerHTML = '🤔';
-                btn.textContent = 'Tentar Novamente';
-                btn.className = 'w-full font-black text-xl py-5 rounded-2xl btn-clean text-slate-900 bg-secondary hover:bg-yellow-500';
+                title.textContent = 'Ops! Quase lá...'; title.className = 'text-4xl font-black mb-4 text-secondary'; icon.innerHTML = '🤔';
+                btn.textContent = 'Tentar Novamente'; btn.className = 'w-full font-black text-xl py-5 rounded-2xl btn-clean text-slate-900 bg-secondary hover:bg-yellow-500';
                 btn.onclick = () => window.showScreen('quiz-screen');
             }
-
             window.showScreen('feedback-screen');
         };
 
@@ -618,11 +498,7 @@
             const recForm = document.getElementById('form-recover');
             const tabLogin = document.getElementById('tab-login');
             const tabReg = document.getElementById('tab-register');
-
-            loginForm.classList.add('hidden'); 
-            regForm.classList.add('hidden');
-            if(recForm) recForm.classList.add('hidden');
-
+            loginForm.classList.add('hidden'); regForm.classList.add('hidden'); recForm.classList.add('hidden');
             if (tab === 'login') {
                 loginForm.classList.remove('hidden');
                 tabLogin.className = 'flex-1 py-3 text-sm font-bold rounded-lg bg-primary text-white transition';
@@ -637,207 +513,127 @@
                 tabReg.className = 'flex-1 py-3 text-sm font-bold rounded-lg text-slate-400 hover:text-white transition';
             }
         }
-
-        window.showRecoverPassword = function() {
-            window.switchTeacherTab('recover');
-        }
-
-        window.teacherRecoverPassword = async function() {
-            const email = document.getElementById('t-rec-email').value.trim().toLowerCase();
-            const school = document.getElementById('t-rec-school').value.trim();
-            const newPwd = document.getElementById('t-rec-pwd').value.trim();
-
-            if(!email || !school || !newPwd) { alert("Preencha todos os campos!"); return; }
-
-            let teachers = [];
-            try {
-                if (typeof window.firebaseFetchTeachers === 'function' && !window.useMockDb) {
-                    teachers = await window.firebaseFetchTeachers();
-                } else { teachers = window.mockTeachers; }
-            } catch(e) { window.useMockDb = true; teachers = window.mockTeachers; }
-
-            const found = teachers.find(t => t.email === email && t.school.toLowerCase() === school.toLowerCase());
-            
-            if (found) {
-                try {
-                    if (typeof window.firebaseUpdateTeacher === 'function' && !window.useMockDb) {
-                        await window.firebaseUpdateTeacher(found.id, { pwd: newPwd });
-                    } else {
-                        found.pwd = newPwd; 
-                    }
-                    alert("Senha alterada com sucesso! Faça o login.");
-                    document.getElementById('t-login-email').value = email;
-                    document.getElementById('t-rec-email').value = '';
-                    document.getElementById('t-rec-school').value = '';
-                    document.getElementById('t-rec-pwd').value = '';
-                    window.switchTeacherTab('login');
-                } catch(e) {
-                    alert("Erro ao atualizar senha no banco de dados.");
-                }
-            } else {
-                alert("Cadastro não encontrado com este e-mail e escola!");
-            }
-        }
+        window.showRecoverPassword = function() { window.switchTeacherTab('recover'); }
 
         window.teacherRegister = async function() {
             const name = document.getElementById('t-reg-name').value.trim();
             const school = document.getElementById('t-reg-school').value.trim();
             const email = document.getElementById('t-reg-email').value.trim().toLowerCase();
             const pwd = document.getElementById('t-reg-pwd').value.trim();
-
             if (!name || !school || !email || !pwd) { alert("Preencha tudo!"); return; }
             const teacherData = { name, school, email, pwd };
-
             try {
-                if (typeof window.firebaseSaveTeacher === 'function') {
-                    await window.firebaseSaveTeacher(teacherData);
-                } else {
-                    window.mockTeachers.push(teacherData);
-                }
-                alert("Conta criada! Faça login.");
-                window.switchTeacherTab('login');
-                document.getElementById('t-login-email').value = email;
-            } catch(e) {
-                window.mockTeachers.push(teacherData);
-                window.useMockDb = true;
-                window.switchTeacherTab('login');
-            }
+                if (typeof window.firebaseSaveTeacher === 'function') { await window.firebaseSaveTeacher(teacherData); } 
+                else { window.mockTeachers.push(teacherData); }
+                alert("Conta criada! Faça login."); window.switchTeacherTab('login'); document.getElementById('t-login-email').value = email;
+            } catch(e) { window.mockTeachers.push(teacherData); window.useMockDb = true; window.switchTeacherTab('login'); }
         };
 
         window.teacherLogin = async function() {
             const email = document.getElementById('t-login-email').value.trim().toLowerCase();
             const pwd = document.getElementById('t-login-pwd').value.trim();
-
             if (!email || !pwd) { alert("Preencha email e senha!"); return; }
-
             let teachers = [];
             try {
-                if (typeof window.firebaseFetchTeachers === 'function' && !window.useMockDb) {
-                    teachers = await window.firebaseFetchTeachers();
-                } else { teachers = window.mockTeachers; }
+                if (typeof window.firebaseFetchTeachers === 'function' && !window.useMockDb) { teachers = await window.firebaseFetchTeachers(); } 
+                else { teachers = window.mockTeachers; }
             } catch(e) { window.useMockDb = true; teachers = window.mockTeachers; }
-
             const found = teachers.find(t => t.email === email && t.pwd === pwd);
             if (found) {
-                state.teacher = found;
-                document.getElementById('dashboard-teacher-info').textContent = `Prof. ${found.name} | ${found.school}`;
-                
+                state.teacher = found; document.getElementById('dashboard-teacher-info').textContent = `Prof. ${found.name} | ${found.school}`;
                 let currentUrl = window.location.href.split('?')[0];
                 if (currentUrl.includes('about:')) currentUrl = "https://seusite.com/jogo";
-                const schoolParam = encodeURIComponent(found.school);
-                document.getElementById('game-share-link').value = `${currentUrl}?escola=${schoolParam}`;
-
-                window.showScreen('teacher-dashboard');
-                window.refreshTeacherData();
-            } else {
-                alert("Email ou senha incorretos!");
-            }
+                document.getElementById('game-share-link').value = `${currentUrl}?escola=${encodeURIComponent(found.school)}`;
+                window.showScreen('teacher-dashboard'); window.refreshTeacherData();
+            } else { alert("Email ou senha incorretos!"); }
         };
 
-        window.teacherLogout = function() {
-            state.teacher = null;
-            document.getElementById('t-login-pwd').value = '';
-            window.showScreen('home-screen');
-        }
+        window.teacherRecoverPassword = async function() {
+            const email = document.getElementById('t-rec-email').value.trim().toLowerCase();
+            const school = document.getElementById('t-rec-school').value.trim();
+            const newPwd = document.getElementById('t-rec-pwd').value.trim();
+            if(!email || !school || !newPwd) { alert("Preencha todos os campos!"); return; }
+            let teachers = [];
+            try {
+                if (typeof window.firebaseFetchTeachers === 'function' && !window.useMockDb) { teachers = await window.firebaseFetchTeachers(); } 
+                else { teachers = window.mockTeachers; }
+            } catch(e) { window.useMockDb = true; teachers = window.mockTeachers; }
+            
+            const found = teachers.find(t => t.email === email && t.school.toLowerCase() === school.toLowerCase());
+            if (found) {
+                try {
+                    if (typeof window.firebaseUpdateTeacher === 'function' && !window.useMockDb) { await window.firebaseUpdateTeacher(found.id, { pwd: newPwd }); } 
+                    else { found.pwd = newPwd; }
+                    alert("Senha alterada! Faça o login."); window.switchTeacherTab('login');
+                } catch(e) { alert("Erro ao atualizar senha."); }
+            } else { alert("Cadastro não encontrado com este e-mail e escola!"); }
+        };
+
+        window.teacherLogout = function() { state.teacher = null; document.getElementById('t-login-pwd').value = ''; window.showScreen('home-screen'); }
 
         window.copyGameLink = function() {
             const url = document.getElementById('game-share-link').value;
-            const textArea = document.createElement("textarea");
-            textArea.value = url; textArea.style.position = "fixed"; textArea.style.left = "-999999px";
+            const textArea = document.createElement("textarea"); textArea.value = url; textArea.style.position = "fixed"; textArea.style.left = "-999999px";
             document.body.appendChild(textArea); textArea.focus(); textArea.select();
             try {
-                document.execCommand('copy');
-                const btn = document.getElementById('btn-copy-link');
-                const original = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-check"></i>';
-                btn.classList.add('bg-green-500'); btn.classList.remove('bg-primary');
-                setTimeout(() => {
-                    btn.innerHTML = original;
-                    btn.classList.remove('bg-green-500'); btn.classList.add('bg-primary');
-                }, 2000);
+                document.execCommand('copy'); const btn = document.getElementById('btn-copy-link'); const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i>'; btn.classList.add('bg-green-500'); btn.classList.remove('bg-primary');
+                setTimeout(() => { btn.innerHTML = original; btn.classList.remove('bg-green-500'); btn.classList.add('bg-primary'); }, 2000);
             } catch (err) { console.error(err); } finally { textArea.remove(); }
         };
 
         window.simulateStudentLink = function() {
-            if (!state.teacher) return;
-            window.showScreen('student-login-screen');
-            const schoolInput = document.getElementById('student-school');
-            schoolInput.value = state.teacher.school;
-            schoolInput.readOnly = true;
-            schoolInput.classList.add('bg-blue-50', 'text-slate-600', 'cursor-not-allowed', 'border-blue-200');
-            state.teacher = null;
+            if (!state.teacher) return; window.showScreen('student-login-screen');
+            const schoolInput = document.getElementById('student-school'); schoolInput.value = state.teacher.school; schoolInput.readOnly = true;
+            schoolInput.classList.add('bg-blue-50', 'text-slate-600', 'cursor-not-allowed', 'border-blue-200'); state.teacher = null;
         };
 
         window.refreshTeacherData = async function() {
             if (!state.teacher) return;
             const tbody = document.getElementById('students-table-body');
             tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-center text-primary font-bold">Buscando...</td></tr>';
-            
             let allStudents = [];
             try {
-                if (typeof window.firebaseFetchStudents === 'function' && !window.useMockDb) {
-                    allStudents = await window.firebaseFetchStudents();
-                } else { allStudents = [...window.mockStudents]; }
+                if (typeof window.firebaseFetchStudents === 'function' && !window.useMockDb) { allStudents = await window.firebaseFetchStudents(); } 
+                else { allStudents = [...window.mockStudents]; }
             } catch(e) { window.useMockDb = true; allStudents = [...window.mockStudents]; }
 
             const myStudents = allStudents.filter(s => s.school.toLowerCase() === state.teacher.school.toLowerCase());
             myStudents.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
             
             tbody.innerHTML = '';
-            if (myStudents.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-center text-slate-500 font-bold">Nenhum aluno jogando ainda.</td></tr>';
-                return;
-            }
-
+            if (myStudents.length === 0) { tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-center text-slate-500 font-bold">Nenhum aluno jogando ainda.</td></tr>'; return; }
             myStudents.forEach(s => {
-                const tr = document.createElement('tr');
-                tr.className = 'border-b border-slate-100 hover:bg-slate-50 transition';
-                const nivelVisual = Math.min(s.level, state.totalLevels);
-                const isFinished = s.level > state.totalLevels;
+                const tr = document.createElement('tr'); tr.className = 'border-b border-slate-100 hover:bg-slate-50 transition';
+                const nivelVisual = Math.min(s.level, state.totalLevels); const isFinished = s.level > state.totalLevels;
                 const progressWidth = (nivelVisual / state.totalLevels) * 100;
-                
                 tr.innerHTML = `
                     <td class="p-6 font-black text-slate-800 flex items-center gap-4"><span class="text-4xl bg-white p-2 rounded-xl border-2 border-slate-100 shadow-sm">${s.avatar}</span> <span>${s.name}</span></td>
                     <td class="p-6 text-slate-600 font-bold">${s.class}</td>
                     <td class="p-6">
                         <div class="flex flex-col gap-2">
-                            <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
-                                <div class="${isFinished ? 'bg-green-500' : 'bg-secondary'} h-3 rounded-full transition-all" style="width: ${progressWidth}%"></div>
-                            </div>
+                            <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden"><div class="${isFinished ? 'bg-green-500' : 'bg-secondary'} h-3 rounded-full transition-all" style="width: ${progressWidth}%"></div></div>
                             <span class="text-xs font-black ${isFinished ? 'text-green-600' : 'text-slate-600'}">${isFinished ? `FORMADO!` : `${nivelVisual} de ${state.totalLevels}`}</span>
                         </div>
-                    </td>
-                `;
+                    </td>`;
                 tbody.appendChild(tr);
             });
         };
 
         async function saveProgressToDb() {
-            const data = {
-                name: state.student.name, school: state.student.school, class: state.student.class,
-                avatar: state.student.avatar, level: state.student.level, timestamp: new Date().toISOString()
-            };
+            const data = { name: state.student.name, school: state.student.school, class: state.student.class, avatar: state.student.avatar, level: state.student.level, timestamp: new Date().toISOString() };
             if (window.useMockDb) { saveStudentLocal(data); return; }
-            try {
-                if (typeof window.firebaseSaveStudent === 'function') await window.firebaseSaveStudent(data);
-                else saveStudentLocal(data);
+            try { if (typeof window.firebaseSaveStudent === 'function') await window.firebaseSaveStudent(data); else saveStudentLocal(data);
             } catch (e) { window.useMockDb = true; saveStudentLocal(data); }
         }
-
         function saveStudentLocal(data) {
-            if (!state.student.docId) {
-                state.student.docId = 'mock-s-' + Date.now();
-                window.mockStudents.push({ id: state.student.docId, ...data });
-            } else {
-                const idx = window.mockStudents.findIndex(s => s.id === state.student.docId);
-                if(idx > -1) window.mockStudents[idx] = { id: state.student.docId, ...data };
-            }
+            if (!state.student.docId) { state.student.docId = 'mock-s-' + Date.now(); window.mockStudents.push({ id: state.student.docId, ...data }); } 
+            else { const idx = window.mockStudents.findIndex(s => s.id === state.student.docId); if(idx > -1) window.mockStudents[idx] = { id: state.student.docId, ...data }; }
         }
     </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getDatabase, ref, set, push, get, update, child } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
         const firebaseConfig = {
@@ -850,27 +646,18 @@
             appId: "1:265636817567:web:14497a555866ecdba990aa"
         };
 
-        let app, db, auth;
+        let app, db;
         try {
             app = initializeApp(firebaseConfig);
             db = getDatabase(app);
-            auth = getAuth(app);
             window.useMockDb = false; 
         } catch (e) {
-            console.warn("Usando Mock DB offline", e);
+            console.warn("Falha ao iniciar Firebase, usando DB local offline.");
             window.useMockDb = true;
-        }
-
-        async function initAuth() {
-            if (!auth) return false;
-            if (!auth.currentUser) await signInAnonymously(auth);
-            return !!auth.currentUser;
         }
 
         window.firebaseSaveStudent = async function(data) {
             if (window.useMockDb) throw new Error("Mock ativo");
-            const hasAuth = await initAuth(); if (!hasAuth) throw new Error("Sem auth");
-            
             if (!state.student.docId) {
                 const newListRef = push(ref(db, `artifacts/${window.appId}/students`));
                 state.student.docId = newListRef.key;
@@ -882,44 +669,32 @@
 
         window.firebaseFetchStudents = async function() {
             if (window.useMockDb) throw new Error("Mock ativo");
-            const hasAuth = await initAuth(); if (!hasAuth) throw new Error("Sem auth");
-            
             const snapshot = await get(child(ref(db), `artifacts/${window.appId}/students`));
             const data = [];
             if (snapshot.exists()) {
-                snapshot.forEach((childSnapshot) => {
-                    data.push({ id: childSnapshot.key, ...childSnapshot.val() });
-                });
+                snapshot.forEach((childSnapshot) => { data.push({ id: childSnapshot.key, ...childSnapshot.val() }); });
             }
             return data;
         };
 
         window.firebaseSaveTeacher = async function(data) {
             if (window.useMockDb) throw new Error("Mock ativo");
-            const hasAuth = await initAuth(); if (!hasAuth) throw new Error("Sem auth");
-            
             const newListRef = push(ref(db, `artifacts/${window.appId}/teachers`));
             await set(newListRef, data);
         };
 
         window.firebaseFetchTeachers = async function() {
             if (window.useMockDb) throw new Error("Mock ativo");
-            const hasAuth = await initAuth(); if (!hasAuth) throw new Error("Sem auth");
-            
             const snapshot = await get(child(ref(db), `artifacts/${window.appId}/teachers`));
             const data = [];
             if (snapshot.exists()) {
-                snapshot.forEach((childSnapshot) => {
-                    data.push({ id: childSnapshot.key, ...childSnapshot.val() });
-                });
+                snapshot.forEach((childSnapshot) => { data.push({ id: childSnapshot.key, ...childSnapshot.val() }); });
             }
             return data;
         };
 
         window.firebaseUpdateTeacher = async function(id, data) {
             if (window.useMockDb) throw new Error("Mock ativo");
-            const hasAuth = await initAuth(); if (!hasAuth) throw new Error("Sem auth");
-            
             await update(ref(db, `artifacts/${window.appId}/teachers/${id}`), data);
         };
     </script>
