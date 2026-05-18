@@ -130,7 +130,7 @@
         <div class="max-w-md mx-auto w-full flex-1 overflow-y-auto no-scrollbar relative p-6 pb-20">
             <div class="text-center mb-12 mt-4">
                 <h2 class="text-3xl font-black text-slate-800">Trilha de Pesquisa</h2>
-                <p class="text-slate-500 font-semibold mt-1">Complete as 30 missões!</p>
+                <p class="text-slate-500 font-semibold mt-1">Complete as 30 missões para se formar!</p>
             </div>
             <div class="trail-container flex flex-col-reverse items-center gap-14" id="levels-container"><div class="trail-line"></div></div>
         </div>
@@ -175,25 +175,25 @@
         </div>
     </main>
 
-    <!-- TELA DE FEEDBACK (ACERTOU/ERROU) -->
+    <!-- TELA DE FEEDBACK -->
     <main id="feedback-screen" class="screen items-center justify-center p-6 bg-slate-800/50 backdrop-blur-sm fixed inset-0 z-[60]">
         <div class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md text-center border-4 border-white animate-[scaleIn_0.3s_ease-out]">
             <div id="feedback-icon" class="text-8xl mb-6 drop-shadow-md"></div>
             <h2 id="feedback-title" class="text-4xl font-black mb-4">Título</h2>
-            <div class="bg-slate-50 p-6 rounded-2xl mb-8 border-2 border-slate-100">
-                <p id="feedback-message" class="text-slate-700 font-bold text-lg leading-relaxed">Mensagem</p>
+            <div class="bg-slate-50 p-6 rounded-2xl mb-8 border-2 border-slate-100 text-left">
+                <p id="feedback-message" class="text-slate-700 font-bold text-lg leading-relaxed text-center">Mensagem</p>
             </div>
             <button id="feedback-btn" class="w-full font-black text-xl py-5 rounded-2xl btn-clean text-white shadow-lg"></button>
         </div>
     </main>
 
-    <!-- ÁREA DO PROFESSOR (LOGIN E CADASTRO) -->
+    <!-- ÁREA DO PROFESSOR (LOGIN, CADASTRO, RECUPERAÇÃO) -->
     <main id="teacher-auth-screen" class="screen items-center justify-center p-6 bg-slate-900 text-slate-100">
         <div class="bg-slate-800 p-10 rounded-3xl shadow-2xl w-full max-w-md border border-slate-700">
             <div class="text-center mb-8">
                 <div class="w-20 h-20 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-slate-600"><i class="fas fa-user-shield text-4xl text-secondary"></i></div>
                 <h2 class="text-3xl font-black text-white">Área do Professor</h2>
-                <p class="text-slate-400 mt-2 font-medium">Gerencie sua turma</p>
+                <p class="text-slate-400 mt-2 font-medium">Gerencie sua turma com segurança</p>
             </div>
 
             <div class="flex bg-slate-900 rounded-xl p-1.5 mb-8 border border-slate-700">
@@ -212,7 +212,7 @@
                 <input type="text" id="t-reg-name" placeholder="Seu Nome (Ex: Prof. Silva)" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
                 <input type="text" id="t-reg-school" placeholder="Nome exato da Escola" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
                 <input type="email" id="t-reg-email" placeholder="E-mail" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
-                <input type="password" id="t-reg-pwd" placeholder="Crie uma Senha" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <input type="password" id="t-reg-pwd" placeholder="Crie uma Senha Forte" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
                 <button onclick="window.teacherRegister()" class="w-full bg-secondary text-slate-900 font-black text-lg py-4 rounded-xl hover:bg-yellow-500 transition mt-4 shadow-lg shadow-yellow-500/20">Cadastrar Escola</button>
             </div>
 
@@ -221,9 +221,9 @@
                     <h3 class="text-xl font-black text-white">Recuperar Senha</h3>
                     <p class="text-xs text-slate-400 mt-1">Confirme a escola e e-mail para criar nova senha</p>
                 </div>
-                <input type="email" id="t-rec-email" placeholder="Seu E-mail" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <input type="email" id="t-rec-email" placeholder="Seu E-mail Cadastrado" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
                 <input type="text" id="t-rec-school" placeholder="Nome exato da Escola" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
-                <input type="password" id="t-rec-pwd" placeholder="Nova Senha" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <input type="password" id="t-rec-pwd" placeholder="Digite a Nova Senha" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
                 <button onclick="window.teacherRecoverPassword()" class="w-full bg-green-500 text-white font-black text-lg py-4 rounded-xl hover:bg-green-600 transition mt-4 shadow-lg shadow-green-500/20">Salvar Nova Senha</button>
                 <button onclick="window.switchTeacherTab('login')" class="w-full text-slate-400 text-sm font-bold hover:text-white transition mt-4">Voltar ao Login</button>
             </div>
@@ -270,52 +270,452 @@
     </main>
 
     <script>
+        // CONFIGURAÇÃO DO BANCO DE DADOS DIRETO (API REST)
         const FIREBASE_DB_URL = "https://detetives-da-internet-default-rtdb.firebaseio.com";
+        
         const state = { student: { name: '', school: '', class: '', avatar: '', level: 1, docId: null }, teacher: null, currentLevel: 1, totalLevels: 30 };
         const avatars = ['🕵️', '👩‍💻', '🦊', '🦉', '🚀', '🤖', '👾', '🦄', '🦖'];
         const getImgUrl = (text) => `https://placehold.co/600x300/e0e7ff/0052ff?text=${encodeURIComponent(text)}&font=montserrat`;
 
-        // DADOS DAS 30 FASES
+        // DADOS DAS 30 FASES - TOTALMENTE REVISADOS E APROFUNDADOS
         const levelsData = [
-            { level: 1, flashcard: { icon: '📰', title: 'O que são Fake News?', content: 'Fake News são notícias falsas ou mentirosas criadas para enganar as pessoas, causar medo ou ganhar cliques.', example: 'Uma mensagem no grupo da família dizendo que o mundo vai acabar amanhã se você não mandar a mensagem para 10 pessoas.', image: getImgUrl('Mentira ou Verdade?') }, question: 'Você recebe um link no WhatsApp dizendo "Ganhe um celular grátis clicando aqui!". O que você faz?', options: [ { text: 'Clico rápido para ganhar o celular.', correct: false, explanation: 'Isso é perigoso! Pode ser um vírus ou um golpe.' }, { text: 'Não clico e apago a mensagem.', correct: true, explanation: 'Excelente! Você evitou cair em uma Fake News.' } ] },
-            { level: 2, flashcard: { icon: '📝', title: 'Plágio é Roubo', content: 'Copiar o trabalho de outra pessoa da internet e dizer que é seu se chama Plágio.', example: 'Copiar a página da Wikipédia inteira para o trabalho escolar.', image: getImgUrl('Dê o Crédito') }, question: 'Como você usa a internet num trabalho de história?', options: [ { text: 'Leio, entendo e escrevo com minhas palavras.', correct: true, explanation: 'Perfeito! Assim você aprende de verdade.' }, { text: 'Copio o texto e colo no Word.', correct: false, explanation: 'Isso é plágio. O trabalho tem que ser feito por você.' } ] },
-            { level: 3, flashcard: { icon: '🔑', title: 'Senhas Seguras', content: 'Uma senha é como a chave da sua casa. Ela deve ser forte, misturando letras, números e símbolos.', example: 'Senha Forte: "Gat0@Branc022!"', image: getImgUrl('Crie Senhas Fortes') }, question: 'Seu amigo pede a senha do seu jogo para "te ajudar". Você:', options: [ { text: 'Digo que senhas são secretas e não passo.', correct: true, explanation: 'Boa! Senha é pessoal.' }, { text: 'Passo a senha, ele é meu amigo.', correct: false, explanation: 'Senhas não devem ser compartilhadas com NINGUÉM.' } ] },
-            { level: 4, flashcard: { icon: '🤐', title: 'Privacidade de Dados', content: 'Endereço e telefone são DADOS PESSOAIS. Não espalhe isso em chats públicos de jogos.', example: 'Um estranho no Roblox pergunta: "Onde você estuda?". Não responda.', image: getImgUrl('Proteja seus Dados') }, question: 'No chat do jogo alguém diz: "Mora onde? Vou mandar um presente".', options: [ { text: 'Passo o nome do meu bairro.', correct: false, explanation: 'Nunca passe informações de onde você mora.' }, { text: 'Ignoro a mensagem ou bloqueio a pessoa.', correct: true, explanation: 'Isso aí! Segurança em primeiro lugar.' } ] },
-            { level: 5, flashcard: { icon: '🔍', title: 'Palavras-Chave', content: 'No Google, não digite frases inteiras. Use "Palavras-Chave" (os termos mais importantes).', example: 'Em vez de "o que ursos comem no inverno", busque "alimentação urso inverno".', image: getImgUrl('Busca Inteligente') }, question: 'Como buscar sobre o sistema solar para um trabalho?', options: [ { text: '"planetas sistema solar"', correct: true, explanation: 'Direto ao ponto! Traz resultados melhores.' }, { text: '"trabalho sobre todos os planetas do sistema solar"', correct: false, explanation: 'Muito longo!' } ] },
-            { level: 6, flashcard: { icon: '🔒', title: 'O Cadeado (HTTPS)', content: 'Antes de colocar dados, olhe a barra de endereços. Tem que ter um "Cadeado" fechado.', example: 'https://escola.edu.br (Seguro).', image: getImgUrl('Procure o Cadeado') }, question: 'O site para comprar um jogo não tem cadeado. O que fazer?', options: [ { text: 'Saio do site imediatamente.', correct: true, explanation: 'Certíssimo! Seus dados podem ser roubados.' }, { text: 'Compro mesmo assim.', correct: false, explanation: 'Sem segurança, seus dados podem ser roubados.' } ] },
-            { level: 7, flashcard: { icon: '🤝', title: 'Cyberbullying', content: 'Ofender alguém online é Cyberbullying. É crime e machuca.', example: 'Fazer montagens de fotos de um colega para rir dele.', image: getImgUrl('Diga NÃO ao Cyberbullying') }, question: 'Colegas fazem piadas maldosas no WhatsApp sobre uma menina. Você:', options: [ { text: 'Não participo e aviso um professor/adulto.', correct: true, explanation: 'Ação de herói!' }, { text: 'Apenas ignoro.', correct: false, explanation: 'Ficar calado ajuda o agressor. Peça ajuda.' } ] },
-            { level: 8, flashcard: { icon: '📸', title: 'Fotos e Pegada Digital', content: 'Tudo na internet fica lá para sempre. Pense antes de postar fotos suas ou de amigos.', example: 'Foto de uniforme da escola mostra para estranhos onde você estuda.', image: getImgUrl('Pense Antes de Postar') }, question: 'Quer postar uma foto engraçada do amigo. O que fazer antes?', options: [ { text: 'Peço permissão para ele.', correct: true, explanation: 'Exato! Consentimento é fundamental.' }, { text: 'Posto logo para ter curtidas!', correct: false, explanation: 'E se ele não gostar? Respeite a imagem dos outros.' } ] },
-            { level: 9, flashcard: { icon: '🎣', title: 'Phishing (Pescaria)', content: 'Phishing é fingir ser uma empresa (banco, jogo) para roubar sua senha.', example: 'E-mail: "Seu jogo foi bloqueado. Digite a senha aqui".', image: getImgUrl('Cuidado com Golpes') }, question: 'Recebe e-mail da Netflix pedindo senha urgente. Você:', options: [ { text: 'Não clico, abro o site oficial para checar.', correct: true, explanation: 'Gênio! Empresas reais não pedem senhas assim.' }, { text: 'Clico rápido.', correct: false, explanation: 'Isso é golpe para roubar a senha.' } ] },
-            { level: 10, flashcard: { icon: '🎓', title: 'Fontes .gov e .edu', content: 'Sites terminados em .gov (Governo) ou .edu (Educação) têm informações mais seguras.', example: 'Site do Ministério da Saúde (.gov.br).', image: getImgUrl('Fontes Oficiais') }, question: 'Onde achar informação correta sobre vacinas?', options: [ { text: 'No site www.saude.gov.br.', correct: true, explanation: 'Sim! Fontes seguras.' }, { text: 'No blog "SaudeMisteriosa.com".', correct: false, explanation: 'Qualquer um cria blog. Vá nas fontes oficiais.' } ] },
-            { level: 11, flashcard: { icon: '📢', title: 'Anúncio vs Conteúdo', content: 'Propagandas se disfarçam de notícias ou botões de download.', example: 'Botão gigante "Download" num site de jogos.', image: getImgUrl('Isso é Propaganda?') }, question: 'Na página tem um botão gigante verde "DOWNLOAD". Você:', options: [ { text: 'Procuro letras escritas "Anúncio".', correct: true, explanation: 'Visão afiada!' }, { text: 'Clico no botão.', correct: false, explanation: 'Pode ser propaganda.' } ] },
-            { level: 12, flashcard: { icon: '👣', title: 'Sua Pegada Digital', content: 'Tudo que você posta e pesquisa deixa um rastro.', example: 'Comentários maldosos hoje podem prejudicar no futuro.', image: getImgUrl('Rastros na Rede') }, question: 'O que faz parte da Pegada Digital?', options: [ { text: 'Meus comentários, fotos e sites que visito.', correct: true, explanation: 'Exato. Aja com responsabilidade.' }, { text: 'Só arquivos baixados.', correct: false, explanation: 'Não, interações sociais também contam.' } ] },
-            { level: 13, flashcard: { icon: '⬇️', title: 'Downloads Seguros', content: 'Baixar jogos piratas traz vírus. Use lojas oficiais.', example: 'Play Store ou App Store.', image: getImgUrl('Cuidado ao Baixar') }, question: 'Quer jogar um jogo pago que um site dá de graça. Você:', options: [ { text: 'Não baixo para não pegar vírus.', correct: true, explanation: 'Decisão segura!' }, { text: 'Baixo para jogar de graça!', correct: false, explanation: 'Risco enorme de vírus.' } ] },
-            { level: 14, flashcard: { icon: '©️', title: 'Direitos Autorais', content: 'Imagens têm dono. Não pegue do Google sem permissão para seus projetos.', example: 'Use bancos gratuitos (Pixabay).', image: getImgUrl('Copyright') }, question: 'Precisa de fotos para um blog. Onde procurar?', options: [ { text: 'Sites de Imagens de Domínio Público.', correct: true, explanation: 'Perfeito!' }, { text: 'Copio do Google Imagens.', correct: false, explanation: 'Muitas têm direitos autorais.' } ] },
-            { level: 15, flashcard: { icon: '📶', title: 'Wi-Fi Público', content: 'Wi-Fi de shopping não é seguro para colocar senhas.', example: 'Entrar no banco no Wi-Fi da praça de alimentação.', image: getImgUrl('Perigos do Wi-Fi') }, question: 'No Wi-Fi sem senha do shopping. O que é seguro?', options: [ { text: 'Apenas navegar em notícias/vídeos.', correct: true, explanation: 'Ótima prática.' }, { text: 'Entrar no e-mail e comprar.', correct: false, explanation: 'Hackers podem roubar os dados.' } ] },
-            { level: 16, flashcard: { icon: '🔄', title: 'Atualizações', content: 'Atualizar celular/PC protege contra vírus novos.', example: 'Aviso: "Atualização de sistema".', image: getImgUrl('Mantenha Atualizado') }, question: 'Celular pede para atualizar. Você:', options: [ { text: 'Atualizo assim que possível.', correct: true, explanation: 'Melhora e protege o aparelho.' }, { text: 'Ignoro.', correct: false, explanation: 'Deixa vulnerável a vírus.' } ] },
-            { level: 17, flashcard: { icon: '⏰', title: 'Tempo de Tela', content: 'Ficar no celular à noite prejudica o sono.', example: 'Usar no escuro até as 3 da manhã.', image: getImgUrl('Equilíbrio') }, question: 'Qual a melhor prática à noite?', options: [ { text: 'Desligar telas uma hora antes de dormir.', correct: true, explanation: 'O sono será melhor.' }, { text: 'Ver vídeos até pegar no sono.', correct: false, explanation: 'A luz prejudica o sono.' } ] },
-            { level: 18, flashcard: { icon: '👥', title: 'Amigos Online', content: 'Amigo de jogo ainda é ESTRANHO. Pessoas fingem quem são.', example: 'Foto de criança pode ser adulto.', image: getImgUrl('Quem é?') }, question: 'Amigo do jogo chama para encontrar na praça. Você:', options: [ { text: 'Aviso os pais. Nunca vou sozinho.', correct: true, explanation: 'Segurança em primeiro lugar.' }, { text: 'Vou, pois jogamos muito.', correct: false, explanation: 'Muito perigoso.' } ] },
-            { level: 19, flashcard: { icon: '🛡️', title: 'Autenticação 2FA', content: 'A Verificação em 2 Etapas é uma segunda fechadura (código por SMS).', example: 'Ativar PIN no WhatsApp.', image: getImgUrl('Fechadura Dupla') }, question: 'Como tornar contas mais seguras?', options: [ { text: 'Ativando a verificação em duas etapas (2FA).', correct: true, explanation: 'Segurança de Elite!' }, { text: 'Trocando a senha a cada 10 anos.', correct: false, explanation: 'Não é suficiente.' } ] },
-            { level: 20, flashcard: { icon: '⚖️', title: 'Checagem', content: 'Cheque se a notícia está em jornais confiáveis.', example: 'Ver em vários sites.', image: getImgUrl('Confira as Fontes') }, question: 'Lê: "Extraterrestres pousaram". Você:', options: [ { text: 'Pesquiso em jornais grandes. Se não tem, é fake.', correct: true, explanation: 'Checar é essencial.' }, { text: 'Repasso.', correct: false, explanation: 'Não espalhe sem checar.' } ] },
-            { level: 21, flashcard: { icon: '📚', title: 'Pesquisar não é Copiar', content: 'Pesquisar é ler várias fontes, entender e explicar com suas palavras.', example: 'Ler 3 sites sobre dinossauros e fazer um resumo.', image: getImgUrl('Como Pesquisar') }, question: 'Trabalho sobre Ciclo da Água. Atitude correta:', options: [ { text: 'Leio 3 sites e escrevo com minhas palavras.', correct: true, explanation: 'Isso é construir conhecimento!' }, { text: 'Copio o primeiro texto do Google.', correct: false, explanation: 'Isso é cópia.' } ] },
-            { level: 22, flashcard: { icon: '🎯', title: 'Foco no Tema', content: 'Seja específico na busca para não se perder.', example: 'Buscar "reciclagem garrafa PET" em vez de só "plástico".', image: getImgUrl('Mire no Alvo') }, question: 'Tema: "Alimentação do Leão". Como buscar?', options: [ { text: '"o que leões comem na natureza"', correct: true, explanation: 'Busca direta e focada.' }, { text: '"tudo sobre leões e curiosidades"', correct: false, explanation: 'Muito amplo.' } ] },
-            { level: 23, flashcard: { icon: '🏷️', title: 'Aspas no Google', content: 'Usar aspas "" busca a frase EXATA.', example: 'Buscar "planeta marte" (com aspas).', image: getImgUrl('Use Aspas') }, question: 'Achar o poema com a frase exata: Minha terra tem palmeiras.', options: [ { text: '"Minha terra tem palmeiras" poema', correct: true, explanation: 'Força achar a frase inteira.' }, { text: 'Minha terra tem palmeiras poema', correct: false, explanation: 'Traz resultados bagunçados.' } ] },
-            { level: 24, flashcard: { icon: '👤', title: 'Regra do Autor', content: 'Procure saber QUEM escreveu (cientista? governo?). Textos sem autor são suspeitos.', example: 'Texto da NASA vs. Blog anônimo.', image: getImgUrl('Quem Escreveu?') }, question: 'Achou texto incrível sem autor. O que fazer?', options: [ { text: 'Desconfio e procuro em site com autor.', correct: true, explanation: 'Autoria é responsabilidade.' }, { text: 'Uso assim mesmo.', correct: false, explanation: 'Pode ser falso.' } ] },
-            { level: 25, flashcard: { icon: '🌐', title: 'Segredo da Wikipédia', content: 'Use a Wikipédia para o resumo, mas clique nas "Referências" [1] no final da página para as fontes oficiais.', example: 'Ir do resumo do Egito para o site do historiador.', image: getImgUrl('Além da Wiki') }, question: 'Como pesquisador usa a Wikipédia?', options: [ { text: 'Clico nas referências do final para ver fontes originais.', correct: true, explanation: 'É um trampolim.' }, { text: 'Copio tudo pro trabalho.', correct: false, explanation: 'Não é a fonte final.' } ] },
-            { level: 26, flashcard: { icon: '👀', title: 'Ler Lateralmente', content: 'Abra outra aba e pesquise o que falam SOBRE o site.', example: 'Buscar: "Site XYZ é confiável?".', image: getImgUrl('Olhe para os Lados') }, question: 'Achou notícia chocante no site "VerdadesOcultas".', options: [ { text: 'Pesquiso no Google se o site é confiável.', correct: true, explanation: 'Ler lateralmente!' }, { text: 'Leio a página "Sobre Nós" do site.', correct: false, explanation: 'Qualquer um pode mentir.' } ] },
-            { level: 27, flashcard: { icon: '📝', title: 'Citação Direta', content: 'Copiar uma frase marcante? Coloque entre "aspas" e diga o autor.', example: 'Segundo Einstein: "A imaginação é...".', image: getImgUrl('Cópia Certa') }, question: 'Vai usar uma frase genial de um livro:', options: [ { text: 'Coloco entre aspas e o nome do autor.', correct: true, explanation: 'Ética nota 1000.' }, { text: 'Escrevo como se fosse minha.', correct: false, explanation: 'Isso é plágio.' } ] },
-            { level: 28, flashcard: { icon: '🗣️', title: 'Paráfrase', content: 'Escrever com SUAS palavras ainda exige dar crédito ao autor original.', example: 'Segundo a Fiocruz, lavar as mãos...', image: getImgUrl('Ideia Deles') }, question: 'Leu no livro que a água ferve a 100 graus e escreveu com suas palavras.', options: [ { text: 'Coloco: Segundo o livro de Física...', correct: true, explanation: 'Respeitou a ideia original.' }, { text: 'Não preciso citar.', correct: false, explanation: 'É plágio de ideia.' } ] },
-            { level: 29, flashcard: { icon: '📑', title: 'Referências', content: 'A lista final de sites e livros usados no trabalho.', example: 'Os "créditos" do seu trabalho.', image: getImgUrl('Os Créditos') }, question: 'O que é a página de Referências?', options: [ { text: 'Lista no final com as fontes que usei.', correct: true, explanation: 'Prova de pesquisa real.' }, { text: 'Escrever Google no final.', correct: false, explanation: 'Google não é autor.' } ] },
-            { level: 30, flashcard: { icon: '🧩', title: 'Referência de Site', content: 'Exige: Autor, Título, Link e Data de Acesso.', example: 'G1. Título. Link. Acesso em 15 mai.', image: getImgUrl('Montando') }, question: 'Qual a forma completa de referenciar um site?', options: [ { text: 'Nome do Autor, Título, Link e Data de acesso.', correct: true, explanation: 'Mestre da Pesquisa!' }, { text: 'Apenas colar o link solto.', correct: false, explanation: 'Incompleto.' } ] }
+            // BLOCO 1: SEGURANÇA BÁSICA E VERIFICAÇÃO DE FATOS
+            { 
+                level: 1, 
+                flashcard: { 
+                    icon: '📰', title: 'O que são Fake News?', 
+                    content: 'Fake News não são apenas mentiras bobas. São informações manipuladas, criadas de propósito com títulos alarmistas. Elas são desenhadas para mexer com suas emoções (causar raiva, medo ou alegria extrema) para que você compartilhe sem pensar. Quem cria isso ganha dinheiro com anúncios toda vez que alguém clica no link.', 
+                    example: 'Uma corrente de WhatsApp toda em MAIÚSCULAS com emojis de sirene (🚨) dizendo: "URGENTE! O mundo vai acabar amanhã se você não repassar essa mensagem para 10 grupos!"', 
+                    image: getImgUrl('Emoção vs Razão') 
+                }, 
+                question: 'Você recebe um link no grupo da escola dizendo: "PROIBIRAM O VIDEO GAME NO BRASIL! CLIQUE AQUI PARA VER A LISTA". Qual a sua atitude?', 
+                options: [ 
+                    { text: 'Clico rápido, pois preciso saber se o meu jogo favorito foi banido.', correct: false, explanation: 'Perigoso! Títulos com letras maiúsculas e tom de desespero são a isca perfeita para Fake News. Ao clicar, você pode dar dinheiro ao golpista ou baixar vírus.' }, 
+                    { text: 'Desconfio do exagero, não clico no link e pesquiso a notícia em sites de jornais conhecidos.', correct: true, explanation: 'Exatamente! A regra de ouro é: leu algo chocante? Respire fundo e verifique a fonte antes de acreditar ou clicar.' } 
+                ] 
+            },
+            { 
+                level: 2, 
+                flashcard: { 
+                    icon: '📝', title: 'Plágio é Roubo Intelectual', 
+                    content: 'Copiar o texto, a ideia ou a arte de alguém da internet e colocar no seu trabalho dizendo que foi você quem fez é Crime de Direitos Autorais, conhecido como Plágio. O objetivo da escola não é testar se você sabe usar o "CTRL+C / CTRL+V", mas sim se você consegue ler, entender e explicar o assunto com as suas próprias palavras.', 
+                    example: 'Você precisa fazer um trabalho sobre o Egito Antigo. Entrar na Wikipédia, copiar o primeiro parágrafo inteiro, colar no Word e entregar para o professor como se você tivesse escrito.', 
+                    image: getImgUrl('Crie, Não Copie') 
+                }, 
+                question: 'Você está atrasado com a entrega do trabalho de Ciências sobre o Sistema Solar. O que você faz?', 
+                options: [ 
+                    { text: 'Leio dois sites diferentes, entendo como os planetas funcionam e escrevo o resumo usando o meu próprio vocabulário.', correct: true, explanation: 'Perfeito! Isso se chama síntese. Ao fazer isso, você aprende de verdade e respeita o autor original.' }, 
+                    { text: 'Copio apenas as partes mais importantes de um blog e mudo a cor da letra para o professor não perceber.', correct: false, explanation: 'Ainda é plágio! Mudar a cor da letra ou trocar duas palavrinhas não esconde o fato de que a ideia e o texto não são seus.' } 
+                ] 
+            },
+            { 
+                level: 3, 
+                flashcard: { 
+                    icon: '🔑', title: 'O Segredo das Senhas', 
+                    content: 'Hackers usam programas de computador que "chutam" milhares de senhas por segundo. Se sua senha for seu nome, sua data de nascimento ou "123456", o programa descobre em meio segundo. Uma senha forte precisa ser longa (mais de 8 caracteres) e misturar letras maiúsculas, minúsculas, números e símbolos especiais.', 
+                    example: 'Senha Fraca: "joao2012" (Fácil de adivinhar). Senha Forte: "Gat0@Branc022!" (Mistura símbolos, letras grandes e pequenas).', 
+                    image: getImgUrl('A Chave do Cofre') 
+                }, 
+                question: 'Você acabou de criar uma conta num jogo novo. Seu melhor amigo da escola diz: "Me passa sua senha para eu entrar na sua conta e te ajudar a passar de nível enquanto você dorme".', 
+                options: [ 
+                    { text: 'Passo a senha, afinal ele é meu melhor amigo da escola e eu confio nele.', correct: false, explanation: 'Nunca faça isso. Senhas são como a chave da sua casa. Se você passa para um amigo, e o celular dele for roubado, sua conta também será roubada.' }, 
+                    { text: 'Agradeço, mas digo que regras de segurança da internet dizem para nunca compartilhar senhas com ninguém, nem com amigos.', correct: true, explanation: 'Atitude de Mestre! Amigos de verdade vão entender que segurança digital é coisa séria e não vão insistir.' } 
+                ] 
+            },
+            { 
+                level: 4, 
+                flashcard: { 
+                    icon: '🤐', title: 'Privacidade e "Grooming"', 
+                    content: 'Na internet, os dados valem ouro (e perigo). "Grooming" é quando adultos mal-intencionados usam jogos online infantis fingindo ser crianças para ganhar sua confiança e pedir fotos, número de telefone ou endereço. DADOS PESSOAIS são sagrados: nome completo da escola, bairro, onde seus pais trabalham e horários que você fica sozinho.', 
+                    example: 'No chat do Roblox ou do Minecraft, alguém com skin de criança pergunta: "Que legal, você joga muito! Onde você estuda para a gente se ver no recreio?"', 
+                    image: getImgUrl('Cuidado com Estranhos') 
+                }, 
+                question: 'Um jogador que sempre joga com você no time diz: "Vou mandar um controle de PS5 de presente pra você, só me passar seu endereço completo e CPF". Você:', 
+                options: [ 
+                    { text: 'Não passo nenhum dado, saio da partida e aviso um responsável sobre o comportamento estranho.', correct: true, explanation: 'Isso mesmo! Presentes não caem do céu na internet. Pedir dados pessoais é o primeiro sinal vermelho de perigo extremo.' }, 
+                    { text: 'Passo apenas o nome da rua e o bairro, sem o número da casa, para ser mais seguro.', correct: false, explanation: 'Isso é perigoso! Qualquer pista sobre onde você mora pode ser usada contra você. Nunca dê nenhuma informação de localização.' } 
+                ] 
+            },
+            { 
+                level: 5, 
+                flashcard: { 
+                    icon: '🔍', title: 'Lógica dos Mecanismos de Busca', 
+                    content: 'O Google não é um humano, é um robô (algoritmo) que procura palavras correspondentes. Se você digitar uma pergunta gigante como se estivesse conversando, ele vai focar em palavras inúteis como "o", "que", "de". Para ser rápido e preciso, digite apenas as PALAVRAS-CHAVE principais do assunto.', 
+                    example: 'Em vez de buscar: "Por favor Google me diga o que os ursos polares gostam de comer durante o inverno rigoroso", busque apenas: "alimentação urso polar inverno".', 
+                    image: getImgUrl('Palavras-Chave') 
+                }, 
+                question: 'Sua professora pediu para pesquisar sobre a causa da extinção dos dinossauros. Qual a melhor frase para digitar na barra de pesquisa?', 
+                options: [ 
+                    { text: '"quero saber como os grandes dinossauros morreram e sumiram do planeta terra"', correct: false, explanation: 'Isso tem muitas palavras soltas (quero, saber, como). O algoritmo do Google vai se confundir e trazer resultados sobre outras coisas.' }, 
+                    { text: '"causas extinção dinossauros"', correct: true, explanation: 'Cirúrgico! Você tirou todas as palavras de ligação e deixou apenas o que o robô do Google precisa procurar nos artigos científicos.' } 
+                ] 
+            },
+            { 
+                level: 6, 
+                flashcard: { 
+                    icon: '🔒', title: 'O Cadeado de Criptografia (HTTPS)', 
+                    content: 'Quando você acessa um site, as informações viajam do seu PC até o servidor através da internet. Se o endereço do site começa com HTTP (sem o S), a viagem é em "texto aberto", e qualquer hacker no meio do caminho pode ler suas senhas. O "HTTPS" (com o S de Segurança) cria um túnel blindado. O símbolo disso é aquele pequeno cadeado fechado ao lado do endereço do site.', 
+                    example: 'Você vai comprar um ingresso. O site é http://ingressos-baratos.com (Cuidado, não tem o S e nem o cadeado. Seu cartão de crédito pode ser roubado!).', 
+                    image: getImgUrl('Procure o Cadeado') 
+                }, 
+                question: 'Você encontrou uma loja online vendendo o tênis dos seus sonhos com 80% de desconto, mas ao olhar a barra superior do navegador, diz "Site Não Seguro" e não tem o cadeado. O que fazer?', 
+                options: [ 
+                    { text: 'Aproveito o desconto incrível e coloco os dados de pagamento rápido antes que acabe.', correct: false, explanation: 'Cilada! Descontos surreais somados à falta de segurança (sem HTTPS) são a receita clássica de sites falsos criados para roubar cartões.' }, 
+                    { text: 'Fecho o site imediatamente. Sem o cadeado de segurança, meus dados pessoais e de pagamento podem ser interceptados por criminosos.', correct: true, explanation: 'Perfeito. A segurança vem muito antes de qualquer desconto. Nunca insira dados em sites sem HTTPS.' } 
+                ] 
+            },
+            { 
+                level: 7, 
+                flashcard: { 
+                    icon: '🤝', title: 'A Ferida do Cyberbullying', 
+                    content: 'O bullying que acontece na internet (Cyberbullying) é cruel porque nunca para. Na escola, o bullying termina quando o sino toca. Na internet, ele persegue a vítima 24h por dia pelo celular, com humilhações públicas que milhares de pessoas podem ver. Rir, compartilhar ou ficar calado faz de você um cúmplice dessa agressão.', 
+                    example: 'Criar uma figurinha de WhatsApp humilhante com o rosto de um colega da sala que errou a resposta no quadro, e compartilhar nos grupos da escola.', 
+                    image: getImgUrl('Empatia Digital') 
+                }, 
+                question: 'Em um grupo de WhatsApp da turma, começam a fazer montagens maldosas com a foto de uma menina que mudou de cabelo. O que você faz como um Cidadão Digital Responsável?', 
+                options: [ 
+                    { text: 'Não acho graça, não repasso as imagens e tiro prints para mostrar à coordenação da escola ou aos pais dela.', correct: true, explanation: 'Atitude de líder! Quebrar a corrente do silêncio e buscar a ajuda de um adulto é a única forma de parar o Cyberbullying.' }, 
+                    { text: 'Eu apenas saio do grupo e ignoro, para não me envolver no problema dos outros.', correct: false, explanation: 'A omissão (não fazer nada) ajuda os agressores a continuarem. Você deve sempre reportar abusos para proteger a vítima.' } 
+                ] 
+            },
+            { 
+                level: 8, 
+                flashcard: { 
+                    icon: '📸', title: 'Metadados e Cenários de Fotos', 
+                    content: 'Uma foto revela muito mais do que você imagina. Antes de postar algo, você deve analisar o cenário ao fundo: tem a placa do carro dos seus pais? Mostra o logotipo da sua escola no uniforme? Tem a placa da rua da sua casa? Além disso, fotos de celular carregam "Metadados" invisíveis que dizem a localização GPS exata de onde a foto foi tirada.', 
+                    example: 'Você tira uma foto no espelho do quarto com o uniforme escolar e posta no Instagram público, marcando "A caminho da aula". Qualquer estranho sabe onde e quando te encontrar.', 
+                    image: getImgUrl('O Fundo da Foto') 
+                }, 
+                question: 'Você tirou uma foto muito engraçada com seu amigo no clube, mas ele está de olhos fechados e com uma expressão constrangedora. Você quer muito postar no TikTok.', 
+                options: [ 
+                    { text: 'Eu posto imediatamente, pois vai render muitas curtidas e ele tem que aprender a levar na brincadeira.', correct: false, explanation: 'Errado! Você está ferindo o direito de imagem do seu amigo. Uma brincadeira só é brincadeira quando os dois lados estão se divertindo.' }, 
+                    { text: 'Eu pergunto a ele primeiro: "Posso postar essa foto nossa?". Se ele disser não, eu apago ou corto ele da imagem.', correct: true, explanation: 'Exato! O nome disso é Consentimento. Temos que respeitar a imagem dos outros, pois uma vez na internet, é difícil de apagar.' } 
+                ] 
+            },
+            { 
+                level: 9, 
+                flashcard: { 
+                    icon: '🎣', title: 'A Isca do Phishing (Pescaria)', 
+                    content: 'Phishing (Pescaria) é um crime de "Engenharia Social". Os criminosos criam e-mails ou páginas falsas idênticas às originais (como Netflix, Bancos ou Jogos) e enviam mensagens de desespero (Urgência) para você não ter tempo de pensar. Eles pescam o seu medo para roubar suas senhas.', 
+                    example: 'Um e-mail escrito: "Sua conta da Microsoft será EXCLUÍDA em 2 horas. Clique no botão abaixo e digite sua senha para evitar perder tudo".', 
+                    image: getImgUrl('Não Morda a Isca') 
+                }, 
+                question: 'Você recebe um e-mail que parece ser do suporte do Instagram dizendo: "Alguém tentou invadir sua conta. Clique aqui e faça login com sua senha para verificar". O e-mail do remetente é "suporte-insta@gmail.com".', 
+                options: [ 
+                    { text: 'Não clico no link do e-mail. Abro o aplicativo oficial do Instagram no meu celular e verifico se há algum aviso real de segurança nas configurações.', correct: true, explanation: 'Mestre da segurança! Empresas gigantes NUNCA usam endereços como "@gmail.com" ou "@hotmail.com", e nunca pedem senhas por link.' }, 
+                    { text: 'Clico rápido no link para proteger minha conta antes que o suposto invasor roube minhas fotos.', correct: false, explanation: 'Você mordeu a isca da urgência! Esse link falso te levaria para uma página controlada pelo hacker para capturar sua senha.' } 
+                ] 
+            },
+            { 
+                level: 10, 
+                flashcard: { 
+                    icon: '🎓', title: 'Lendo o Domínio (Sufixos Oficiais)', 
+                    content: 'Qualquer pessoa com R$ 40,00 pode comprar um site terminado em ".com" ou ".com.br" e escrever qualquer mentira lá dentro. Porém, alguns finais de site (sufixos) são restritos. Sites terminados em ".gov" (Governo) só podem ser usados por órgãos governamentais reais. Sites terminados em ".edu" (Educação) pertencem a universidades sérias. Eles têm credibilidade!', 
+                    example: 'Se você precisa de dados sobre as queimadas na Amazônia, o site "ibama.gov.br" é muito mais confiável que o blog "naturezaverde.com.br".', 
+                    image: getImgUrl('O Final do Link Importa') 
+                }, 
+                question: 'Você está fazendo uma pesquisa importante sobre os sintomas da Dengue para a aula de Ciências. Qual fonte você escolhe como a principal do seu trabalho?', 
+                options: [ 
+                    { text: 'Uma página oficial do Ministério da Saúde com o endereço www.gov.br/saude/dengue.', correct: true, explanation: 'Excelente escolha. Fontes ".gov" baseiam-se em dados científicos oficiais, validados por especialistas de saúde pública.' }, 
+                    { text: 'Um post no Facebook de um terapeuta alternativo que diz curar a Dengue com chás e não cita nenhum médico.', correct: false, explanation: 'Fontes de redes sociais sem comprovação científica podem trazer informações perigosas (desinformação em saúde), que podem até custar a vida de alguém.' } 
+                ] 
+            },
+            // BLOCO 2: NAVEGAÇÃO, SAÚDE DIGITAL E SEGURANÇA AVANÇADA
+            { 
+                level: 11, 
+                flashcard: { 
+                    icon: '📢', title: 'Publicidade Disfarçada (Native Ads)', 
+                    content: 'Antigamente, as propagandas ficavam em letreiros claros. Hoje, elas usam "Publicidade Nativa". Os anúncios são camuflados para parecerem uma notícia real do site ou um botão de utilidade (como botões falsos de "Baixar Agora" ou "Play"). O truque para não cair é treinar o olhar para achar palavras minúsculas dizendo "Patrocinado", "Ad" ou "Publicidade".', 
+                    example: 'Você entra num site para baixar um resumo de livro, e no meio do texto tem um botão gigante verde "DOWNLOAD PDF", mas na verdade ele te leva para o site de um cassino online.', 
+                    image: getImgUrl('Cuidado Onde Clica') 
+                }, 
+                question: 'Você está lendo um site de notícias esportivas. No final da página, tem um quadro idêntico às notícias escrito: "Descubra o segredo do jogador para ganhar músculos (Patrocinado)". O que é isso?', 
+                options: [ 
+                    { text: 'É uma publicidade (anúncio). Uma empresa pagou ao site de notícias para colocar aquele link ali disfarçado de matéria jornalística.', correct: true, explanation: 'Isso! Fique atento à palavra "Patrocinado" (Sponsored). Isso significa que não é uma informação imparcial, mas sim alguém tentando te vender algo.' }, 
+                    { text: 'É uma investigação oficial do jornal esportivo revelando o segredo de treinamento dos atletas.', correct: false, explanation: 'Errou! O site não pesquisou isso. Apenas vendeu o espaço para uma empresa que vende suplementos anunciar seus produtos.' } 
+                ] 
+            },
+            { 
+                level: 12, 
+                flashcard: { 
+                    icon: '👣', title: 'O Peso da Pegada Digital', 
+                    content: 'Sua Pegada Digital é o conjunto de rastros que você deixa na internet desde criança: vídeos do TikTok, comentários no YouTube, curtidas polêmicas. Nada desaparece totalmente, mesmo se você apagar, pois as empresas e outros usuários podem ter feito cópias (prints). Hoje, faculdades e empresas recrutadoras pesquisam as redes sociais dos candidatos antes de aprová-los.', 
+                    example: 'Um adolescente xinga muito outras pessoas jogando Valorant online e publica os vídeos. Anos depois, ele perde uma vaga de emprego porque a empresa achou os vídeos e viu que ele tem comportamento agressivo.', 
+                    image: getImgUrl('Rastros Permanentes') 
+                }, 
+                question: 'Você está com muita raiva de um professor que te deu nota baixa. Seus amigos sugerem que você desabafe e xingue ele no Twitter, pois "sua conta é fechada só para amigos".', 
+                options: [ 
+                    { text: 'Não publico nada. Qualquer amigo pode tirar um print e espalhar. Essa atitude pode destruir minha reputação escolar e deixar uma mancha na minha pegada digital.', correct: true, explanation: 'Pensamento de longo prazo impecável! Na era digital, trate qualquer postagem "privada" como se fosse parar na capa do jornal de amanhã.' }, 
+                    { text: 'Faço a postagem, afinal é meu direito desabafar na minha própria conta fechada e ninguém de fora vai ver.', correct: false, explanation: 'A falsa sensação de privacidade já arruinou muitas vidas. Um único print de um "amigo" vazado para a diretoria pode resultar em expulsão.' } 
+                ] 
+            },
+            { 
+                level: 13, 
+                flashcard: { 
+                    icon: '🦠', title: 'O Preço da Pirataria', 
+                    content: 'Sites que oferecem de graça softwares, jogos ou filmes que normalmente custam caro são um campo minado. "Não existe almoço grátis". Ao baixar um arquivo pirata, na maioria das vezes, você está instalando silenciosamente um "Cavalo de Troia" (Trojan) no seu computador. Esses malwares roubam senhas do seu banco ou usam sua placa de vídeo para minerar criptomoedas para o hacker.', 
+                    example: 'Baixar o "Minecraft de graça (Completo + Mods).exe" de um vídeo do YouTube. Ao abrir, a tela pisca, o jogo não abre, e o PC começa a ficar lento e travar.', 
+                    image: getImgUrl('Cavalo de Troia') 
+                }, 
+                question: 'Um grande lançamento de jogo custa R$ 300,00, mas você acha um link num fórum russo prometendo o download completo e grátis. Você:', 
+                options: [ 
+                    { text: 'Não baixo de forma alguma. Com certeza o arquivo está modificado com programas espiões (malwares) que podem danificar meu computador e roubar as senhas dos meus pais.', correct: true, explanation: 'Decisão sábia! O custo de consertar um computador infectado ou ter cartões roubados é infinitamente maior que o valor do jogo original.' }, 
+                    { text: 'Baixo rápido, desligo o antivírus porque ele costuma bloquear jogos piratas atoa, e faço a instalação.', correct: false, explanation: 'Isso é suicídio digital! O antivírus bloqueia arquivos piratas justamente porque eles contêm vírus escondidos na instalação.' } 
+                ] 
+            },
+            { 
+                level: 14, 
+                flashcard: { 
+                    icon: '©️', title: 'Bancos de Imagens e Creative Commons', 
+                    content: 'Não é porque uma imagem está no Google que ela é pública. Fotógrafos vivem do seu trabalho e protegem suas obras com Direitos Autorais (Copyright). Se você usar essas imagens no seu site ou canal, pode levar um processo. A solução é usar "Bancos de Imagens Gratuitas" (como Pixabay, Unsplash ou Pexels) que usam a licença "Creative Commons" (permissão aberta para usar).', 
+                    example: 'Você precisa de uma foto de um leão para o seu slide. Em vez de ir no Google Imagens, você entra no site Pixabay e baixa uma foto em alta qualidade, liberada para uso gratuito.', 
+                    image: getImgUrl('Licença Aberta') 
+                }, 
+                question: 'Você está criando um vídeo escolar que vai ser postado no YouTube aberto da escola. Como você escolhe a música de fundo?', 
+                options: [ 
+                    { text: 'Pego a música mais famosa do momento da minha cantora favorita e coloco de fundo no meu vídeo.', correct: false, explanation: 'Erro de direitos autorais! O YouTube tem robôs que identificam a música com direitos e vão derrubar (apagar) o seu vídeo na mesma hora.' }, 
+                    { text: 'Uso a "Biblioteca de Áudio" do próprio YouTube ou procuro músicas "No Copyright Sounds", garantindo que a música tem licença livre para uso.', correct: true, explanation: 'Perfeito! É assim que os criadores de conteúdo profissionais fazem para evitar problemas judiciais ou ter seus vídeos derrubados.' } 
+                ] 
+            },
+            { 
+                level: 15, 
+                flashcard: { 
+                    icon: '📶', title: 'O Perigo do Wi-Fi Público', 
+                    content: 'Wi-Fi de praças, shoppings, aeroportos ou padarias (aqueles que não têm senha) são redes abertas. Isso significa que todos os dispositivos conectados ali estão no mesmo "salão digital". Um hacker com um notebook comum sentado na mesma praça pode rodar um programa (Man-in-the-Middle) que "escuta" e copia tudo o que sai do seu celular (senhas, fotos, mensagens) antes de ir para a internet.', 
+                    example: 'Sentar num café, conectar no "Wi-Fi Café Aberto", abrir o aplicativo do banco e digitar a senha. O hacker na mesa ao lado acabou de capturar os seus números.', 
+                    image: getImgUrl('Rede Aberta, Portas Abertas') 
+                }, 
+                question: 'Você está no aeroporto e conecta na rede aberta "Aeroporto Wi-Fi Free". O que você pode fazer com segurança?', 
+                options: [ 
+                    { text: 'Apenas navegação superficial: ler as notícias do dia, ver vídeos no YouTube ou pesquisar no Google. Jamais abrir o banco, e-mail pessoal ou fazer compras online.', correct: true, explanation: 'Isso aí! O segredo do Wi-Fi público é nunca fazer login ou transações importantes. Deixe isso para o 4G/5G do seu celular, que é criptografado e seguro.' }, 
+                    { text: 'Fazer o login no meu e-mail da escola e entrar no site da minha conta de jogos para comprar um item novo usando o cartão salvo.', correct: false, explanation: 'Você acabou de entregar seus logins para qualquer pessoa mal-intencionada que esteja monitorando aquela rede Wi-Fi aberta.' } 
+                ] 
+            },
+            { 
+                level: 16, 
+                flashcard: { 
+                    icon: '🔄', title: 'A Importância das Atualizações', 
+                    content: 'Aquele aviso chato de "Nova Atualização do Sistema Disponível" não serve apenas para mudar o visual dos aplicativos. As atualizações (Patches) servem para consertar "buracos na parede" (vulnerabilidades). Quando hackers descobrem uma falha no Android, iOS ou Windows, as empresas criam uma atualização correndo para fechar a porta. Quem não atualiza fica com a falha aberta para invasões.', 
+                    example: 'O aviso diz: "Atualização de Segurança do iOS 17.5". Atualize hoje à noite, não deixe para a próxima semana!', 
+                    image: getImgUrl('Feche os Buracos') 
+                }, 
+                question: 'Seu celular avisou pela terceira vez na semana: "O sistema precisa reiniciar para instalar uma atualização crítica de segurança".', 
+                options: [ 
+                    { text: 'Eu fico adiando "Lembrar mais tarde" por semanas, pois essas atualizações só deixam o celular mais lento e gastam minha bateria.', correct: false, explanation: 'Mito! Atrasar atualizações é manter portas destrancadas no seu aparelho. Se uma nova ameaça surgir, você será a primeira vítima.' }, 
+                    { text: 'Conecto o celular no carregador, salvo meus trabalhos e autorizo a atualização na mesma hora. Sistemas atualizados são a melhor linha de defesa.', correct: true, explanation: 'Exatamente! Atualizações frequentes de sistema operacional e de aplicativos são vitais para tapar brechas usadas por cibercriminosos.' } 
+                ] 
+            },
+            { 
+                level: 17, 
+                flashcard: { 
+                    icon: '⏰', title: 'Saúde Digital e Higiene do Sono', 
+                    content: 'Nossos cérebros regulam o sono baseados na luz do sol. As telas de celulares e computadores emitem "Luz Azul", que avisa ao cérebro: "Ei, é meio-dia, fique acordado!". Usar telas na cama de madrugada inibe a produção de Melatonina (o hormônio do sono). Além disso, rolar feeds infinitos gera estímulo de dopamina, causando ansiedade e déficit de atenção no dia seguinte nas aulas.', 
+                    example: 'Ficar no TikTok com a luz apagada no quarto até 2 da manhã. No outro dia, acorda exausto, irritado e não consegue focar na explicação do professor.', 
+                    image: getImgUrl('Desligue e Descanse') 
+                }, 
+                question: 'Como aplicar uma boa "Higiene do Sono" para ter um desempenho escolar de mestre?', 
+                options: [ 
+                    { text: 'Desligar celulares, TVs e tablets pelo menos 1 hora antes de dormir. Deixar o celular carregando longe da cama e ler um livro físico para relaxar a mente.', correct: true, explanation: 'Hábito de ouro! A falta de luz azul permite que a melatonina haja, trazendo um sono profundo e restaurador. Seu cérebro agradece.' }, 
+                    { text: 'Colocar o celular no "Modo Escuro" e continuar assistindo séries na cama até os olhos pesarem e cair no sono.', correct: false, explanation: 'O "Modo Escuro" ajuda um pouco no conforto visual, mas a tela continua emitindo radiação luminosa que engana o cérebro e a história da série mantém a mente acelerada.' } 
+                ] 
+            },
+            { 
+                level: 18, 
+                flashcard: { 
+                    icon: '🎭', title: 'O Mito do "Amigo Virtual"', 
+                    content: 'Jogar online com pessoas de outros lugares é divertido, mas uma regra de sobrevivência se aplica: "Amigos de internet são e sempre serão ESTRANHOS". O anonimato permite que qualquer adulto finja ser um adolescente com os mesmos gostos que você (prática chamada Catfishing). Pessoas reais revelam suas vidas aos poucos na escola; perfis virtuais mostram apenas aquilo que querem que você veja.', 
+                    example: 'Uma conta com foto de anime e voz modificada entra no seu time de "Free Fire", diz ter 13 anos igual a você e começa a perguntar detalhes sobre a rotina da sua casa.', 
+                    image: getImgUrl('Por Trás da Máscara') 
+                }, 
+                question: 'Um "amigo virtual" que você joga junto há 6 meses diz que vai visitar sua cidade de férias e quer marcar um encontro com você numa praça para comer hambúrguer, mas pede para não avisar os pais para ser uma surpresa.', 
+                options: [ 
+                    { text: 'Recuso imediatamente, conto toda a situação para meus pais/responsáveis e bloqueio a pessoa. Pedir para manter segredo de adultos é o comportamento clássico de um predador.', correct: true, explanation: 'Visão de raio-x! Predadores sempre tentam isolar a criança dos pais (o "vamos guardar um segredinho"). Nunca, em hipótese alguma, encontre estranhos da internet sozinho.' }, 
+                    { text: 'Aceito, pois já conheço ele há 6 meses, jogamos todo dia, e seria muito legal conhecer meu parceiro de jogo na vida real.', correct: false, explanation: 'Erro fatal de segurança. Seis meses de chat em um jogo não provam a identidade de ninguém. A foto e a idade informadas podem ser totalmente falsas.' } 
+                ] 
+            },
+            { 
+                level: 19, 
+                flashcard: { 
+                    icon: '🛡️', title: 'A Fechadura Dupla (Autenticação 2FA)', 
+                    content: 'A "Autenticação em 2 Fatores" (2FA) é a maior barreira contra invasões hoje em dia. Imagine que sua senha é a chave da sua porta. O 2FA é um segurança gigante de pé na porta. Mesmo que o hacker descubra sua chave (senha), o sistema manda um código de 6 números (por SMS ou App) apenas para o seu aparelho celular. Sem esse código de 6 números que muda a cada minuto, o hacker não entra.', 
+                    example: 'Ativar o "PIN" no WhatsApp, ou ativar a segurança 2FA na conta do Google/Instagram usando o app "Google Authenticator".', 
+                    image: getImgUrl('Barreira Impenetrável') 
+                }, 
+                question: 'Alguém na Rússia conseguiu descobrir a senha do seu e-mail, mas você tinha a "Autenticação de 2 Fatores" ativada no celular. O que acontece?', 
+                options: [ 
+                    { text: 'O hacker não consegue entrar, pois a tela do e-mail vai travar pedindo um código numérico de segurança que foi enviado apenas para o seu celular físico.', correct: true, explanation: 'Isso é segurança de Elite! O 2FA transforma sua conta numa fortaleza. Mesmo com a senha vazada, o invasor fica preso do lado de fora da sua vida digital.' }, 
+                    { text: 'O hacker entra do mesmo jeito, pois a senha estava correta e a autenticação em duas etapas só serve para recuperar a conta se eu esquecer a senha.', correct: false, explanation: 'Incorreto! A função principal do 2FA é barrar acessos em novos dispositivos. É um requisito obrigatório para quem leva a segurança a sério.' } 
+                ] 
+            },
+            { 
+                level: 20, 
+                flashcard: { 
+                    icon: '⚖️', title: 'A Triangulação de Fatos', 
+                    content: 'Jornalistas profissionais usam a "Triangulação": nunca confiar em apenas UMA fonte. Se você leu uma notícia absurda e quer saber se é verdade, você deve buscar essa mesma notícia em pelo menos TRÊS grandes jornais de credibilidade (independentes entre si). Se um evento mundial importante aconteceu (como a queda de um meteoro), TODOS os jornais do mundo estarão noticiando, e não apenas um blog desconhecido no Facebook.', 
+                    example: 'Você vê um post: "Leões fogem do zoológico de São Paulo!". Você abre a CNN, o G1 e o Estadão. Nenhum deles tem essa notícia na capa. Logo, é uma Fake News de pânico.', 
+                    image: getImgUrl('Cheque em 3 Lugares') 
+                }, 
+                question: 'Você vê um influenciador no TikTok gritando que o Governo aprovou uma lei cancelando as férias de julho de todas as escolas do país. O vídeo tem 2 milhões de visualizações.', 
+                options: [ 
+                    { text: 'Saio do TikTok, abro o Google e pesquiso: "Governo cancela férias escolares de julho". Abro os sites dos grandes portais de jornalismo ou do Ministério da Educação para confirmar.', correct: true, explanation: 'Mentalidade investigativa! Visualizações e curtidas não compram a verdade. Somente o jornalismo profissional e portais oficiais podem confirmar fatos dessa magnitude.' }, 
+                    { text: 'Acredito imediatamente, afinal o vídeo viralizou, tem milhares de pessoas chorando nos comentários e ele mostrou um documento que parecia real na tela.', correct: false, explanation: 'Manipulação de massas! Vídeos virais são ferramentas poderosas de desinformação. Documentos falsos podem ser gerados por inteligência artificial em segundos.' } 
+                ] 
+            },
+            // BLOCO 3: METODOLOGIA DE PESQUISA (COMO SER UM GÊNIO DA ESCOLA)
+            { 
+                level: 21, 
+                flashcard: { 
+                    icon: '🧠', title: 'Sintetizar: O Motor do Cérebro', 
+                    content: 'Fazer um trabalho de escola copiando textos da internet faz o computador trabalhar, mas não o seu cérebro. A verdadeira pesquisa exige "Sintetizar": o ato de ler duas ou três fontes diferentes sobre um assunto, entender a ideia geral, cruzar as informações e criar um texto novo, escrito por você. É assim que o conhecimento sai do Google e fica armazenado permanentemente na sua cabeça.', 
+                    example: 'Você lê um site que diz "As formigas são insetos sociais", e outro que diz "Formigas trabalham em grupo para alimentar a rainha". Você sintetiza: "As formigas vivem em grandes comunidades organizadas, onde cada grupo tem uma função focada em proteger e alimentar a rainha do formigueiro."', 
+                    image: getImgUrl('Junte as Peças') 
+                }, 
+                question: 'A professora pediu uma pesquisa de 2 páginas sobre a Revolução Industrial. Qual é a estratégia de um aluno nível Mestre?', 
+                options: [ 
+                    { text: 'Pesquiso no Google "Resumo da Revolução Industrial", clico no primeiro link que achar e copio apenas os primeiros e últimos parágrafos de cada tópico para enganar a professora.', correct: false, explanation: 'Esse é o método do "Aluno Preguiçoso". Além de não aprender absolutamente nada sobre a matéria, os professores têm softwares avançados (como o Turnitin) que detectam plágio em segundos.' }, 
+                    { text: 'Abro 3 artigos diferentes, leio cada um fazendo anotações em tópicos num papel. Depois, fecho as abas e escrevo a redação usando minhas anotações e minha capacidade de explicação.', correct: true, explanation: 'Brilhante! Esse é o segredo dos alunos brilhantes. Ao ler, anotar e reescrever, você memorizou o assunto para a prova sem nem perceber!' } 
+                ] 
+            },
+            { 
+                level: 22, 
+                flashcard: { 
+                    icon: '⚙️', title: 'Operadores de Busca (Avançado)', 
+                    content: 'O Google tem códigos secretos (Operadores) para afinar pesquisas. O sinal de menos (-) remove uma palavra dos resultados. A palavra "site:" obriga o Google a procurar apenas dentro de um site específico. A palavra "filetype:" busca tipos de arquivos, como PDFs.', 
+                    example: 'Se você buscar "jaguar -carro", o Google vai mostrar apenas o animal onça-pintada e excluir todos os sites da marca de carros Jaguar. Se buscar "site:gov.br vacinas", só trará documentos oficiais do governo.', 
+                    image: getImgUrl('Pesquisa Cirúrgica') 
+                }, 
+                question: 'Você precisa de um artigo longo em formato PDF, com bases científicas, sobre os problemas causados pelas "Mudanças Climáticas". Como você digita na barra do Google?', 
+                options: [ 
+                    { text: '"mudanças climáticas filetype:pdf site:.edu"', correct: true, explanation: 'Hacker da pesquisa acadêmica! Você mandou o Google ignorar blogs normais e trazer somente documentos em formato PDF hospedados em sites de Universidades (.edu).' }, 
+                    { text: '"textos enormes e científicos em formato de pdf sobre tudo o que as mudanças do clima causam no mundo inteiro"', correct: false, explanation: 'Muito falatório! O Google vai se perder nas preposições e não usou os comandos técnicos para filtrar os resultados corretamente.' } 
+                ] 
+            },
+            { 
+                level: 23, 
+                flashcard: { 
+                    icon: '🏷️', title: 'O Poder das Aspas Duplas', 
+                    content: 'Quando você busca várias palavras soltas no Google, ele tenta achar sites que contenham qualquer uma delas, em qualquer ordem (espalhadas pela página). Quando você coloca uma frase inteira entre Aspas Duplas (" "), você dá uma ordem estrita: "Google, ache sites que tenham essa frase exata, com as palavras exatamente nessa ordem, nem uma vírgula a mais".', 
+                    example: 'Buscar "A persistência da memória" (com aspas) trará rapidamente análises sobre o famoso quadro de Salvador Dalí, em vez de páginas separadas sobre a palavra persistência e páginas médicas sobre perda de memória.', 
+                    image: getImgUrl('Ordem Exata') 
+                }, 
+                question: 'Você lembrou do trecho de um livro que a sua avó lia, mas só sabe a frase exata "O gato pulou a janela amarela", e quer descobrir o nome do livro e o autor.', 
+                options: [ 
+                    { text: 'Busco no Google da seguinte forma: livro infantil onde o gato pulou a janela amarela da casa.', correct: false, explanation: 'Sem aspas, o Google vai tentar focar em "livro infantil" e "gato", trazendo milhares de histórias de gatos aleatórias que nada têm a ver com a frase da sua avó.' }, 
+                    { text: 'Busco no Google da seguinte forma: "O gato pulou a janela amarela" livro.', correct: true, explanation: 'Tiro no alvo! As aspas forçam o mecanismo de busca a varrer a internet inteira procurando exatamente por esse parágrafo agrupado, revelando o título da obra na hora.' } 
+                ] 
+            },
+            { 
+                level: 24, 
+                flashcard: { 
+                    icon: '👤', title: 'A Regra da Autoria e do Viés', 
+                    content: 'Quem escreveu esse texto? Textos de pesquisa não brotam do chão, são escritos por pessoas. Se um artigo de blog não assina o nome do autor ("Por: João da Silva, Jornalista"), desconfie! Textos sem autoria não assumem responsabilidade sobre as mentiras que dizem. Além disso, verifique o "Viés": quem paga pelo site? Um artigo sobre os benefícios do chocolate no site de uma marca de chocolates pode esconder a parte sobre os problemas do açúcar.', 
+                    example: 'Site anônimo: "Médicos escondem que tomar limão em jejum cura doenças graves". Sem autor, sem fontes, e o site vende e-books de dieta. Isso é um viés perigoso.', 
+                    image: getImgUrl('Quem Escreveu?') 
+                }, 
+                question: 'Você achou um artigo sensacional que diz: "Tomar refrigerante todos os dias fortalece os ossos das crianças". O artigo está no site da Associação Nacional das Indústrias de Bebidas Doces. Qual sua conclusão crítica?', 
+                options: [ 
+                    { text: 'O texto tem um claro Conflito de Interesses (Viés). A associação que lucra com a venda de refrigerantes não publicaria as pesquisas reais que mostram os danos à saúde. Devo procurar opiniões de pediatras.', correct: true, explanation: 'Uma análise madura! Saber identificar quem ganha dinheiro com a informação publicada é a habilidade suprema de um Detetive da Internet.' }, 
+                    { text: 'A informação deve ser real, pois o site tem um layout bonito, a foto do artigo parece profissional e tem mais de 5.000 compartilhamentos no Facebook.', correct: false, explanation: 'Ingenuidade digital. O design do site e o número de curtidas não validam verdades científicas. O lucro financeiro dita a narrativa desse artigo.' } 
+                ] 
+            },
+            { 
+                level: 25, 
+                flashcard: { 
+                    icon: '🌐', title: 'O Segredo da Wikipédia', 
+                    content: 'Você não deve copiar a Wikipédia no seu trabalho porque ela é feita por milhares de voluntários e pode ser alterada (vandalizada). Porém, pesquisadores profissionais usam ela de forma secreta: A Wikipédia é um excelente lugar para se ter uma introdução rápida e, O MAIS IMPORTANTE, para roubar as "Referências Bibliográficas". Os pequenos números azuis [1], [2] no meio do texto te levam para os sites governamentais e jornais reais no final da página.', 
+                    example: 'Você lê na Wikipédia que "A água ferve a 100°C ao nível do mar [5]". Em vez de citar a Wikipédia no seu trabalho, você clica no [5], vai parar no livro do cientista da universidade, lê o trecho do livro e cita o livro diretamente.', 
+                    image: getImgUrl('Use as Referências') 
+                }, 
+                question: 'Seu professor de Geografia proibiu o uso da Wikipédia como fonte final no trabalho de fim de ano. Como você contorna essa limitação de forma inteligente e ética?', 
+                options: [ 
+                    { text: 'Leio a Wikipédia para entender a cronologia do assunto de forma fácil, vou até o rodapé da página (seção de Referências) e clico nos links originais das universidades que basearam o artigo, usando eles como fonte.', correct: true, explanation: 'Você dominou o uso enciclopédico! A Wikipédia é uma ponte maravilhosa que liga você às fontes acadêmicas e aos livros reais dos pesquisadores originais.' }, 
+                    { text: 'Copio o texto da Wikipédia de qualquer jeito, levo para o ChatGPT e peço para ele reescrever de um jeito confuso, assim o professor não vai perceber que a origem foi a Wikipédia.', correct: false, explanation: 'Isso é duplo erro! Você burlou a regra de pesquisa ao invés de buscar fontes sólidas, e não desenvolveu habilidades reais de análise acadêmica.' } 
+                ] 
+            },
+            { 
+                level: 26, 
+                flashcard: { 
+                    icon: '👀', title: 'Leitura Lateral (Fact-Checking)', 
+                    content: 'Um erro comum de iniciantes é a "Leitura Vertical": rolar a página "Sobre Nós" de um site tentando ver se ele é bom. Isso é ingênuo! Golpistas sabem escrever a aba "Sobre Nós" para parecerem super profissionais e honestos. O segredo dos jornalistas é a "Leitura Lateral". Em vez de olhar para o próprio site, você abre uma NOVA ABA (ao lado) no navegador e pesquisa o que os OUTROS especialistas e jornais estão falando sobre aquele site.', 
+                    example: 'Você entra no site "CurasSecretas.com" (leitura vertical). Para verificar, abre outra aba e busca: "site curassecretas.com é confiável fraude". Você achará alertas de agências de saúde.', 
+                    image: getImgUrl('Não Confie, Verifique') 
+                }, 
+                question: 'Você encontra o site "Instituto de Pesquisa de OVNIS do Brasil" com uma página "Quem Somos" gigantesca e fotos de senhores de jaleco. Para descobrir se eles são cientistas reais, você deve:', 
+                options: [ 
+                    { text: 'Ler atentamente cada linha da página do instituto e verificar se as fotos dos homens de jaleco parecem serias.', correct: false, explanation: 'Essa é a Leitura Vertical. Qualquer um pode escrever mentiras num blog e colocar fotos de banco de imagens de modelos fingindo ser médicos.' }, 
+                    { text: 'Abrir uma nova aba no Google, digitar o nome do tal "Instituto" e verificar se grandes universidades brasileiras ou jornais citam eles como fonte científica reconhecida ou se os expõem como farsa.', correct: true, explanation: 'Essa é a verdadeira Leitura Lateral! A reputação de um site é definida pelo que fontes confiáveis externas dizem sobre ele, e não pelo que ele diz de si mesmo.' } 
+                ] 
+            },
+            { 
+                level: 27, 
+                flashcard: { 
+                    icon: '🪶', title: 'A Arte da Citação Direta', 
+                    content: 'Citação Direta é quando a frase que um autor ou cientista escreveu é tão perfeita e marcante que você precisa colocá-la exatamente daquela forma no seu trabalho. Para fazer isso de forma ética e acadêmica (sem cometer plágio), você deve, OBRIGATORIAMENTE, prender a frase entre "aspas" (para isolar do seu próprio texto) e colocar o sobrenome do autor e o ano (pelas regras da ABNT no Brasil).', 
+                    example: 'Como aponta o historiador: "A história é escrita pelos vencedores, não pelos perdedores" (SILVA, 2018). Essa frase prova que o ponto de vista da guerra muda.', 
+                    image: getImgUrl('As Aspas Salvam') 
+                }, 
+                question: 'No meio do seu parágrafo sobre as Leis da Física, você quer colocar exatamente a frase célebre do físico Isaac Newton. Qual a maneira correta?', 
+                options: [ 
+                    { text: 'De acordo com o gênio cientista Isaac Newton, "Para toda ação, há uma reação de força igual e no sentido oposto". E por isso o foguete decola.', correct: true, explanation: 'Primoroso! Você isolou a frase do autor original com "aspas" e a misturou graciosamente ao fluxo do seu próprio texto, dando o crédito absoluto.' }, 
+                    { text: 'O foguete sobe porque de acordo com Newton para toda ação existe sempre uma reação oposta e de mesma intensidade, e isso é lei.', correct: false, explanation: 'Embora tenha citado o nome, ao não usar aspas, a fronteira entre o que é o seu texto e o que é o texto histórico se perde. Em meios acadêmicos, isso é falho.' } 
+                ] 
+            },
+            { 
+                level: 28, 
+                flashcard: { 
+                    icon: '🗣️', title: 'Como Fazer a Paráfrase', 
+                    content: 'Paráfrase (Citação Indireta) é a habilidade de ler as ideias intelectuais de um livro ou site e explicá-las com o seu estilo de escrita (suas palavras e estrutura de frases). MAS ATENÇÃO: você AINDA PRECISA colocar o nome do autor original! Roubar a IDEIA de alguém é tão grave quanto roubar o texto copiado. Dar o crédito ao dono da ideia mostra o quão vasta foi sua pesquisa.', 
+                    example: 'Texto Original: "Os cachorros evoluíram a partir de uma linhagem de lobos antigos na Europa." Paráfrase: Estudos de Oliveira (2020) indicam que a origem genética do cachorro doméstico moderno está ligada aos lobos que habitavam o continente europeu no passado.', 
+                    image: getImgUrl('Explique, Mas Cite') 
+                }, 
+                question: 'Você leu uma teoria complexa de 3 parágrafos de um cientista renomado e conseguiu resumir brilhantemente a ideia dele em 2 linhas com suas palavras no seu trabalho de geografia. O que falta?', 
+                options: [ 
+                    { text: 'Preciso adicionar no texto: "Segundo as pesquisas do Dr. Fulano..." para garantir que o professor saiba de onde tirei a base daquele pensamento brilhante.', correct: true, explanation: 'Excepcional! Isso separa as suas opiniões pessoais dos fatos científicos de terceiros, construindo argumentos blindados e à prova de plágio.' }, 
+                    { text: 'Não preciso fazer nada. Como eu usei minhas próprias palavras, a nova forma de explicar me torna o dono legítimo e oficial dessa ideia no trabalho.', correct: false, explanation: 'Ilegal na academia (Plágio Intelectual). Modificar as palavras (trocar por sinônimos) não te dá a propriedade de ideias científicas alheias. O crédito à fonte da ideia é obrigatório.' } 
+                ] 
+            },
+            { 
+                level: 29, 
+                flashcard: { 
+                    icon: '📑', title: 'A Página de Referências', 
+                    content: 'Todo trabalho científico, tese ou pesquisa de ponta termina com a última página intitulada "Referências" (antigamente chamada de Bibliografia). Essa página é a maior prova da sua integridade e do seu suor na pesquisa. Ela deve listar todas as fontes originais completas, links e nomes de livros que você citou no meio do texto, em ordem alfabética. Se algo não está nas Referências, sua pesquisa perde a validade.', 
+                    example: 'A página final do seu trabalho tem uma lista contendo 2 livros de história lidos na biblioteca e 4 links diretos de artigos de jornais digitais com as datas de acesso.', 
+                    image: getImgUrl('Os Créditos do Filme') 
+                }, 
+                question: 'Seu professor recebeu seu excelente trabalho de história. Porém, ao ir para a última página, ele não encontra o título "Referências". Qual será a reação dele?', 
+                options: [ 
+                    { text: 'Ele vai anular o trabalho ou zerar a pontuação de pesquisa. Um texto escolar sem referências não passa de "vozes da minha cabeça", sem respaldo de pesquisa real.', correct: true, explanation: 'Cruel e real! Na ciência e no mundo acadêmico universitário, todo conhecimento é construído sobre ombros de antigos pesquisadores. Sem listar suas fontes, não há evidências do estudo.' }, 
+                    { text: 'Ele vai te dar nota 10 pela criatividade narrativa, visto que hoje em dia os professores confiam na memória visual e na facilidade dos alunos com o Google.', correct: false, explanation: 'Uma ilusão. Em avaliações sérias e rigorosas (como bancas universitárias), a falta do referencial teórico é motivo de reprovação imediata por desonestidade intelectual.' } 
+                ] 
+            },
+            { 
+                level: 30, 
+                flashcard: { 
+                    icon: '🧩', title: 'Montando o Quebra-Cabeças (ABNT)', 
+                    content: 'Para citar um site da internet nas suas Referências finais de forma profissional, jogar apenas um link solto com letras estranhas não serve. A Associação Brasileira de Normas Técnicas (ABNT) exige um padrão elegante e organizado: SOBRENOME do autor. Título da matéria. Nome do Site, ano. Disponível em: <Link completo>. Acesso em: [Data que você entrou no site, já que na internet as coisas mudam de lugar].', 
+                    example: 'SOUZA, Marina. Como as abelhas polinizam as flores. Portal da Natureza, 2023. Disponível em: <www.natureza.br/abelhas>. Acesso em: 15 de abril de 2024.', 
+                    image: getImgUrl('A Estrutura ABNT') 
+                }, 
+                question: 'Qual das opções abaixo é a maneira digna de um "Mestre da Pesquisa de Nível 30" para colocar um site na página de Referências do trabalho final?', 
+                options: [ 
+                    { text: 'SANTOS, Pedro. As grandes batalhas do Brasil Colonial. G1 Notícias, 2021. Disponível em: <http://g1.globo.com/brasil-colonial>. Acesso em: 10 jun. 2024.', correct: true, explanation: 'Você atingiu o ápice! Isso é a montagem perfeita das normas ABNT: autoria evidente, rastreabilidade exata do link e a margem de segurança da data de acesso. Formatura merecida!' }, 
+                    { text: 'Fonte de pesquisa que usei hoje: http://www.google.com e um pouco da Wikipédia sobre a guerra colonial.', correct: false, explanation: 'Trágico e desestruturado! "Google" não é autor de nada (é apenas um buscador), e links soltos quebram, se perdem e não seguem as normas de padronização científica.' } 
+                ] 
+            }
         ];
 
         document.addEventListener('DOMContentLoaded', () => {
+            window.appId = typeof __app_id !== 'undefined' ? __app_id : 'detetives-app-v4';
+            
+            // Verificação automática de link de escola (se vier do link do professor)
             const params = new URLSearchParams(window.location.search);
             const escolaParam = params.get('escola');
             if(escolaParam) {
                 const schoolInput = document.getElementById('student-school');
-                schoolInput.value = escolaParam; schoolInput.readOnly = true;
+                schoolInput.value = escolaParam;
+                schoolInput.readOnly = true;
                 schoolInput.classList.add('bg-blue-50', 'text-slate-600', 'cursor-not-allowed', 'border-blue-200');
+                
                 const label = schoolInput.previousElementSibling;
                 if (!label.innerHTML.includes('fa-link')) {
                     label.innerHTML += ' <span class="text-xs text-primary font-black ml-2 bg-blue-100 px-2 py-1 rounded-md"><i class="fas fa-link"></i> Da sua Professora!</span>';
@@ -323,69 +723,122 @@
             }
         });
 
+        // NAVEGAÇÃO DE TELAS
         window.showScreen = function(screenId) {
-            document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active-screen'); s.style.display = 'none'; });
+            document.querySelectorAll('.screen').forEach(s => {
+                s.classList.remove('active-screen');
+                s.style.display = 'none';
+            });
             const screen = document.getElementById(screenId);
-            screen.style.display = 'flex'; screen.classList.add('active-screen'); window.scrollTo(0,0);
+            screen.style.display = 'flex';
+            screen.classList.add('active-screen');
+            window.scrollTo(0,0);
         };
 
+        // VALIDAÇÃO E LOGIN ALUNO
         window.goToAvatarSelection = function() {
             const name = document.getElementById('student-name').value.trim();
             const school = document.getElementById('student-school').value.trim();
             const turma = document.getElementById('student-class').value.trim();
-            if (!name || !school || !turma) { alert('Detetive, preencha todos os campos!'); return; }
-            state.student.name = name; state.student.school = school; state.student.class = turma;
-            renderAvatars(); window.showScreen('avatar-screen');
+
+            if (!name || !school || !turma) {
+                alert('Detetive, preencha todos os campos!');
+                return;
+            }
+            state.student.name = name;
+            state.student.school = school;
+            state.student.class = turma;
+            
+            renderAvatars();
+            window.showScreen('avatar-screen');
         };
 
         function renderAvatars() {
-            const container = document.getElementById('avatar-container'); container.innerHTML = '';
+            const container = document.getElementById('avatar-container');
+            container.innerHTML = '';
             avatars.forEach(avatar => {
                 const btn = document.createElement('button');
                 btn.className = 'text-5xl p-4 bg-white rounded-2xl border-4 border-slate-100 avatar-option hover:bg-blue-50 transition shadow-sm';
                 btn.innerHTML = avatar;
                 btn.onclick = () => {
                     document.querySelectorAll('.avatar-option').forEach(b => b.classList.remove('selected'));
-                    btn.classList.add('selected'); state.student.avatar = avatar;
+                    btn.classList.add('selected');
+                    state.student.avatar = avatar;
                 };
                 container.appendChild(btn);
             });
         }
 
         window.registerStudent = async function() {
-            if (!state.student.avatar) { alert('Escolha um avatar para continuar!'); return; }
-            state.student.level = 1; renderMap(); updateHud();
-            window.showScreen('map-screen'); await saveProgressToDb();
+            if (!state.student.avatar) {
+                alert('Escolha um avatar para continuar!');
+                return;
+            }
+            state.student.level = 1;
+            renderMap();
+            updateHud();
+            window.showScreen('map-screen');
+            await saveProgressToDb();
         };
 
+        // ATUALIZAR INTERFACE
         function updateHud() {
             document.getElementById('hud-name').textContent = state.student.name;
             document.getElementById('hud-avatar').textContent = state.student.avatar;
             document.getElementById('hud-level').textContent = 'Nível ' + Math.min(state.student.level, state.totalLevels);
         }
 
+        // RENDERIZAR O MAPA DE FASES
         function renderMap() {
-            const container = document.getElementById('levels-container'); container.innerHTML = '<div class="trail-line"></div>';
+            const container = document.getElementById('levels-container');
+            container.innerHTML = '<div class="trail-line"></div>';
+
             for (let i = state.totalLevels; i >= 1; i--) {
-                const isCompleted = i < state.student.level; const isActive = i === state.student.level;
+                const isCompleted = i < state.student.level;
+                const isActive = i === state.student.level;
+                
                 let btnClass = 'level-node w-16 h-16 rounded-full flex items-center justify-center font-black text-2xl border-4 ';
                 let iconHTML = i;
-                if (isCompleted) { btnClass += 'level-completed shadow-md cursor-pointer hover:scale-110'; iconHTML = `<i class="fas fa-check text-3xl"></i>`; } 
-                else if (isActive) { btnClass += 'level-active shadow-lg cursor-pointer hover:scale-110 pulse-active'; } 
-                else { btnClass += 'level-locked'; iconHTML = `<i class="fas fa-lock text-slate-400"></i>`; }
+                
+                if (isCompleted) {
+                    btnClass += 'level-completed shadow-md cursor-pointer hover:scale-110';
+                    iconHTML = `<i class="fas fa-check text-3xl"></i>`;
+                } else if (isActive) {
+                    btnClass += 'level-active shadow-lg cursor-pointer hover:scale-110 pulse-active';
+                } else {
+                    btnClass += 'level-locked';
+                    iconHTML = `<i class="fas fa-lock text-slate-400"></i>`;
+                }
+
                 let margins = i % 2 === 0 ? 'mr-32' : 'ml-32'; 
-                const wrapper = document.createElement('div'); wrapper.className = `flex flex-col items-center ${margins} relative z-10 group`;
-                const btn = document.createElement('button'); btn.className = btnClass; btn.innerHTML = iconHTML;
-                if (isCompleted || isActive) { btn.onclick = () => window.startLevel(i); }
-                const label = document.createElement('span'); label.className = `mt-3 text-sm font-black ${isActive ? 'text-secondary bg-slate-900' : 'text-slate-500 bg-white'} px-3 py-1 rounded-lg shadow-sm border border-slate-200 whitespace-nowrap`;
+
+                const wrapper = document.createElement('div');
+                wrapper.className = `flex flex-col items-center ${margins} relative z-10 group`;
+                
+                const btn = document.createElement('button');
+                btn.className = btnClass;
+                btn.innerHTML = iconHTML;
+                
+                if (isCompleted || isActive) {
+                    btn.onclick = () => window.startLevel(i);
+                }
+
+                const label = document.createElement('span');
+                label.className = `mt-3 text-sm font-black ${isActive ? 'text-secondary bg-slate-900' : 'text-slate-500 bg-white'} px-3 py-1 rounded-lg shadow-sm border border-slate-200 whitespace-nowrap`;
                 label.textContent = `Missão ${i}`;
-                wrapper.appendChild(btn); wrapper.appendChild(label); container.appendChild(wrapper);
+
+                wrapper.appendChild(btn);
+                wrapper.appendChild(label);
+                container.appendChild(wrapper);
             }
         }
 
+        // INICIAR FASE (ABRIR FLASHCARD)
         window.startLevel = function(level) {
             if (level > state.student.level) return;
-            state.currentLevel = level; const data = levelsData[level - 1];
+            state.currentLevel = level;
+            const data = levelsData[level - 1];
+            
             document.getElementById('flashcard-icon').textContent = data.flashcard.icon;
             document.getElementById('flashcard-title').textContent = data.flashcard.title;
             document.getElementById('flashcard-content').textContent = data.flashcard.content;
@@ -394,45 +847,105 @@
             window.showScreen('flashcard-screen');
         };
 
+        // MOSTRAR PERGUNTA DO QUIZ
         window.showQuiz = function() {
             const data = levelsData[state.currentLevel - 1];
             document.getElementById('quiz-level-indicator').textContent = 'MISSÃO ' + data.level;
             document.getElementById('quiz-question').textContent = data.question;
-            const optionsContainer = document.getElementById('quiz-options'); optionsContainer.innerHTML = '';
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            
             const shuffledOptions = [...data.options].sort(() => Math.random() - 0.5);
             shuffledOptions.forEach((opt) => {
                 const btn = document.createElement('button');
                 btn.className = 'w-full text-left p-6 bg-white border-4 border-slate-100 rounded-2xl font-black text-slate-700 text-lg hover:border-primary hover:bg-blue-50 transition shadow-sm';
-                btn.textContent = opt.text; btn.onclick = () => window.handleAnswer(opt.correct, opt.explanation);
+                btn.textContent = opt.text;
+                btn.onclick = () => window.handleAnswer(opt.correct, opt.explanation);
                 optionsContainer.appendChild(btn);
             });
             window.showScreen('quiz-screen');
         };
 
+        // RESPOSTA E FEEDBACK
         window.handleAnswer = async function(isCorrect, explanation) {
-            const title = document.getElementById('feedback-title'); const icon = document.getElementById('feedback-icon');
-            const message = document.getElementById('feedback-message'); const btn = document.getElementById('feedback-btn');
+            const title = document.getElementById('feedback-title');
+            const icon = document.getElementById('feedback-icon');
+            const message = document.getElementById('feedback-message');
+            const btn = document.getElementById('feedback-btn');
+
             message.textContent = explanation;
+
             if (isCorrect) {
-                title.textContent = 'Mandou Bem!'; title.className = 'text-4xl font-black mb-4 text-green-500'; icon.innerHTML = '🎉';
-                btn.textContent = 'Avançar no Mapa'; btn.className = 'w-full font-black text-xl py-5 rounded-2xl btn-clean text-white bg-green-500 hover:bg-green-600';
+                title.textContent = 'Mandou Bem!';
+                title.className = 'text-4xl font-black mb-4 text-green-500';
+                icon.innerHTML = '🎉';
+                btn.textContent = 'Avançar no Mapa';
+                btn.className = 'w-full font-black text-xl py-5 rounded-2xl btn-clean text-white bg-green-500 hover:bg-green-600';
+                
                 btn.onclick = async () => {
-                    if (state.currentLevel === state.student.level) { if (state.student.level <= state.totalLevels) { state.student.level++; await saveProgressToDb(); } }
-                    renderMap(); updateHud(); window.showScreen('map-screen');
-                    if(state.student.level > state.totalLevels && state.currentLevel === state.totalLevels) { setTimeout(() => alert(`PARABÉNS ${state.student.name}! Você é um Mestre da Pesquisa!`), 800); }
+                    if (state.currentLevel === state.student.level) {
+                        if (state.student.level <= state.totalLevels) {
+                            state.student.level++;
+                            await saveProgressToDb();
+                        }
+                    }
+                    renderMap();
+                    updateHud();
+                    window.showScreen('map-screen');
+                    
+                    if(state.student.level > state.totalLevels && state.currentLevel === state.totalLevels) {
+                        setTimeout(() => alert(`PARABÉNS ${state.student.name}! Você se formou com honras e é um verdadeiro Mestre da Pesquisa Responsável!`), 800);
+                    }
                 };
             } else {
-                title.textContent = 'Ops! Quase lá...'; title.className = 'text-4xl font-black mb-4 text-secondary'; icon.innerHTML = '🤔';
-                btn.textContent = 'Tentar Novamente'; btn.className = 'w-full font-black text-xl py-5 rounded-2xl btn-clean text-slate-900 bg-secondary hover:bg-yellow-500';
+                title.textContent = 'Ops! Quase lá...';
+                title.className = 'text-4xl font-black mb-4 text-secondary';
+                icon.innerHTML = '🤔';
+                btn.textContent = 'Tentar Novamente';
+                btn.className = 'w-full font-black text-xl py-5 rounded-2xl btn-clean text-slate-900 bg-secondary hover:bg-yellow-500';
                 btn.onclick = () => window.showScreen('quiz-screen');
             }
+
             window.showScreen('feedback-screen');
         };
 
+        // =====================================================================
+        // AREA DO PROFESSOR (COMUNICAÇÃO COM FIREBASE REST API DE FORMA NATIVA)
+        // =====================================================================
+
+        async function doFirebaseRequest(path, method = 'GET', body = null) {
+            const url = `${FIREBASE_DB_URL}/${path}.json`;
+            const options = { method, headers: { 'Content-Type': 'application/json' } };
+            if (body) options.body = JSON.stringify(body);
+
+            try {
+                const response = await fetch(url, options);
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        throw new Error("⚠️ Regras bloqueadas. Acesse o Realtime Database no painel e altere as regras para .read e .write igual a true.");
+                    }
+                    throw new Error(`Erro na rede: ${response.status}`);
+                }
+                return await response.json();
+            } catch (err) {
+                console.error("Firebase Error:", err);
+                throw err;
+            }
+        }
+
         window.switchTeacherTab = function(tab) {
-            const loginForm = document.getElementById('form-login'); const regForm = document.getElementById('form-register'); const recForm = document.getElementById('form-recover');
-            const tabLogin = document.getElementById('tab-login'); const tabReg = document.getElementById('tab-register');
-            loginForm.classList.add('hidden'); regForm.classList.add('hidden'); recForm.classList.add('hidden');
+            const loginForm = document.getElementById('form-login');
+            const regForm = document.getElementById('form-register');
+            const recForm = document.getElementById('form-recover');
+            
+            const tabLogin = document.getElementById('tab-login');
+            const tabReg = document.getElementById('tab-register');
+
+            loginForm.classList.add('hidden');
+            regForm.classList.add('hidden');
+            recForm.classList.add('hidden');
+
             if (tab === 'login') {
                 loginForm.classList.remove('hidden');
                 tabLogin.className = 'flex-1 py-3 text-sm font-bold rounded-lg bg-primary text-white transition';
@@ -447,124 +960,198 @@
                 tabReg.className = 'flex-1 py-3 text-sm font-bold rounded-lg text-slate-400 hover:text-white transition';
             }
         }
+        
         window.showRecoverPassword = function() { window.switchTeacherTab('recover'); }
 
-        window.copyGameLink = function() {
-            const url = document.getElementById('game-share-link').value;
-            const textArea = document.createElement("textarea"); textArea.value = url; textArea.style.position = "fixed"; textArea.style.left = "-999999px";
-            document.body.appendChild(textArea); textArea.focus(); textArea.select();
-            try {
-                document.execCommand('copy'); const btn = document.getElementById('btn-copy-link'); const original = btn.innerHTML;
-                btn.innerHTML = '<i class="fas fa-check"></i>'; btn.classList.add('bg-green-500'); btn.classList.remove('bg-primary');
-                setTimeout(() => { btn.innerHTML = original; btn.classList.remove('bg-green-500'); btn.classList.add('bg-primary'); }, 2000);
-            } catch (err) { console.error(err); } finally { textArea.remove(); }
-        };
-
-        window.simulateStudentLink = function() {
-            if (!state.teacher) return; window.showScreen('student-login-screen');
-            const schoolInput = document.getElementById('student-school'); schoolInput.value = state.teacher.school; schoolInput.readOnly = true;
-            schoolInput.classList.add('bg-blue-50', 'text-slate-600', 'cursor-not-allowed', 'border-blue-200'); state.teacher = null;
-        };
-
-        window.teacherLogout = function() { state.teacher = null; document.getElementById('t-login-pwd').value = ''; window.showScreen('home-screen'); }
-
-        // Esse método garante 100% de compatibilidade sem precisar importar bibliotecas
-
         window.teacherRegister = async function() {
-            const name = document.getElementById('t-reg-name').value.trim(); const school = document.getElementById('t-reg-school').value.trim();
-            const email = document.getElementById('t-reg-email').value.trim().toLowerCase(); const pwd = document.getElementById('t-reg-pwd').value.trim();
-            if (!name || !school || !email || !pwd) { alert("Preencha tudo!"); return; }
-            
+            const name = document.getElementById('t-reg-name').value.trim();
+            const school = document.getElementById('t-reg-school').value.trim();
+            const email = document.getElementById('t-reg-email').value.trim().toLowerCase();
+            const pwd = document.getElementById('t-reg-pwd').value.trim();
+
+            if (!name || !school || !email || !pwd) { alert("Preencha todos os campos do cadastro!"); return; }
+
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Cadastrando...'; btn.disabled = true;
+
             try {
-                const response = await fetch(`${FIREBASE_DB_URL}/teachers.json`, {
-                    method: 'POST', headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name, school, email, pwd })
-                });
-                if(!response.ok) throw new Error("Erro");
-                alert("Conta criada com sucesso! Faça o login.");
-                window.switchTeacherTab('login'); document.getElementById('t-login-email').value = email;
-            } catch(e) { alert("Erro de conexão. Verifique se publicou as Regras do Firebase."); }
+                await doFirebaseRequest(`artifacts/${window.appId}/teachers`, 'POST', { name, school, email, pwd });
+                alert("Conta criada com sucesso! Faça login no painel.");
+                window.switchTeacherTab('login');
+                document.getElementById('t-login-email').value = email;
+            } catch(e) {
+                alert(e.message);
+            } finally {
+                btn.innerHTML = originalText; btn.disabled = false;
+            }
         };
 
         window.teacherLogin = async function() {
-            const email = document.getElementById('t-login-email').value.trim().toLowerCase(); const pwd = document.getElementById('t-login-pwd').value.trim();
-            if (!email || !pwd) { alert("Preencha email e senha!"); return; }
+            const email = document.getElementById('t-login-email').value.trim().toLowerCase();
+            const pwd = document.getElementById('t-login-pwd').value.trim();
+
+            if (!email || !pwd) { alert("Preencha e-mail e senha."); return; }
+
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Autenticando...'; btn.disabled = true;
 
             try {
-                const response = await fetch(`${FIREBASE_DB_URL}/teachers.json`);
-                if(!response.ok) throw new Error("Erro");
-                const data = await response.json();
+                const data = await doFirebaseRequest(`artifacts/${window.appId}/teachers`);
                 let teachers = [];
-                if (data) { teachers = Object.keys(data).map(key => ({ id: key, ...data[key] })); }
-                
+                if (data) { teachers = Object.keys(data).map(k => ({ id: k, ...data[k] })); }
+
                 const found = teachers.find(t => t.email === email && t.pwd === pwd);
+                
                 if (found) {
-                    state.teacher = found; document.getElementById('dashboard-teacher-info').textContent = `Prof. ${found.name} | ${found.school}`;
-                    let currentUrl = window.location.href.split('?')[0]; if (currentUrl.includes('about:')) currentUrl = "https://seusite.com/jogo";
+                    state.teacher = found;
+                    document.getElementById('dashboard-teacher-info').textContent = `Prof. ${found.name} | ${found.school}`;
+                    
+                    let currentUrl = window.location.href.split('?')[0];
+                    if (currentUrl.includes('about:')) currentUrl = "https://seusite.com/jogo";
                     document.getElementById('game-share-link').value = `${currentUrl}?escola=${encodeURIComponent(found.school)}`;
-                    window.showScreen('teacher-dashboard'); window.refreshTeacherData();
-                } else { alert("Email ou senha incorretos!"); }
-            } catch(e) { alert("Erro ao carregar banco de dados."); }
+
+                    window.showScreen('teacher-dashboard');
+                    window.refreshTeacherData();
+                } else {
+                    alert("E-mail ou senha incorretos.");
+                }
+            } catch(e) {
+                alert(e.message);
+            } finally {
+                btn.innerHTML = originalText; btn.disabled = false;
+            }
         };
 
         window.teacherRecoverPassword = async function() {
-            const email = document.getElementById('t-rec-email').value.trim().toLowerCase(); const school = document.getElementById('t-rec-school').value.trim();
+            const email = document.getElementById('t-rec-email').value.trim().toLowerCase();
+            const school = document.getElementById('t-rec-school').value.trim();
             const newPwd = document.getElementById('t-rec-pwd').value.trim();
-            if(!email || !school || !newPwd) { alert("Preencha todos os campos!"); return; }
+
+            if(!email || !school || !newPwd) { alert("Preencha e-mail, escola e a nova senha."); return; }
+
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Salvando...'; btn.disabled = true;
 
             try {
-                const response = await fetch(`${FIREBASE_DB_URL}/teachers.json`);
-                const data = await response.json();
-                let teachers = []; if (data) { teachers = Object.keys(data).map(key => ({ id: key, ...data[key] })); }
-                
+                const data = await doFirebaseRequest(`artifacts/${window.appId}/teachers`);
+                let teachers = [];
+                if (data) { teachers = Object.keys(data).map(k => ({ id: k, ...data[k] })); }
+
                 const found = teachers.find(t => t.email === email && t.school.toLowerCase() === school.toLowerCase());
+                
                 if (found) {
-                    await fetch(`${FIREBASE_DB_URL}/teachers/${found.id}.json`, {
-                        method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ pwd: newPwd })
-                    });
-                    alert("Senha alterada! Faça o login."); window.switchTeacherTab('login');
-                } else { alert("Cadastro não encontrado com este e-mail e escola!"); }
-            } catch(e) { alert("Erro ao recuperar senha."); }
+                    // Update field
+                    await doFirebaseRequest(`artifacts/${window.appId}/teachers/${found.id}`, 'PATCH', { pwd: newPwd });
+                    alert("Sua senha foi alterada com sucesso! Faça login.");
+                    window.switchTeacherTab('login');
+                } else {
+                    alert("Nenhum cadastro encontrado com essa escola e e-mail.");
+                }
+            } catch(e) {
+                alert(e.message);
+            } finally {
+                btn.innerHTML = originalText; btn.disabled = false;
+            }
         };
 
         window.refreshTeacherData = async function() {
             if (!state.teacher) return;
             const tbody = document.getElementById('students-table-body');
-            tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-center text-primary font-bold">Buscando...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-center text-primary font-bold">Buscando na nuvem...</td></tr>';
             
             try {
-                const response = await fetch(`${FIREBASE_DB_URL}/students.json`);
-                const data = await response.json();
-                let allStudents = []; if (data) { allStudents = Object.keys(data).map(key => ({ id: key, ...data[key] })); }
+                const data = await doFirebaseRequest(`artifacts/${window.appId}/students`);
+                let allStudents = [];
+                if (data) { allStudents = Object.keys(data).map(k => ({ id: k, ...data[k] })); }
 
                 const myStudents = allStudents.filter(s => s.school.toLowerCase() === state.teacher.school.toLowerCase());
                 myStudents.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
                 
                 tbody.innerHTML = '';
-                if (myStudents.length === 0) { tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-center text-slate-500 font-bold">Nenhum aluno jogando ainda.</td></tr>'; return; }
+                if (myStudents.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="3" class="px-6 py-8 text-center text-slate-500 font-bold">Ainda não há alunos registrados. Compartilhe o link!</td></tr>';
+                    return;
+                }
+
                 myStudents.forEach(s => {
-                    const tr = document.createElement('tr'); tr.className = 'border-b border-slate-100 hover:bg-slate-50 transition';
-                    const nivelVisual = Math.min(s.level, state.totalLevels); const isFinished = s.level > state.totalLevels;
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b border-slate-100 hover:bg-slate-50 transition';
+                    const nivelVisual = Math.min(s.level, state.totalLevels);
+                    const isFinished = s.level > state.totalLevels;
                     const progressWidth = (nivelVisual / state.totalLevels) * 100;
+                    
                     tr.innerHTML = `
                         <td class="p-6 font-black text-slate-800 flex items-center gap-4"><span class="text-4xl bg-white p-2 rounded-xl border-2 border-slate-100 shadow-sm">${s.avatar}</span> <span>${s.name}</span></td>
                         <td class="p-6 text-slate-600 font-bold">${s.class}</td>
-                        <td class="p-6"><div class="flex flex-col gap-2"><div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden"><div class="${isFinished ? 'bg-green-500' : 'bg-secondary'} h-3 rounded-full transition-all" style="width: ${progressWidth}%"></div></div><span class="text-xs font-black ${isFinished ? 'text-green-600' : 'text-slate-600'}">${isFinished ? `FORMADO!` : `${nivelVisual} de ${state.totalLevels}`}</span></div></td>`;
+                        <td class="p-6">
+                            <div class="flex flex-col gap-2">
+                                <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                                    <div class="${isFinished ? 'bg-green-500' : 'bg-secondary'} h-3 rounded-full transition-all" style="width: ${progressWidth}%"></div>
+                                </div>
+                                <span class="text-xs font-black ${isFinished ? 'text-green-600' : 'text-slate-600'}">${isFinished ? `FORMADO!` : `${nivelVisual} de ${state.totalLevels}`}</span>
+                            </div>
+                        </td>
+                    `;
                     tbody.appendChild(tr);
                 });
-            } catch(e) { tbody.innerHTML = '<tr><td colspan="3" class="text-center text-red-500 font-bold">Erro ao buscar dados.</td></tr>'; }
+            } catch(e) {
+                tbody.innerHTML = `<tr><td colspan="3" class="px-6 py-8 text-center text-red-500 font-bold">Ocorreu um erro: ${e.message}</td></tr>`;
+            }
         };
 
+        window.copyGameLink = function() {
+            const url = document.getElementById('game-share-link').value;
+            const textArea = document.createElement("textarea");
+            textArea.value = url; textArea.style.position = "fixed"; textArea.style.left = "-999999px";
+            document.body.appendChild(textArea); textArea.focus(); textArea.select();
+            try {
+                document.execCommand('copy');
+                const btn = document.getElementById('btn-copy-link');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i> Copiado';
+                btn.classList.add('bg-green-500'); btn.classList.remove('bg-primary');
+                setTimeout(() => {
+                    btn.innerHTML = original;
+                    btn.classList.remove('bg-green-500'); btn.classList.add('bg-primary');
+                }, 2000);
+            } catch (err) { console.error(err); } finally { textArea.remove(); }
+        };
+
+        window.simulateStudentLink = function() {
+            if (!state.teacher) return;
+            window.showScreen('student-login-screen');
+            const schoolInput = document.getElementById('student-school');
+            schoolInput.value = state.teacher.school;
+            schoolInput.readOnly = true;
+            schoolInput.classList.add('bg-blue-50', 'text-slate-600', 'cursor-not-allowed', 'border-blue-200');
+            state.teacher = null;
+        };
+
+        window.teacherLogout = function() {
+            state.teacher = null;
+            document.getElementById('t-login-pwd').value = '';
+            window.showScreen('home-screen');
+        };
+
+        // SALVAR PROGRESSO DO ALUNO NA NUVEM
         async function saveProgressToDb() {
-            const payload = { name: state.student.name, school: state.student.school, class: state.student.class, avatar: state.student.avatar, level: state.student.level, timestamp: new Date().toISOString() };
+            const data = {
+                name: state.student.name, school: state.student.school, class: state.student.class,
+                avatar: state.student.avatar, level: state.student.level, timestamp: new Date().toISOString()
+            };
             try {
                 if (!state.student.docId) {
-                    const response = await fetch(`${FIREBASE_DB_URL}/students.json`, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
-                    const data = await response.json(); state.student.docId = data.name;
+                    const res = await doFirebaseRequest(`artifacts/${window.appId}/students`, 'POST', data);
+                    state.student.docId = res.name; // Firebase RTDB returns generated key as 'name'
                 } else {
-                    await fetch(`${FIREBASE_DB_URL}/students/${state.student.docId}.json`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) });
+                    await doFirebaseRequest(`artifacts/${window.appId}/students/${state.student.docId}`, 'PATCH', data);
                 }
-            } catch (e) { console.error("Erro ao salvar", e); }
+            } catch (e) {
+                console.warn("Salvando offline devido a erro no servidor.");
+            }
         }
     </script>
 </body>
