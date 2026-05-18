@@ -301,7 +301,7 @@
             { level: 8, flashcard: { icon: '📸', title: 'Pegada Digital', content: 'A internet tem uma memória de elefante. Uma foto postada não some nunca mais (alguém pode tirar print). Pense antes de postar!', example: 'Postar foto de uniforme na frente da escola permite que estranhos saibam sua rotina.', image: getImgUrl('Pense 2 Vezes') }, question: 'Você tirou uma foto super engraçada de um amigo dormindo babando no ônibus escolar.', options: [ { text: 'Posto logo no TikTok porque vai render muitas curtidas!', correct: false, explanation: 'E se ele sofrer bullying por causa dessa foto? A imagem dele não te pertence.' }, { text: 'Mostro para ele primeiro. Só posto se ele me der permissão clara.', correct: true, explanation: 'Exato! A regra de ouro é o consentimento. Respeite a privacidade dos outros.' } ] },
             { level: 9, flashcard: { icon: '🎣', title: 'O Golpe da Pescaria', content: 'Phishing (Pescaria) é um golpe onde o hacker finge ser uma empresa (Netflix, banco, Roblox) para "pescar" sua senha. Eles usam logotipos oficiais para te enganar.', example: 'E-mail: "Atenção! Sua conta do Roblox será apagada hoje se você não confirmar sua senha aqui".', image: getImgUrl('Não Morda a Isca') }, question: 'Você recebe um e-mail do "Instagram" dizendo: "Alguém tentou invadir sua conta. Clique aqui e coloque sua senha para proteger".', options: [ { text: 'Clico rápido e coloco minha senha, com medo de perder a conta.', correct: false, explanation: 'Você acabou de dar sua senha para o hacker! O e-mail usava o desespero contra você.' }, { text: 'Ignoro o e-mail, abro o aplicativo do Instagram normal no celular e olho as notificações.', correct: true, explanation: 'Genial! Empresas de verdade avisam os problemas dentro do próprio aplicativo oficial, e não por links de e-mail.' } ] },
             { level: 10, flashcard: { icon: '🎓', title: 'Sufixos de Confiança', content: 'Na hora da pesquisa, repare no final do link. Sites terminados em .gov (Governo) ou .edu (Educação/Universidade) são mais confiáveis do que sites .com (Comerciais).', example: 'Site do Ministério da Saúde (.gov.br) x Blog "SaudeMisteriosa.com".', image: getImgUrl('Fontes Oficiais') }, question: 'Para um trabalho sobre vacinas no Brasil, onde você busca informações?', options: [ { text: 'No site saude.gov.br', correct: true, explanation: 'Sim! É o site oficial do governo focado em saúde.' }, { text: 'Em um post gigante que me mandaram no grupo da família.', correct: false, explanation: 'Mensagens de WhatsApp não têm revisão científica e são os maiores focos de mentiras.' } ] },
-            // Fases 11 a 30 (Mantendo resumidas na estrutura mas ricas em conteúdo para espaço)
+            // Fases 11 a 30 
             { level: 11, flashcard: { icon: '📢', title: 'Anúncio Disfarçado', content: 'Muitos sites de jogos gratuitos sobrevivem de anúncios. Eles criam botões FALSOS de "Play" ou "Download" que na verdade instalam vírus ou abrem propagandas.', example: 'Um botão verde gigante piscando "BAIXAR AGORA".', image: getImgUrl('Isso é Propaganda') }, question: 'Você quer baixar um livro em PDF, mas a página tem 4 botões de "Download". Qual clicar?', options: [ { text: 'O maior botão verde e brilhante da página.', correct: false, explanation: 'Esses botões grandes e chamativos são quase 100% anúncios falsos!' }, { text: 'Procuro por um link pequeno que não tenha a palavra "Anúncio" perto dele.', correct: true, explanation: 'Visão de raio-x! Os links reais costumam ser os mais simples e discretos.' } ] },
             { level: 12, flashcard: { icon: '⬇️', title: 'O Preço da Pirataria', content: 'Jogos piratas não são de graça. O preço que você paga é instalar "cavalos de tróia" no seu PC. Eles deixam a máquina lenta, espiam sua câmera e roubam senhas.', example: 'Baixar "Minecraft Grátis 2024" num site russo estranho.', image: getImgUrl('O Barato Sai Caro') }, question: 'Aquele jogo de R$200 está de graça num site que o youtuber menor indicou.', options: [ { text: 'Não baixo. Sei que estão tentando infectar meu aparelho.', correct: true, explanation: 'Decisão madura! A pirataria sempre traz vírus de brinde.' }, { text: 'Desativo o antivírus para conseguir instalar o jogo.', correct: false, explanation: 'Nunca faça isso! Desligar o antivírus é abrir a porta da sua casa para ladrões.' } ] },
             { level: 13, flashcard: { icon: '©️', title: 'Direitos Autorais (Copyright)', content: 'No Google Imagens, as fotos têm donos. Usar a arte de outra pessoa no seu canal do YouTube sem pedir pode fazer seu vídeo ser apagado e você processado.', example: 'Usar uma música da Anitta inteira de fundo no seu vídeo de vlog.', image: getImgUrl('Arte com Dono') }, question: 'Você precisa de uma música de fundo para o trabalho da escola em vídeo.', options: [ { text: 'Pego a música mais famosa do momento e coloco.', correct: false, explanation: 'A música tem copyright (direitos autorais). O vídeo será bloqueado pelas plataformas.' }, { text: 'Procuro na "Biblioteca de Áudio Gratuita do YouTube".', correct: true, explanation: 'Lá existem milhares de músicas livres de direitos prontas para usar!' } ] },
@@ -448,7 +448,6 @@
                 const btn = document.createElement('button');
                 btn.className = 'w-full text-left p-6 bg-white border-4 border-slate-100 rounded-2xl font-black text-slate-700 text-lg hover:border-primary hover:bg-blue-50 transition shadow-sm';
                 btn.textContent = opt.text;
-                // Pass the text clicked so we can record it if wrong
                 btn.onclick = () => window.handleAnswer(opt.correct, opt.explanation, opt.text);
                 optionsContainer.appendChild(btn);
             });
@@ -465,7 +464,6 @@
             message.textContent = explanation;
 
             if (isCorrect) {
-                // Tracking success
                 if(state.currentLevel === state.student.level) state.student.acertos++;
 
                 title.textContent = 'Mandou Bem!';
@@ -490,17 +488,15 @@
                     }
                 };
             } else {
-                // Tracking error
                 if(state.currentLevel === state.student.level) {
                     state.student.erros++;
-                    // Save detailed error info
                     state.student.mistakes.push({
                         level: currentData.level,
                         question: currentData.question,
                         wrongAnswer: clickedText,
                         explanation: explanation
                     });
-                    await saveProgressToDb(); // Save immediately so teacher sees real-time
+                    await saveProgressToDb(); 
                 }
 
                 title.textContent = 'Ops! Quase lá...';
@@ -514,7 +510,6 @@
             window.showScreen('feedback-screen');
         };
 
-        /* ---------------- TEACHER FUNCTIONS ---------------- */
         window.switchTeacherTab = function(tab) {
             document.getElementById('form-login').classList.add('hidden');
             document.getElementById('form-register').classList.add('hidden');
@@ -657,7 +652,6 @@
                     allStudents = Object.keys(data).map(key => ({ id: key, ...data[key] }));
                 }
                 
-                // Cache data globally for the Modal to use
                 window.allStudentsCache = allStudents;
 
                 const myStudents = allStudents.filter(s => s.school.toLowerCase() === state.teacher.school.toLowerCase());
