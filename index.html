@@ -170,7 +170,7 @@
             <p class="text-slate-500 mb-8 font-semibold">Quem vai representar você no mapa?</p>
 
             <div class="grid grid-cols-3 gap-6 mb-10" id="avatar-container">
-                <!-- Avatares via JS -->
+                <!-- Avatares gerados via JS -->
             </div>
 
             <div class="flex gap-4">
@@ -203,7 +203,7 @@
 
             <div class="trail-container flex flex-col-reverse items-center gap-14" id="levels-container">
                 <div class="trail-line"></div>
-                <!-- Fases via JS -->
+                <!-- Fases geradas via JS -->
             </div>
         </div>
     </main>
@@ -544,7 +544,6 @@
             const optionsContainer = document.getElementById('quiz-options');
             optionsContainer.innerHTML = '';
             
-            // Embaralha opções
             const shuffledOptions = [...data.options].sort(() => Math.random() - 0.5);
 
             shuffledOptions.forEach((opt) => {
@@ -778,7 +777,6 @@
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getDatabase, ref, set, push, get, update, child } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-database.js";
 
-        // AS SUAS CHAVES DO FIREBASE ESTÃO AQUI:
         const firebaseConfig = {
             apiKey: "AIzaSyD8rGanWoHluo_k3xVOavwXsLig6up5ZsM",
             authDomain: "detetives-da-internet.firebaseapp.com",
@@ -795,9 +793,8 @@
             db = getDatabase(app);
             auth = getAuth(app);
             window.useMockDb = false; 
-            console.log("Firebase conectado!");
         } catch (e) {
-            console.warn("Usando banco local offline.", e);
+            console.warn("Usando Mock DB offline", e);
             window.useMockDb = true;
         }
 
