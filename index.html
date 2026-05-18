@@ -224,7 +224,6 @@
                 </div>
 
                 <div class="w-full flex justify-center mb-2">
-                    <!-- Imagem gerada via SVG para nunca ser bloqueada -->
                     <img id="flashcard-image" src="" alt="Ilustração do Conceito" class="rounded-xl shadow-md border-4 border-white max-h-48 object-cover w-full sm:w-auto">
                 </div>
             </div>
@@ -260,7 +259,6 @@
             </div>
             <button id="feedback-btn" class="w-full font-black text-xl py-5 rounded-2xl btn-clean text-white shadow-lg"></button>
             
-            <!-- Botão extra para voltar ao mapa, caso o aluno queira parar -->
             <button id="feedback-back-map" onclick="window.returnToMap()" class="w-full mt-4 text-slate-400 hover:text-slate-600 font-bold hidden transition">
                 <i class="fas fa-map-marked-alt mr-2"></i> Voltar para o Mapa
             </button>
@@ -385,6 +383,7 @@
         window.mockStudents = []; 
         window.mockTeachers = [];
 
+        // Imagem offline infalível baseada em matemática (SVG)
         const getImgUrl = (text) => {
             const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="600" height="300" viewBox="0 0 600 300">
                 <rect width="100%" height="100%" fill="#E0E7FF" rx="20"/>
