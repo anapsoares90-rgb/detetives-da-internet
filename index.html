@@ -1,19 +1,757 @@
-<!-- ... existing code ... -->
-            document.getElementById('mistakes-modal').style.display = 'flex';
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detetives da Internet</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Nunito', sans-serif; background-color: #F8FAFC; color: #0F172A; margin: 0; overflow-x: hidden; }
+        .bg-primary { background-color: #0052FF; }
+        .text-primary { color: #0052FF; }
+        .bg-secondary { background-color: #FFD500; }
+        .text-secondary { color: #D4AF37; }
+        .btn-clean { transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 4px 0px rgba(0, 0, 0, 0.15); }
+        .btn-clean:hover { transform: translateY(-2px); box-shadow: 0 6px 0px rgba(0, 0, 0, 0.15); }
+        .btn-clean:active { transform: translateY(4px); box-shadow: 0 0px 0px rgba(0, 0, 0, 0); }
+        .avatar-option { transition: all 0.2s; border: 3px solid transparent; }
+        .avatar-option.selected { border-color: #0052FF; background-color: #EFF6FF; transform: scale(1.15); box-shadow: 0 10px 15px -3px rgba(0, 82, 255, 0.2); }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .screen { display: none; min-height: calc(100vh - 72px); }
+        .active-screen { display: flex; flex-direction: column; }
+        .trail-container { position: relative; padding: 60px 0; }
+        .trail-line { position: absolute; top: 0; bottom: 0; left: 50%; width: 12px; background-color: #E2E8F0; transform: translateX(-50%); z-index: 0; border-radius: 10px; }
+        .level-node { z-index: 10; position: relative; transition: all 0.3s; }
+        .level-active { border-color: #FFD500; background-color: #FFFDE7; box-shadow: 0 0 0 8px rgba(255, 213, 0, 0.3); }
+        .level-completed { border-color: #0052FF; background-color: #E0E7FF; color: #0052FF; }
+        .level-locked { background-color: #F1F5F9; color: #94A3B8; border-color: #CBD5E1; cursor: not-allowed; }
+        @keyframes pulse-ring { 0% { box-shadow: 0 0 0 0 rgba(255, 213, 0, 0.7); } 100% { box-shadow: 0 0 0 15px rgba(255, 213, 0, 0); } }
+        .pulse-active { animation: pulse-ring 2s infinite; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes scaleIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+</head>
+<body class="antialiased text-slate-800">
+
+    <header class="bg-white shadow-sm flex justify-between items-center z-50 relative border-b border-gray-100 px-6 py-4 h-[72px]">
+        <div class="flex items-center gap-3 cursor-pointer" onclick="window.showScreen('home-screen')">
+            <div class="bg-primary p-2 rounded-xl text-white shadow-sm"><i class="fas fa-search"></i></div>
+            <h1 class="font-black text-2xl tracking-tight text-slate-800">Detetives da Internet</h1>
+        </div>
+        <button onclick="window.showScreen('teacher-auth-screen')" class="text-sm font-bold text-slate-500 hover:text-primary transition flex items-center gap-2 bg-slate-50 px-3 py-2 rounded-lg border border-slate-200">
+            <i class="fas fa-user-graduate"></i> Professor
+        </button>
+    </header>
+
+    <main id="home-screen" class="screen active-screen items-center justify-center p-6 bg-slate-50">
+        <div class="max-w-4xl w-full grid md:grid-cols-2 gap-8 items-center">
+            <div>
+                <h1 class="text-5xl md:text-6xl font-black text-slate-900 mb-6 leading-tight">Aprenda a pesquisar como um <span class="text-primary">Mestre</span>.</h1>
+                <p class="text-xl text-slate-600 mb-8 font-semibold">Descubra como buscar no Google, evitar mentiras na rede, citar autores corretamente e proteger seus dados. Embarque nessa trilha!</p>
+                <button onclick="window.showScreen('student-login-screen')" class="bg-secondary text-slate-900 font-black text-xl py-4 px-8 rounded-2xl btn-clean w-full md:w-auto inline-flex justify-center items-center gap-3">
+                    Iniciar Aventura <i class="fas fa-rocket"></i>
+                </button>
+            </div>
+            <div class="hidden md:flex justify-center">
+                <svg viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg" class="w-full h-auto drop-shadow-2xl">
+                    <circle cx="250" cy="200" r="180" fill="#E0E7FF" /><circle cx="250" cy="200" r="150" fill="#C7D2FE" />
+                    <rect x="140" y="240" width="220" height="120" rx="10" fill="#1E293B" /><rect x="150" y="250" width="200" height="90" rx="5" fill="#F8FAFC" /><path d="M 100 360 L 400 360 C 410 360 415 365 410 370 L 90 370 C 85 365 90 360 100 360 Z" fill="#475569" />
+                    <circle cx="290" cy="170" r="65" fill="none" stroke="#FFD500" stroke-width="14" /><line x1="335" y1="215" x2="400" y2="280" stroke="#FFD500" stroke-width="18" stroke-linecap="round" /><circle cx="290" cy="170" r="55" fill="#FEF08A" opacity="0.4" />
+                    <path d="M 170 360 C 170 230 250 180 250 180 C 250 180 330 230 330 360 Z" fill="#0052FF" /><circle cx="250" cy="150" r="45" fill="#FFEDD5" /><path d="M 180 120 C 180 90 320 90 320 120 L 340 120 L 160 120 Z" fill="#1E3A8A" /><rect x="195" y="80" width="110" height="40" rx="10" fill="#1E3A8A" /><rect x="195" y="105" width="110" height="15" fill="#FFD500" />
+                    <text x="165" y="275" font-family="monospace" font-weight="bold" font-size="14" fill="#94A3B8">Busca...</text><rect x="165" y="290" width="100" height="8" rx="4" fill="#CBD5E1" /><rect x="165" y="310" width="160" height="8" rx="4" fill="#CBD5E1" />
+                    <circle cx="110" cy="120" r="25" fill="#22C55E" /><path d="M 100 120 L 108 128 L 120 112" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+                    <circle cx="430" cy="160" r="20" fill="#EF4444" /><path d="M 420 160 L 440 160 M 430 150 L 430 170" fill="none" stroke="white" stroke-width="4" stroke-linecap="round" />
+                </svg>
+            </div>
+        </div>
+    </main>
+
+    <main id="student-login-screen" class="screen items-center justify-center p-6 bg-slate-50">
+        <div class="bg-white p-10 rounded-3xl shadow-xl w-full max-w-md border border-slate-100">
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-blue-50 text-primary rounded-full flex items-center justify-center mx-auto mb-4 text-3xl shadow-sm border-4 border-blue-100"><i class="fas fa-id-card"></i></div>
+                <h2 class="text-3xl font-black text-slate-900">Novo Recruta</h2>
+                <p class="text-slate-500 mt-2 font-semibold">Preencha sua credencial</p>
+            </div>
+            <div class="space-y-5">
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Nome Completo</label>
+                    <input type="text" id="student-name" placeholder="Ex: João da Silva" class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-primary focus:bg-white outline-none transition font-semibold text-slate-800">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Nome da Escola</label>
+                    <input type="text" id="student-school" placeholder="Ex: Escola Municipal Luz" class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-primary focus:bg-white outline-none transition font-semibold text-slate-800">
+                </div>
+                <div>
+                    <label class="block text-sm font-bold text-slate-700 mb-2">Sua Turma</label>
+                    <input type="text" id="student-class" placeholder="Ex: 5º Ano B" class="w-full p-4 bg-slate-50 border-2 border-slate-200 rounded-xl focus:border-primary focus:bg-white outline-none transition font-semibold text-slate-800">
+                </div>
+            </div>
+            <button onclick="window.goToAvatarSelection()" class="w-full bg-primary text-white font-black text-xl py-4 rounded-xl btn-clean mt-8">Continuar <i class="fas fa-chevron-right ml-2"></i></button>
+        </div>
+    </main>
+
+    <main id="avatar-screen" class="screen items-center justify-center p-6 bg-slate-50">
+        <div class="bg-white p-10 rounded-3xl shadow-xl w-full max-w-lg border border-slate-100 text-center">
+            <h2 class="text-3xl font-black text-slate-900 mb-2">Escolha seu Avatar</h2>
+            <p class="text-slate-500 mb-8 font-semibold">Quem vai representar você no mapa?</p>
+            <div class="grid grid-cols-3 gap-6 mb-10" id="avatar-container"></div>
+            <div class="flex gap-4">
+                <button onclick="window.showScreen('student-login-screen')" class="w-1/3 bg-slate-100 text-slate-600 font-bold py-4 rounded-xl hover:bg-slate-200 transition">Voltar</button>
+                <button onclick="window.registerStudent()" class="w-2/3 bg-secondary text-slate-900 font-black text-xl py-4 rounded-xl btn-clean">Ir pro Mapa! <i class="fas fa-map-marked-alt ml-2"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <main id="map-screen" class="screen bg-slate-50 relative">
+        <div class="sticky top-0 z-40 bg-white/90 backdrop-blur-md border-b border-slate-200 p-4 shadow-sm flex justify-center">
+            <div class="flex items-center gap-4 bg-white px-6 py-2 rounded-2xl shadow-sm border-2 border-slate-100">
+                <div id="hud-avatar" class="text-4xl bg-slate-50 p-2 rounded-xl">🧑‍💻</div>
+                <div class="text-left">
+                    <h3 id="hud-name" class="font-black text-slate-800 text-lg leading-tight">Nome</h3>
+                    <div class="bg-secondary text-slate-900 text-xs font-bold px-2 py-1 rounded mt-1 inline-block" id="hud-level">Nível: 1</div>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-md mx-auto w-full flex-1 overflow-y-auto no-scrollbar relative p-6 pb-20">
+            <div class="text-center mb-12 mt-4">
+                <h2 class="text-3xl font-black text-slate-800">Trilha de Pesquisa</h2>
+                <p class="text-slate-500 font-semibold mt-1">Complete as 30 missões!</p>
+            </div>
+            <div class="trail-container flex flex-col-reverse items-center gap-14" id="levels-container">
+                <div class="trail-line"></div>
+            </div>
+        </div>
+    </main>
+
+    <main id="flashcard-screen" class="screen items-center justify-center p-4 sm:p-6 bg-slate-800/50 backdrop-blur-sm fixed inset-0 z-50">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-[fadeIn_0.3s_ease-out]">
+            <div class="bg-primary p-8 text-center relative text-white">
+                <button onclick="window.showScreen('map-screen')" class="absolute top-4 right-4 w-10 h-10 bg-white/20 rounded-full flex items-center justify-center hover:bg-white/40 transition"><i class="fas fa-times text-white text-xl"></i></button>
+                <div class="inline-block bg-white/20 px-4 py-1 rounded-full text-sm font-bold tracking-widest mb-4">DICA DE MESTRE</div>
+                <div id="flashcard-icon" class="text-6xl mb-4 drop-shadow-md"></div>
+                <h3 id="flashcard-title" class="text-3xl font-black leading-tight">Título</h3>
+            </div>
+            <div class="p-6 sm:p-8 overflow-y-auto flex-1 bg-slate-50">
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 mb-6">
+                    <h4 class="font-black text-primary mb-3 uppercase tracking-wide flex items-center gap-2"><i class="fas fa-book-open"></i> O que é?</h4>
+                    <p id="flashcard-content" class="text-slate-700 text-lg font-medium leading-relaxed"></p>
+                </div>
+                <div class="bg-blue-50 border-2 border-blue-100 rounded-2xl p-6 mb-6">
+                    <h4 class="font-black text-slate-800 mb-3 flex items-center gap-2"><i class="fas fa-bolt text-secondary text-xl"></i> Exemplo Prático</h4>
+                    <p id="flashcard-example" class="text-slate-700 font-medium"></p>
+                </div>
+                <div class="w-full flex justify-center mb-2"><img id="flashcard-image" src="" alt="Ilustração" class="rounded-xl shadow-md border-4 border-white max-h-48 object-cover w-full sm:w-auto"></div>
+            </div>
+            <div class="p-6 border-t border-slate-100 bg-white shadow-[0_-10px_15px_-3px_rgba(0,0,0,0.05)]">
+                <button onclick="window.showQuiz()" class="w-full bg-secondary text-slate-900 font-black text-xl py-5 rounded-2xl btn-clean">Ir para o Desafio <i class="fas fa-arrow-right ml-2"></i></button>
+            </div>
+        </div>
+    </main>
+
+    <main id="quiz-screen" class="screen items-center justify-center p-4 sm:p-6 bg-slate-50">
+        <div class="bg-white p-6 sm:p-10 rounded-3xl shadow-xl w-full max-w-2xl border-2 border-slate-100 relative overflow-hidden">
+            <div class="absolute top-0 left-0 w-full h-2 bg-primary"></div>
+            <div class="flex justify-between items-center mb-10 mt-2">
+                <span class="font-black text-primary text-sm bg-blue-50 px-4 py-2 rounded-lg border border-blue-100 uppercase tracking-wider" id="quiz-level-indicator">MISSÃO</span>
+                <button onclick="window.showScreen('map-screen')" class="text-slate-400 hover:text-red-500 font-bold bg-slate-50 px-3 py-1 rounded-lg"><i class="fas fa-times mr-1"></i> Sair</button>
+            </div>
+            <h2 id="quiz-question" class="text-2xl sm:text-3xl font-black text-slate-800 mb-10 leading-tight">Pergunta?</h2>
+            <div id="quiz-options" class="flex flex-col gap-4"></div>
+        </div>
+    </main>
+
+    <main id="feedback-screen" class="screen items-center justify-center p-6 bg-slate-800/50 backdrop-blur-sm fixed inset-0 z-[60]">
+        <div class="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md text-center border-4 border-white animate-[scaleIn_0.3s_ease-out]">
+            <div id="feedback-icon" class="text-8xl mb-6 drop-shadow-md"></div>
+            <h2 id="feedback-title" class="text-4xl font-black mb-4">Título</h2>
+            <div class="bg-slate-50 p-6 rounded-2xl mb-8 border-2 border-slate-100">
+                <p id="feedback-message" class="text-slate-700 font-bold text-lg leading-relaxed">Mensagem</p>
+            </div>
+            <button id="feedback-btn" class="w-full font-black text-xl py-5 rounded-2xl btn-clean text-white shadow-lg"></button>
+        </div>
+    </main>
+
+    <main id="teacher-auth-screen" class="screen items-center justify-center p-6 bg-slate-900 text-slate-100">
+        <div class="bg-slate-800 p-10 rounded-3xl shadow-2xl w-full max-w-md border border-slate-700 relative">
+            <button onclick="window.showScreen('home-screen')" class="absolute top-4 right-4 text-slate-400 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            <div class="text-center mb-8 mt-4">
+                <div class="w-20 h-20 bg-slate-700 rounded-full flex items-center justify-center mx-auto mb-4 border-4 border-slate-600"><i class="fas fa-user-shield text-4xl text-secondary"></i></div>
+                <h2 class="text-3xl font-black text-white">Área do Professor</h2>
+                <p class="text-slate-400 mt-2 font-medium">Gerencie sua turma</p>
+            </div>
+
+            <div class="flex bg-slate-900 rounded-xl p-1.5 mb-8 border border-slate-700" id="tabs-container">
+                <button id="tab-login" onclick="window.switchTeacherTab('login')" class="flex-1 py-3 text-sm font-bold rounded-lg bg-primary text-white transition">Fazer Login</button>
+                <button id="tab-register" onclick="window.switchTeacherTab('register')" class="flex-1 py-3 text-sm font-bold rounded-lg text-slate-400 hover:text-white transition">Nova Conta</button>
+            </div>
+
+            <div id="form-login" class="space-y-4 block">
+                <input type="email" id="t-login-email" placeholder="Seu E-mail" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <input type="password" id="t-login-pwd" placeholder="Senha" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <button onclick="window.teacherLogin()" class="w-full bg-primary text-white font-black text-lg py-4 rounded-xl hover:bg-blue-600 transition mt-4 shadow-lg shadow-blue-500/20">Entrar no Painel</button>
+                <div class="text-center mt-4">
+                    <button onclick="window.switchTeacherTab('forgot')" class="text-sm text-slate-400 hover:text-secondary underline font-semibold transition">Esqueci minha senha</button>
+                </div>
+            </div>
+
+            <div id="form-register" class="space-y-4 hidden">
+                <input type="text" id="t-reg-name" placeholder="Seu Nome (Ex: Prof. Silva)" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <input type="text" id="t-reg-school" placeholder="Nome exato da Escola" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <input type="email" id="t-reg-email" placeholder="E-mail" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <input type="password" id="t-reg-pwd" placeholder="Crie uma Senha" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <button onclick="window.teacherRegister()" class="w-full bg-secondary text-slate-900 font-black text-lg py-4 rounded-xl hover:bg-yellow-500 transition mt-4 shadow-lg shadow-yellow-500/20">Cadastrar Escola</button>
+            </div>
+
+            <div id="form-forgot" class="space-y-4 hidden">
+                <p class="text-sm text-slate-400 text-center mb-4">Para criar uma nova senha, confirme seu e-mail e escola.</p>
+                <input type="email" id="t-forgot-email" placeholder="Seu E-mail" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <input type="text" id="t-forgot-school" placeholder="Nome exato da Escola" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <input type="password" id="t-forgot-newpwd" placeholder="Sua Nova Senha" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <button onclick="window.teacherResetPwd()" class="w-full bg-green-500 text-white font-black text-lg py-4 rounded-xl hover:bg-green-600 transition mt-4 shadow-lg shadow-green-500/20">Salvar Nova Senha</button>
+                <div class="text-center mt-4">
+                    <button onclick="window.switchTeacherTab('login')" class="text-sm text-slate-400 hover:text-white underline transition">Voltar para o Login</button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main id="teacher-dashboard" class="screen bg-slate-100 p-6">
+        <div class="max-w-6xl mx-auto">
+            <div class="flex flex-col lg:flex-row justify-between items-center mb-8 bg-white p-8 rounded-3xl shadow-sm border border-slate-200 gap-6">
+                <div class="text-center lg:text-left w-full lg:w-auto">
+                    <h2 class="text-3xl font-black text-slate-800">Painel de Controle</h2>
+                    <p class="text-slate-500 font-bold mt-1 text-lg" id="dashboard-teacher-info">Escola: Carregando...</p>
+                </div>
+                <div class="flex flex-col w-full lg:w-auto flex-1 max-w-lg bg-blue-50 p-4 rounded-2xl border-2 border-blue-100">
+                    <span class="text-xs font-black text-primary uppercase tracking-widest mb-2"><i class="fas fa-link mr-1"></i> Link da sua turma</span>
+                    <div class="flex gap-2">
+                        <input type="text" id="game-share-link" readonly class="bg-white border-2 border-blue-200 text-slate-700 font-medium rounded-xl px-4 py-3 w-full focus:outline-none focus:border-primary cursor-text">
+                        <button onclick="window.copyGameLink()" id="btn-copy-link" class="bg-primary text-white font-bold px-6 py-3 rounded-xl hover:bg-blue-600 transition shadow-md whitespace-nowrap">Copiar</button>
+                        <button onclick="window.simulateStudentLink()" title="Testar visão do aluno" class="bg-white text-primary border-2 border-primary font-bold px-4 py-3 rounded-xl hover:bg-blue-50 transition shadow-sm"><i class="fas fa-external-link-alt"></i></button>
+                    </div>
+                </div>
+                <div class="flex gap-3 w-full lg:w-auto justify-center lg:justify-end">
+                    <button onclick="window.refreshTeacherData()" title="Atualizar Dados" class="bg-white border-2 border-slate-200 text-slate-700 font-bold px-5 py-3 rounded-xl hover:bg-slate-50 transition shadow-sm flex items-center gap-2"><i class="fas fa-sync-alt"></i> Atualizar</button>
+                    <button onclick="window.teacherLogout()" class="bg-red-50 text-red-600 font-bold px-5 py-3 rounded-xl border-2 border-red-100 hover:bg-red-100 transition shadow-sm"><i class="fas fa-sign-out-alt"></i> Sair</button>
+                </div>
+            </div>
+            <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden overflow-x-auto">
+                <table class="w-full text-left border-collapse">
+                    <thead>
+                        <tr class="bg-slate-50 border-b-2 border-slate-100 text-slate-500 text-sm font-black uppercase tracking-wider">
+                            <th class="p-6">Nome do Aluno</th>
+                            <th class="p-6">Turma</th>
+                            <th class="p-6">Desempenho</th>
+                            <th class="p-6">Progresso da Trilha</th>
+                            <th class="p-6 text-center">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="students-table-body"></tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <!-- Modal do Relatório do Professor -->
+    <div id="mistakes-modal" class="hidden items-center justify-center p-6 bg-slate-900/60 backdrop-blur-sm fixed inset-0 z-[70]">
+        <div class="bg-white rounded-3xl shadow-2xl w-full max-w-2xl overflow-hidden flex flex-col max-h-[90vh] animate-[scaleIn_0.2s_ease-out]">
+            <div class="bg-slate-800 p-6 flex justify-between items-center text-white">
+                <div>
+                    <h3 class="text-2xl font-black">Relatório do Aluno</h3>
+                    <p id="modal-student-name" class="text-slate-300 font-semibold text-sm">Carregando...</p>
+                </div>
+                <button onclick="window.closeMistakesModal()" class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-white/30 transition"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <div class="p-6 overflow-y-auto bg-slate-50 flex-1" id="mistakes-list">
+                <!-- Erros via JS -->
+            </div>
+            <div class="p-6 bg-white border-t border-slate-100 text-center">
+                <button onclick="window.closeMistakesModal()" class="px-8 py-3 bg-slate-200 text-slate-700 font-bold rounded-xl hover:bg-slate-300 transition">Fechar Relatório</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DB_URL = "https://detetives-da-internet-default-rtdb.firebaseio.com";
+        const APP_ID = "detetives-app-v4"; 
+
+        const state = {
+            student: { name: '', school: '', class: '', avatar: '', level: 1, acertos: 0, erros: 0, mistakes: [], docId: null },
+            teacher: null, 
+            currentLevel: 1,
+            totalLevels: 30
+        };
+        const avatars = ['🕵️', '👩‍💻', '🦊', '🦉', '🚀', '🤖', '👾', '🦄', '🦖'];
+        window.allStudentsCache = [];
+
+        const getImgUrl = (text) => `https://placehold.co/600x300/e0e7ff/0052ff?text=${encodeURIComponent(text)}&font=montserrat`;
+
+        const levelsData = [
+            { level: 1, flashcard: { icon: '📰', title: 'O que são Fake News?', content: 'Fake News são notícias mentirosas criadas para causar pânico ou raiva nas pessoas. Elas geram muitos "cliques" e os criadores ganham dinheiro com anúncios.', example: 'Uma corrente de WhatsApp dizendo que "vacina tem chip" ou que "um asteroide vai destruir o Brasil amanhã".', image: getImgUrl('Mentira ou Verdade?') }, question: 'Você recebe um vídeo no TikTok dizendo "Ganhe dinheiro fácil baixando esse app secreto!". O que você faz?', options: [ { text: 'Baixo o app para ver se é verdade.', correct: false, explanation: 'Perigoso! Isso é uma armadilha. Promessas de "dinheiro fácil" na internet quase sempre escondem golpes e vírus.' }, { text: 'Não baixo e denuncio o vídeo.', correct: true, explanation: 'Mestre! Você não caiu no golpe e ainda ajudou a comunidade denunciando a Fake News.' } ] },
+            { level: 2, flashcard: { icon: '📝', title: 'Plágio é Roubo', content: 'Copiar o trabalho de alguém da internet e entregar na escola como se você tivesse escrito se chama Plágio. É o mesmo que roubar a ideia da pessoa.', example: 'Achar um trabalho pronto sobre Revolução Francesa na internet, trocar o nome do aluno e entregar para o professor.', image: getImgUrl('Não Copie') }, question: 'O professor pediu uma redação sobre o meio ambiente. Como fazer do jeito certo?', options: [ { text: 'Leio sites confiáveis e escrevo o que entendi com minhas palavras.', correct: true, explanation: 'Perfeito! Isso é construir conhecimento. Seu cérebro absorve a informação de verdade.' }, { text: 'Copio os primeiros parágrafos da Wikipédia e mudo algumas palavras.', correct: false, explanation: 'Mudar algumas palavras não esconde o plágio! A estrutura da ideia ainda foi roubada.' } ] },
+            { level: 3, flashcard: { icon: '🔑', title: 'Senhas de Aço', content: 'Sua senha é a chave da sua vida digital. Uma senha de aço usa letras maiúsculas, minúsculas, números e símbolos (@, #, !).', example: 'Senha Fraca: "123456" ou "flamengo". Senha de Aço: "Gat0@Branc022!"', image: getImgUrl('Proteja sua Conta') }, question: 'Você e seu melhor amigo estão jogando Roblox. Ele diz: "Me passa sua senha para eu passar de fase pra você".', options: [ { text: 'Eu passo, afinal, ele é meu melhor amigo e eu confio nele.', correct: false, explanation: 'NÃO! E se a conta do seu amigo for hackeada? O hacker pega a sua senha também. Senha não se passa para ninguém.' }, { text: 'Digo que regras de segurança da internet proíbem passar a senha.', correct: true, explanation: 'Excelente! Amigos verdadeiros não pedem a sua senha.' } ] },
+            { level: 4, flashcard: { icon: '🤐', title: 'O que é Pessoal?', content: 'Nome completo, nome da escola, endereço da sua casa e telefone são seus DADOS PESSOAIS. Eles nunca devem ser ditos para estranhos em jogos.', example: 'Alguém no Free Fire perguntar "onde você estuda?".', image: getImgUrl('Seja um Fantasma') }, question: 'No chat público de um jogo, um jogador rico diz: "Mora onde? Vou te mandar skins de presente!".', options: [ { text: 'Bloqueio o jogador e saio do chat.', correct: true, explanation: 'Atitude de Mestre Detetive! Nunca troque sua segurança por itens de jogo.' }, { text: 'Falo apenas o nome da minha rua e da minha cidade.', correct: false, explanation: 'Erro crítico! Com a rua e a cidade, qualquer pessoa mal-intencionada pode te encontrar no mundo real.' } ] },
+            { level: 5, flashcard: { icon: '🔍', title: 'Busca Eficiente', content: 'O Google não é uma pessoa. Ele não entende conversas longas. Em vez de perguntar frases inteiras, use as "Palavras-chave" principais do que você quer achar.', example: 'Em vez de buscar "por que o céu fica azul durante o dia", busque "motivo céu azul".', image: getImgUrl('Seja Direto') }, question: 'Como você buscaria informações sobre a alimentação do sistema solar para um trabalho?', options: [ { text: 'Trabalho escolar completo sobre todos os planetas e o sistema solar', correct: false, explanation: 'O Google vai ficar confuso e vai te mostrar milhões de páginas que não têm o que você quer.' }, { text: 'Planetas sistema solar características', correct: true, explanation: 'Direto ao ponto! Usar palavras-chave filtra os resultados inúteis.' } ] },
+            { level: 6, flashcard: { icon: '🔒', title: 'O Cadeado de Ouro', content: 'Antes de colocar e-mail ou senha num site, olhe lá no topo (onde digita o www). Se o cadeado estiver aberto ou escrito "Não Seguro", não coloque NADA seu lá.', example: 'Site do banco tem cadeado. Site de jogo pirata diz "Não Seguro".', image: getImgUrl('Olhe para Cima') }, question: 'Você clica num link para comprar uma blusa barata. Lá em cima está escrito "Não Seguro". O que você faz?', options: [ { text: 'Fecho o site na mesma hora.', correct: true, explanation: 'Salvou seu cartão de crédito! Sites sem cadeado deixam a porta aberta para hackers roubarem seus dados na hora de comprar.' }, { text: 'Preencho os dados, pois o preço está muito bom.', correct: false, explanation: 'Esse é o golpe! Eles baixam o preço justamente para você ignorar o aviso de segurança.' } ] },
+            { level: 7, flashcard: { icon: '🤝', title: 'Cyberbullying', content: 'Xingar, humilhar ou fazer montagens de colegas e postar na internet é Cyberbullying. Na internet, palavras machucam como agressão física.', example: 'Fazer um grupo no WhatsApp só para falar mal de uma menina da sala.', image: getImgUrl('Paz Online') }, question: 'Seus colegas de sala postam no Instagram fotos editadas para zoar o garoto novo da escola. O que você faz?', options: [ { text: 'Acho engraçado, dou like e comento também.', correct: false, explanation: 'Dar curtida e rir de bullying faz de você um agressor também. Você está apoiando o sofrimento da pessoa.' }, { text: 'Não participo, tiro print e mostro para a coordenação da escola.', correct: true, explanation: 'Herói! Proteger quem sofre cyberbullying é salvar uma vida.' } ] },
+            { level: 8, flashcard: { icon: '📸', title: 'Pegada Digital', content: 'A internet tem uma memória de elefante. Uma foto postada não some nunca mais (alguém pode tirar print). Pense antes de postar!', example: 'Postar foto de uniforme na frente da escola permite que estranhos saibam sua rotina.', image: getImgUrl('Pense 2 Vezes') }, question: 'Você tirou uma foto super engraçada de um amigo dormindo babando no ônibus escolar.', options: [ { text: 'Posto logo no TikTok porque vai render muitas curtidas!', correct: false, explanation: 'E se ele sofrer bullying por causa dessa foto? A imagem dele não te pertence.' }, { text: 'Mostro para ele primeiro. Só posto se ele me der permissão clara.', correct: true, explanation: 'Exato! A regra de ouro é o consentimento. Respeite a privacidade dos outros.' } ] },
+            { level: 9, flashcard: { icon: '🎣', title: 'O Golpe da Pescaria', content: 'Phishing (Pescaria) é um golpe onde o hacker finge ser uma empresa (Netflix, banco, Roblox) para "pescar" sua senha. Eles usam logotipos oficiais para te enganar.', example: 'E-mail: "Atenção! Sua conta do Roblox será apagada hoje se você não confirmar sua senha aqui".', image: getImgUrl('Não Morda a Isca') }, question: 'Você recebe um e-mail do "Instagram" dizendo: "Alguém tentou invadir sua conta. Clique aqui e coloque sua senha para proteger".', options: [ { text: 'Clico rápido e coloco minha senha, com medo de perder a conta.', correct: false, explanation: 'Você acabou de dar sua senha para o hacker! O e-mail usava o desespero contra você.' }, { text: 'Ignoro o e-mail, abro o aplicativo do Instagram normal no celular e olho as notificações.', correct: true, explanation: 'Genial! Empresas de verdade avisam os problemas dentro do próprio aplicativo oficial, e não por links de e-mail.' } ] },
+            { level: 10, flashcard: { icon: '🎓', title: 'Sufixos de Confiança', content: 'Na hora da pesquisa, repare no final do link. Sites terminados em .gov (Governo) ou .edu (Educação/Universidade) são mais confiáveis do que sites .com (Comerciais).', example: 'Site do Ministério da Saúde (.gov.br) x Blog "SaudeMisteriosa.com".', image: getImgUrl('Fontes Oficiais') }, question: 'Para um trabalho sobre vacinas no Brasil, onde você busca informações?', options: [ { text: 'No site saude.gov.br', correct: true, explanation: 'Sim! É o site oficial do governo focado em saúde.' }, { text: 'Em um post gigante que me mandaram no grupo da família.', correct: false, explanation: 'Mensagens de WhatsApp não têm revisão científica e são os maiores focos de mentiras.' } ] },
+            // Fases 11 a 30 (Mantendo resumidas na estrutura mas ricas em conteúdo para espaço)
+            { level: 11, flashcard: { icon: '📢', title: 'Anúncio Disfarçado', content: 'Muitos sites de jogos gratuitos sobrevivem de anúncios. Eles criam botões FALSOS de "Play" ou "Download" que na verdade instalam vírus ou abrem propagandas.', example: 'Um botão verde gigante piscando "BAIXAR AGORA".', image: getImgUrl('Isso é Propaganda') }, question: 'Você quer baixar um livro em PDF, mas a página tem 4 botões de "Download". Qual clicar?', options: [ { text: 'O maior botão verde e brilhante da página.', correct: false, explanation: 'Esses botões grandes e chamativos são quase 100% anúncios falsos!' }, { text: 'Procuro por um link pequeno que não tenha a palavra "Anúncio" perto dele.', correct: true, explanation: 'Visão de raio-x! Os links reais costumam ser os mais simples e discretos.' } ] },
+            { level: 12, flashcard: { icon: '⬇️', title: 'O Preço da Pirataria', content: 'Jogos piratas não são de graça. O preço que você paga é instalar "cavalos de tróia" no seu PC. Eles deixam a máquina lenta, espiam sua câmera e roubam senhas.', example: 'Baixar "Minecraft Grátis 2024" num site russo estranho.', image: getImgUrl('O Barato Sai Caro') }, question: 'Aquele jogo de R$200 está de graça num site que o youtuber menor indicou.', options: [ { text: 'Não baixo. Sei que estão tentando infectar meu aparelho.', correct: true, explanation: 'Decisão madura! A pirataria sempre traz vírus de brinde.' }, { text: 'Desativo o antivírus para conseguir instalar o jogo.', correct: false, explanation: 'Nunca faça isso! Desligar o antivírus é abrir a porta da sua casa para ladrões.' } ] },
+            { level: 13, flashcard: { icon: '©️', title: 'Direitos Autorais (Copyright)', content: 'No Google Imagens, as fotos têm donos. Usar a arte de outra pessoa no seu canal do YouTube sem pedir pode fazer seu vídeo ser apagado e você processado.', example: 'Usar uma música da Anitta inteira de fundo no seu vídeo de vlog.', image: getImgUrl('Arte com Dono') }, question: 'Você precisa de uma música de fundo para o trabalho da escola em vídeo.', options: [ { text: 'Pego a música mais famosa do momento e coloco.', correct: false, explanation: 'A música tem copyright (direitos autorais). O vídeo será bloqueado pelas plataformas.' }, { text: 'Procuro na "Biblioteca de Áudio Gratuita do YouTube".', correct: true, explanation: 'Lá existem milhares de músicas livres de direitos prontas para usar!' } ] },
+            { level: 14, flashcard: { icon: '📶', title: 'O Perigo do Wi-Fi Público', content: 'Redes sem senha (em praças, shoppings, cafés) são como praças abertas. Qualquer hacker na mesma rede consegue "escutar" o que você digita no seu celular.', example: 'Acessar a conta do banco usando o Wi-Fi "Free_Shopping".', image: getImgUrl('Rede Exposta') }, question: 'Você está no shopping, o pacote de dados acabou e você precisa ver sua nota no site da escola.', options: [ { text: 'Conecto no Wi-Fi aberto do shopping e coloco a senha da escola.', correct: false, explanation: 'Perigosíssimo! O hacker na mesa ao lado pode interceptar sua senha escolar.' }, { text: 'Conecto para mandar mensagem, mas não faço nenhum login com senha.', correct: true, explanation: 'Uso inteligente! Wi-Fi público serve apenas para navegação simples, sem senhas.' } ] },
+            { level: 15, flashcard: { icon: '🔄', title: 'Atualizações Salvam', content: 'Quando o celular pede para atualizar, não é só para mudar a cor dos botões. As empresas mandam atualizações para fechar "buracos" de segurança contra novos vírus.', example: 'Aviso: "Atualização de Software necessária".', image: getImgUrl('Mantenha Atualizado') }, question: 'Seu celular avisa que tem uma nova atualização do Android/iOS.', options: [ { text: 'Faço o download e atualizo assim que estiver no Wi-Fi e com bateria.', correct: true, explanation: 'Parabéns. Manter o sistema atualizado é o melhor antivírus.' }, { text: 'Clico em "Lembrar mais tarde" por 5 meses seguidos.', correct: false, explanation: 'Seu aparelho ficará vulnerável a todos os ataques inventados nesses 5 meses.' } ] },
+            { level: 16, flashcard: { icon: '🛡️', title: 'Escudo Duplo (2FA)', content: 'A Verificação em 2 Etapas é uma segunda fechadura. Além da senha, o app manda um código por SMS para o seu celular. Assim, mesmo se o hacker descobrir sua senha, ele não entra.', example: 'Ter o código do WhatsApp ativo.', image: getImgUrl('Fechadura Dupla') }, question: 'O que é a verificação em duas etapas?', options: [ { text: 'É colocar duas senhas diferentes, uma pra entrar no jogo e outra pra sair.', correct: false, explanation: 'Não é isso. Não se coloca senha para sair de aplicativos.' }, { text: 'É exigir a senha normal + um código no celular para logar em aparelhos novos.', correct: true, explanation: 'Muralha de aço! Essa é a função mais segura da internet hoje.' } ] },
+            { level: 17, flashcard: { icon: '⏰', title: 'Equilíbrio de Tela', content: 'A luz azul do celular engana o cérebro dizendo que ainda é dia. Usar telas antes de dormir destrói o hormônio do sono, causando cansaço e falta de foco na aula.', example: 'Ficar no TikTok até as 3 da manhã.', image: getImgUrl('Desconecte-se') }, question: 'Para ter energia no dia seguinte, qual o ideal?', options: [ { text: 'Parar de usar o celular 1 hora antes de dormir e ler um livro ou relaxar.', correct: true, explanation: 'Seu cérebro agradece! A luz abaixa e o hormônio do sono age perfeitamente.' }, { text: 'Assistir vídeos no escuro até o olho fechar sozinho.', correct: false, explanation: 'O seu sono será superficial e você acordará destruído no dia seguinte.' } ] },
+            { level: 18, flashcard: { icon: '👥', title: 'O Avatar de Mentira', content: 'Na internet, ninguém sabe quem está do outro lado. Uma pessoa que diz ter 12 anos no jogo pode ser um adulto de 40. Nunca se encontre com amigos de internet sozinho.', example: 'Um "menino" pedir para te encontrar na praça.', image: getImgUrl('Quem é?') }, question: 'Seu colega de jogo online diz que mora perto e te chama para tomar sorvete na praça.', options: [ { text: 'Vou correndo, afinal jogamos juntos há meses.', correct: false, explanation: 'Nunca faça isso! Você só conhece o avatar da pessoa, não o ser humano real.' }, { text: 'Aviso meus pais imediatamente e não vou sozinho em hipótese alguma.', correct: true, explanation: 'Regra máxima de sobrevivência! Qualquer encontro deve ser sempre acompanhado pelos pais.' } ] },
+            { level: 19, flashcard: { icon: '⚖️', title: 'O Poder da Checagem', content: 'Sites de jornalismo sério passam pelo "Fact-checking" (Checagem de Fatos). Se uma notícia é bombástica, os grandes jornais vão falar sobre. Se só está no WhatsApp, é mentira.', example: 'Buscar no Google se a notícia apareceu na TV.', image: getImgUrl('Cheque os Fatos') }, question: 'Uma corrente avisa que o Governo vai proibir videogames no Brasil.', options: [ { text: 'Repasso para os amigos em pânico.', correct: false, explanation: 'Você acabou de ajudar o criador da Fake News a ganhar dinheiro com visualizações.' }, { text: 'Pesquiso no Google para ver se jornais grandes confirmam isso.', correct: true, explanation: 'O verdadeiro detetive confirma os fatos antes de espalhar a notícia.' } ] },
+            { level: 20, flashcard: { icon: '🤖', title: 'Inteligência Artificial (IA)', content: 'O ChatGPT e as IAs são assistentes, não máquinas de verdade absoluta. Eles "alucinam" (inventam fatos com muita confiança) quando não sabem a resposta.', example: 'A IA inventar o nome de um livro que nunca existiu para um trabalho.', image: getImgUrl('Cuidado com a IA') }, question: 'Você usa uma Inteligência Artificial para te ajudar num trabalho. O que fazer?', options: [ { text: 'Copio a resposta inteira da IA e coloco no trabalho.', correct: false, explanation: 'A IA pode ter inventado fatos! Além disso, se você copia da máquina, quem estuda é a máquina, não você.' }, { text: 'Uso a IA para tirar dúvidas, mas confirmo as informações no Google depois.', correct: true, explanation: 'Uso inteligente! A IA serve para inspirar, e você usa a pesquisa real para confirmar.' } ] },
+            { level: 21, flashcard: { icon: '📚', title: 'Pesquisar vs Copiar', content: 'Pesquisar não é o atalho "Control C + Control V". Pesquisar é garimpar o ouro da informação. Você lê em 3 lugares diferentes, mastiga a ideia no cérebro e escreve o que aprendeu.', example: 'Ler 3 sites sobre fotossíntese e escrever o seu resumo no caderno.', image: getImgUrl('Crie Seu Texto') }, question: 'Para fazer o trabalho de Ciências, qual a atitude do pesquisador real?', options: [ { text: 'Copio o primeiro texto enorme que achei, mudo a fonte no Word e imprimo.', correct: false, explanation: 'Isso é apenas gasto de papel e de tinta. Você não aprendeu absolutamente nada.' }, { text: 'Leio algumas páginas, entendo a ideia, e escrevo o texto com as minhas palavras.', correct: true, explanation: 'Aplausos! Você treinou seu cérebro, melhorou sua escrita e evitou o plágio.' } ] },
+            { level: 22, flashcard: { icon: '🎯', title: 'Mira de Precisão no Google', content: 'Usar símbolos melhora a pesquisa! Se você quer excluir uma palavra, use o "Sinal de Menos".', example: 'Pesquisar "Manga -fruta" mostrará resultados apenas sobre Mangas (camisas ou quadrinhos japoneses).', image: getImgUrl('Sinal de Menos') }, question: 'Você quer pesquisar sobre o animal Onça, mas só aparece marca de carro (Onça Motors). O que você digita?', options: [ { text: '"Animal onça felino da selva brasileira"', correct: false, explanation: 'Você exagerou nas palavras e ainda corre o risco de pegar algum site de carros off-road.' }, { text: 'Onça -carro -motors', correct: true, explanation: 'Mestre Google! Você eliminou a marca e ficou apenas com o animal majestoso.' } ] },
+            { level: 23, flashcard: { icon: '🏷️', title: 'O Poder das Aspas (" ")', content: 'Quando você coloca palavras entre "Aspas", o Google entende que ele TEM QUE buscar aquela frase exata, naquela ordem exata. Excelente para achar citações.', example: 'Pesquisar "Penso, logo existo".', image: getImgUrl('A Frase Exata') }, question: 'Como você acha um poema que você só lembra do trecho: as pedras do meu caminho.', options: [ { text: 'Poemas de pedras caminho Brasil', correct: false, explanation: 'Isso vai trazer resultados de lojas de pedras, caminhos e poemas aleatórios.' }, { text: '"as pedras do meu caminho" poema', correct: true, explanation: 'Bingo! As aspas forçam o Google a não separar a sua frase.' } ] },
+            { level: 24, flashcard: { icon: '👤', title: 'A Regra do Autor', content: 'Informação solta e sem pai nem mãe é perigosa. Procure quem escreveu. O autor é um cientista? Uma universidade? Ou um anônimo no Reddit?', example: 'Blogueiro de moda dando dicas médicas vs Site do Instituto Butantan.', image: getImgUrl('Quem Escreveu?') }, question: 'Você encontrou um texto incrível com a cura mágica da gripe, mas não tem nome do autor.', options: [ { text: 'Desconfio, pois textos sem autor não têm responsabilidade legal se mentirem.', correct: true, explanation: 'Senso crítico ativado! Se é verdade, o cientista vai querer o nome dele ali.' }, { text: 'Uso no meu trabalho escolar, afinal a escrita do texto parece muito séria.', correct: false, explanation: 'Mentiras muito bem escritas continuam sendo mentiras. Falta de autoria é alerta vermelho!' } ] },
+            { level: 25, flashcard: { icon: '🌐', title: 'O Truque da Wikipédia', content: 'A Wikipédia é maravilhosa para iniciar a pesquisa e ter uma visão geral do assunto. Mas a mágica dela está nas notas numéricas azuis [1] [2]. Elas são os links para os documentos oficiais!', example: 'Ir do final da página da Wiki para o site histórico de Roma.', image: getImgUrl('O Trampolim') }, question: 'Como um bom aluno universitário usa a Wikipédia?', options: [ { text: 'Usa a página como a fonte oficial do trabalho e coloca a Wikipédia nas referências.', correct: false, explanation: 'A Wikipédia é livre e muda o tempo todo. Professores não aceitam como fonte principal.' }, { text: 'Lê o resumo, clica nas "Referências" lá no fundo da página e acessa o documento original!', correct: true, explanation: 'Esse é o segredo dos estudiosos! Você usa a Wiki como uma bússola.' } ] },
+            { level: 26, flashcard: { icon: '👀', title: 'Leitura Lateral', content: 'Em vez de ler apenas o site, abra uma Nova Aba e pesquise O QUE as outras pessoas falam SOBRE aquele site. É assim que checamos repórteres.', example: 'Buscar no Google "Site MundoObscuro é confiável?".', image: getImgUrl('Olhe para os Lados') }, question: 'Um site chamado "VerdadesOcultas" publicou que alienígenas ajudaram na Copa do Mundo.', options: [ { text: 'Leio a página "Quem Somos" do site, para ver a história deles.', correct: false, explanation: 'Se o site for falso, a página "Quem Somos" também será uma mentira bem contada!' }, { text: 'Abro outra aba e pesquiso "VerdadesOcultas Fake News".', correct: true, explanation: 'Brilhante! "Leitura lateral" quebra qualquer site de mentiras.' } ] },
+            { level: 27, flashcard: { icon: '📝', title: 'A Arte da Citação', content: 'Você pode e DEVE usar frases geniais de outras pessoas. Mas você precisa colocar entre "Aspas" e dar os créditos na mesma linha.', example: 'Segundo o cientista Carl Sagan, "somos poeira de estrelas".', image: getImgUrl('Citação Honesta') }, question: 'Você quer usar um parágrafo idêntico de um livro no seu trabalho.', options: [ { text: 'Eu jogo no meio do meu texto sem aspas para parecer que eu sou muito inteligente.', correct: false, explanation: 'Isso é plágio na cara dura! O professor sabe a diferença da sua escrita para a do autor.' }, { text: 'Eu coloco o texto entre aspas e menciono o autor antes da frase.', correct: true, explanation: 'Perfeito. Isso se chama "Citação Direta" e dá muito valor ao seu trabalho escolar.' } ] },
+            { level: 28, flashcard: { icon: '🗣️', title: 'Paráfrase também precisa de dono', content: 'Atenção! Mesmo se você ler um livro, fechar o livro, e escrever com as SUAS palavras, a ideia principal ainda é do autor original. Você precisa citar a fonte da ideia!', example: 'Com base nos estudos do IBGE, a população cresceu muito (IBGE, 2023).', image: getImgUrl('Ideia de Quem?') }, question: 'Você leu que o ciclo da água tem 3 etapas principais e escreveu um texto maravilhoso com as SUAS palavras.', options: [ { text: 'Não preciso citar nada no final, pois o texto fui eu quem escrevi do zero.', correct: false, explanation: 'Erro comum! Isso é "Plágio de Ideia". A pesquisa não foi sua.' }, { text: 'Escrevo meu texto, mas no final adiciono: "Conforme o site InfoEscola".', correct: true, explanation: 'Honestidade acadêmica. Você escreveu o texto, mas deu crédito à origem da ideia.' } ] },
+            { level: 29, flashcard: { icon: '📑', title: 'Referências Bibliográficas', content: 'É a última folha do seu trabalho. É a lista das "fontes de energia" da sua pesquisa. Sem elas, seu trabalho não tem prova de que existiu esforço.', example: 'Colocar os links dos sites e os nomes dos livros em lista.', image: getImgUrl('Os Créditos do Filme') }, question: 'O que o professor pensa quando o aluno entrega um trabalho maravilhoso, mas sem referências no final?', options: [ { text: '"Ele deve ter tirado tudo da própria cabeça. Que gênio!".', correct: false, explanation: 'O professor pensa: "Ele copiou da internet, colou, e apagou o histórico". Zero nota!' }, { text: '"Ele inventou as coisas ou então cometeu plágio e tentou esconder".', correct: true, explanation: 'Trabalho sem referência é trabalho não feito. Mostre de onde vieram seus estudos!' } ] },
+            { level: 30, flashcard: { icon: '🧩', title: 'A Fórmula da Referência', content: 'Não basta só jogar o link azul e cru no final do trabalho. Uma referência de site completa tem uma "fórmula": AUTOR. Título. Link. Acesso em: (Data).', example: 'G1. Descoberta de dinossauro. Disponível em: www... Acesso em: 15 mai. 2024.', image: getImgUrl('Montando a Peça') }, question: 'Para tirar o 10 final na pesquisa, como deve ficar a referência de um site lá no final do trabalho?', options: [ { text: 'Apenas a palavra "Google.com" ou colar só o link gigante azul.', correct: false, explanation: 'O Google é o correio, não o remetente! E links soltos quebram e somem com o tempo.' }, { text: 'Nome do site/autor, o título da notícia, o link e o dia que eu acessei.', correct: true, explanation: 'Formado Mestre Detetive da Internet! Você agora sabe pesquisar com excelência.' } ] }
+        ];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const escolaParam = params.get('escola');
+            if(escolaParam) {
+                const schoolInput = document.getElementById('student-school');
+                schoolInput.value = escolaParam;
+                schoolInput.readOnly = true;
+                schoolInput.classList.add('bg-blue-50', 'text-slate-600', 'cursor-not-allowed', 'border-blue-200');
+            }
+        });
+
+        window.showScreen = function(screenId) {
+            document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active-screen'); s.style.display = 'none'; });
+            const screen = document.getElementById(screenId);
+            if(screen) {
+                screen.style.display = 'flex';
+                screen.classList.add('active-screen');
+                window.scrollTo(0,0);
+            }
         };
 
-        window.closeMistakesModal = function() {
-            document.getElementById('mistakes-modal').style.display = 'none';
+        window.goToAvatarSelection = function() {
+            const name = document.getElementById('student-name').value.trim();
+            const school = document.getElementById('student-school').value.trim();
+            const turma = document.getElementById('student-class').value.trim();
+            if (!name || !school || !turma) { alert('Detetive, preencha todos os campos!'); return; }
+            state.student.name = name; state.student.school = school; state.student.class = turma;
+            renderAvatars();
+            window.showScreen('avatar-screen');
         };
+
+        function renderAvatars() {
+            const container = document.getElementById('avatar-container');
+            container.innerHTML = '';
+            avatars.forEach(avatar => {
+                const btn = document.createElement('button');
+                btn.className = 'text-5xl p-4 bg-white rounded-2xl border-4 border-slate-100 avatar-option hover:bg-blue-50 transition shadow-sm';
+                btn.innerHTML = avatar;
+                btn.onclick = () => {
+                    document.querySelectorAll('.avatar-option').forEach(b => b.classList.remove('selected'));
+                    btn.classList.add('selected');
+                    state.student.avatar = avatar;
+                };
+                container.appendChild(btn);
+            });
+        }
+
+        window.registerStudent = async function() {
+            if (!state.student.avatar) { alert('Escolha um avatar para continuar!'); return; }
+            state.student.level = 1;
+            state.student.acertos = 0;
+            state.student.erros = 0;
+            state.student.mistakes = [];
+            
+            renderMap();
+            updateHud();
+            window.showScreen('map-screen');
+            await saveProgressToDb();
+        };
+
+        function updateHud() {
+            document.getElementById('hud-name').textContent = state.student.name;
+            document.getElementById('hud-avatar').textContent = state.student.avatar;
+            document.getElementById('hud-level').textContent = 'Nível ' + Math.min(state.student.level, state.totalLevels);
+        }
+
+        function renderMap() {
+            const container = document.getElementById('levels-container');
+            container.innerHTML = '<div class="trail-line"></div>';
+
+            for (let i = state.totalLevels; i >= 1; i--) {
+                const isCompleted = i < state.student.level;
+                const isActive = i === state.student.level;
+                
+                let btnClass = 'level-node w-16 h-16 rounded-full flex items-center justify-center font-black text-2xl border-4 ';
+                let iconHTML = i;
+                
+                if (isCompleted) { btnClass += 'level-completed shadow-md cursor-pointer hover:scale-110'; iconHTML = `<i class="fas fa-check text-3xl"></i>`; } 
+                else if (isActive) { btnClass += 'level-active shadow-lg cursor-pointer hover:scale-110 pulse-active'; } 
+                else { btnClass += 'level-locked'; iconHTML = `<i class="fas fa-lock text-slate-400"></i>`; }
+
+                let margins = i % 2 === 0 ? 'mr-32' : 'ml-32'; 
+                const wrapper = document.createElement('div');
+                wrapper.className = `flex flex-col items-center ${margins} relative z-10 group`;
+                
+                const btn = document.createElement('button');
+                btn.className = btnClass;
+                btn.innerHTML = iconHTML;
+                if (isCompleted || isActive) { btn.onclick = () => window.startLevel(i); }
+
+                const label = document.createElement('span');
+                label.className = `mt-3 text-sm font-black ${isActive ? 'text-secondary bg-slate-900' : 'text-slate-500 bg-white'} px-3 py-1 rounded-lg shadow-sm border border-slate-200 whitespace-nowrap`;
+                label.textContent = `Missão ${i}`;
+
+                wrapper.appendChild(btn); wrapper.appendChild(label); container.appendChild(wrapper);
+            }
+        }
+
+        window.startLevel = function(level) {
+            if (level > state.student.level) return;
+            state.currentLevel = level;
+            const data = levelsData[level - 1];
+            
+            document.getElementById('flashcard-icon').textContent = data.flashcard.icon;
+            document.getElementById('flashcard-title').textContent = data.flashcard.title;
+            document.getElementById('flashcard-content').textContent = data.flashcard.content;
+            document.getElementById('flashcard-example').textContent = data.flashcard.example;
+            document.getElementById('flashcard-image').src = data.flashcard.image;
+            window.showScreen('flashcard-screen');
+        };
+
+        window.showQuiz = function() {
+            const data = levelsData[state.currentLevel - 1];
+            document.getElementById('quiz-level-indicator').textContent = 'MISSÃO ' + data.level;
+            document.getElementById('quiz-question').textContent = data.question;
+            
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+            const shuffledOptions = [...data.options].sort(() => Math.random() - 0.5);
+
+            shuffledOptions.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = 'w-full text-left p-6 bg-white border-4 border-slate-100 rounded-2xl font-black text-slate-700 text-lg hover:border-primary hover:bg-blue-50 transition shadow-sm';
+                btn.textContent = opt.text;
+                // Pass the text clicked so we can record it if wrong
+                btn.onclick = () => window.handleAnswer(opt.correct, opt.explanation, opt.text);
+                optionsContainer.appendChild(btn);
+            });
+            window.showScreen('quiz-screen');
+        };
+
+        window.handleAnswer = async function(isCorrect, explanation, clickedText) {
+            const title = document.getElementById('feedback-title');
+            const icon = document.getElementById('feedback-icon');
+            const message = document.getElementById('feedback-message');
+            const btn = document.getElementById('feedback-btn');
+            
+            const currentData = levelsData[state.currentLevel - 1];
+            message.textContent = explanation;
+
+            if (isCorrect) {
+                // Tracking success
+                if(state.currentLevel === state.student.level) state.student.acertos++;
+
+                title.textContent = 'Mandou Bem!';
+                title.className = 'text-4xl font-black mb-4 text-green-500';
+                icon.innerHTML = '🎉';
+                btn.textContent = 'Avançar no Mapa';
+                btn.className = 'w-full font-black text-xl py-5 rounded-2xl btn-clean text-white bg-green-500 hover:bg-green-600';
+                
+                btn.onclick = async () => {
+                    if (state.currentLevel === state.student.level) {
+                        if (state.student.level <= state.totalLevels) {
+                            state.student.level++;
+                            await saveProgressToDb();
+                        }
+                    }
+                    renderMap();
+                    updateHud();
+                    window.showScreen('map-screen');
+                    
+                    if(state.student.level > state.totalLevels && state.currentLevel === state.totalLevels) {
+                        setTimeout(() => alert(`PARABÉNS ${state.student.name}! Você é um Mestre da Pesquisa!`), 800);
+                    }
+                };
+            } else {
+                // Tracking error
+                if(state.currentLevel === state.student.level) {
+                    state.student.erros++;
+                    // Save detailed error info
+                    state.student.mistakes.push({
+                        level: currentData.level,
+                        question: currentData.question,
+                        wrongAnswer: clickedText,
+                        explanation: explanation
+                    });
+                    await saveProgressToDb(); // Save immediately so teacher sees real-time
+                }
+
+                title.textContent = 'Ops! Quase lá...';
+                title.className = 'text-4xl font-black mb-4 text-secondary';
+                icon.innerHTML = '🤔';
+                btn.textContent = 'Tentar Novamente';
+                btn.className = 'w-full font-black text-xl py-5 rounded-2xl btn-clean text-slate-900 bg-secondary hover:bg-yellow-500';
+                btn.onclick = () => window.showScreen('quiz-screen');
+            }
+
+            window.showScreen('feedback-screen');
+        };
+
+        /* ---------------- TEACHER FUNCTIONS ---------------- */
+        window.switchTeacherTab = function(tab) {
+            document.getElementById('form-login').classList.add('hidden');
+            document.getElementById('form-register').classList.add('hidden');
+            document.getElementById('form-forgot').classList.add('hidden');
+            document.getElementById('tabs-container').classList.add('hidden');
+
+            if (tab === 'login' || tab === 'register') {
+                document.getElementById('tabs-container').classList.remove('hidden');
+                document.getElementById('form-' + tab).classList.remove('hidden');
+                const tabLogin = document.getElementById('tab-login');
+                const tabReg = document.getElementById('tab-register');
+                if (tab === 'login') {
+                    tabLogin.className = 'flex-1 py-3 text-sm font-bold rounded-lg bg-primary text-white transition';
+                    tabReg.className = 'flex-1 py-3 text-sm font-bold rounded-lg text-slate-400 hover:text-white transition';
+                } else {
+                    tabReg.className = 'flex-1 py-3 text-sm font-bold rounded-lg bg-primary text-white transition';
+                    tabLogin.className = 'flex-1 py-3 text-sm font-bold rounded-lg text-slate-400 hover:text-white transition';
+                }
+            } else if (tab === 'forgot') {
+                document.getElementById('form-forgot').classList.remove('hidden');
+            }
+        }
+
+        window.teacherRegister = async function() {
+            const name = document.getElementById('t-reg-name').value.trim();
+            const school = document.getElementById('t-reg-school').value.trim();
+            const email = document.getElementById('t-reg-email').value.trim().toLowerCase();
+            const pwd = document.getElementById('t-reg-pwd').value.trim();
+
+            if (!name || !school || !email || !pwd) { alert("Preencha todos os campos!"); return; }
+            
+            try {
+                const response = await fetch(`${DB_URL}/artifacts/${APP_ID}/teachers.json`, {
+                    method: 'POST', body: JSON.stringify({ name, school, email, pwd })
+                });
+                if(!response.ok) throw new Error("Erro de permissão no banco");
+                alert("Conta criada com sucesso! Faça login.");
+                window.switchTeacherTab('login');
+                document.getElementById('t-login-email').value = email;
+            } catch(e) { alert("ERRO! O Banco de Dados bloqueou o acesso. Certifique-se de que as Regras no Firebase estão como true."); }
+        };
+
+        window.teacherLogin = async function() {
+            const email = document.getElementById('t-login-email').value.trim().toLowerCase();
+            const pwd = document.getElementById('t-login-pwd').value.trim();
+            if (!email || !pwd) { alert("Preencha email e senha!"); return; }
+
+            try {
+                const res = await fetch(`${DB_URL}/artifacts/${APP_ID}/teachers.json`);
+                const data = await res.json();
+                
+                if(!data) { alert("Nenhum professor cadastrado ainda."); return; }
+                
+                const teachers = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                const found = teachers.find(t => t.email === email && t.pwd === pwd);
+                
+                if (found) {
+                    state.teacher = found;
+                    document.getElementById('dashboard-teacher-info').textContent = `Prof. ${found.name} | ${found.school}`;
+                    
+                    let currentUrl = window.location.href.split('?')[0];
+                    if (currentUrl.includes('about:')) currentUrl = "https://seusite.com/jogo";
+                    const schoolParam = encodeURIComponent(found.school);
+                    document.getElementById('game-share-link').value = `${currentUrl}?escola=${schoolParam}`;
+
+                    window.showScreen('teacher-dashboard');
+                    window.refreshTeacherData();
+                } else { alert("Email ou senha incorretos!"); }
+            } catch(e) { alert("Erro de conexão com o banco."); }
+        };
+
+        window.teacherResetPwd = async function() {
+            const email = document.getElementById('t-forgot-email').value.trim().toLowerCase();
+            const school = document.getElementById('t-forgot-school').value.trim();
+            const newpwd = document.getElementById('t-forgot-newpwd').value.trim();
+
+            if (!email || !school || !newpwd) { alert("Preencha todos os campos."); return; }
+
+            try {
+                const res = await fetch(`${DB_URL}/artifacts/${APP_ID}/teachers.json`);
+                const data = await res.json();
+                if(!data) { alert("Cadastro não encontrado."); return; }
+
+                const teachers = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                const found = teachers.find(t => t.email === email && t.school.toLowerCase() === school.toLowerCase());
+
+                if (found) {
+                    found.pwd = newpwd;
+                    await fetch(`${DB_URL}/artifacts/${APP_ID}/teachers/${found.id}.json`, {
+                        method: 'PATCH', body: JSON.stringify({ pwd: newpwd })
+                    });
+                    alert("Senha alterada com sucesso! Você já pode fazer login.");
+                    window.switchTeacherTab('login');
+                } else { alert("E-mail e Escola não combinam ou não estão cadastrados."); }
+            } catch(e) { alert("Erro ao acessar banco de dados."); }
+        };
+
+        window.teacherLogout = function() {
+            state.teacher = null;
+            document.getElementById('t-login-pwd').value = '';
+            window.showScreen('home-screen');
+        }
 
         window.copyGameLink = function() {
-<!-- ... existing code ... -->
-```
+            const url = document.getElementById('game-share-link').value;
+            const textArea = document.createElement("textarea");
+            textArea.value = url; textArea.style.position = "fixed"; textArea.style.left = "-999999px";
+            document.body.appendChild(textArea); textArea.focus(); textArea.select();
+            try {
+                document.execCommand('copy');
+                const btn = document.getElementById('btn-copy-link');
+                const original = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-check"></i>';
+                btn.classList.add('bg-green-500'); btn.classList.remove('bg-primary');
+                setTimeout(() => { btn.innerHTML = original; btn.classList.remove('bg-green-500'); btn.classList.add('bg-primary'); }, 2000);
+            } catch (err) {} finally { textArea.remove(); }
+        };
 
-**Substitua o trecho acima por este:**
+        window.simulateStudentLink = function() {
+            if (!state.teacher) return;
+            window.showScreen('student-login-screen');
+            const schoolInput = document.getElementById('student-school');
+            schoolInput.value = state.teacher.school;
+            schoolInput.readOnly = true;
+            schoolInput.classList.add('bg-blue-50', 'text-slate-600', 'cursor-not-allowed', 'border-blue-200');
+            state.teacher = null;
+        };
 
-```html:Detetives da Internet:index.html
-<!-- ... existing code ... -->
+        window.refreshTeacherData = async function() {
+            if (!state.teacher) return;
+            const tbody = document.getElementById('students-table-body');
+            tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-primary font-bold">Buscando...</td></tr>';
+            
+            try {
+                const res = await fetch(`${DB_URL}/artifacts/${APP_ID}/students.json`);
+                const data = await res.json();
+                
+                let allStudents = [];
+                if(data) {
+                    allStudents = Object.keys(data).map(key => ({ id: key, ...data[key] }));
+                }
+                
+                // Cache data globally for the Modal to use
+                window.allStudentsCache = allStudents;
+
+                const myStudents = allStudents.filter(s => s.school.toLowerCase() === state.teacher.school.toLowerCase());
+                myStudents.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+                
+                tbody.innerHTML = '';
+                if (myStudents.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-slate-500 font-bold">Nenhum aluno jogando ainda.</td></tr>';
+                    return;
+                }
+
+                myStudents.forEach(s => {
+                    const tr = document.createElement('tr');
+                    tr.className = 'border-b border-slate-100 hover:bg-slate-50 transition';
+                    const nivelVisual = Math.min(s.level, state.totalLevels);
+                    const isFinished = s.level > state.totalLevels;
+                    const progressWidth = (nivelVisual / state.totalLevels) * 100;
+                    
+                    const acertos = s.acertos || 0;
+                    const erros = s.erros || 0;
+                    const totalRespostas = acertos + erros;
+                    let perfColor = "text-slate-500";
+                    let perfText = "Iniciando";
+                    
+                    if (totalRespostas > 0) {
+                        const pct = Math.round((acertos / totalRespostas) * 100);
+                        if (pct >= 80) perfColor = "text-green-600";
+                        else if (pct >= 50) perfColor = "text-yellow-600";
+                        else perfColor = "text-red-600";
+                        perfText = `${pct}% (${acertos}✅ / ${erros}❌)`;
+                    }
+                    
+                    tr.innerHTML = `
+                        <td class="p-6 font-black text-slate-800 flex items-center gap-4"><span class="text-4xl bg-white p-2 rounded-xl border-2 border-slate-100 shadow-sm">${s.avatar}</span> <span>${s.name}</span></td>
+                        <td class="p-6 text-slate-600 font-bold">${s.class}</td>
+                        <td class="p-6 font-black ${perfColor}">${perfText}</td>
+                        <td class="p-6">
+                            <div class="flex flex-col gap-2">
+                                <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
+                                    <div class="${isFinished ? 'bg-green-500' : 'bg-secondary'} h-3 rounded-full transition-all" style="width: ${progressWidth}%"></div>
+                                </div>
+                                <span class="text-xs font-black ${isFinished ? 'text-green-600' : 'text-slate-600'}">${isFinished ? `FORMADO!` : `${nivelVisual} de ${state.totalLevels}`}</span>
+                            </div>
+                        </td>
+                        <td class="p-6 text-center">
+                            <button onclick="window.showMistakesModal('${s.id}')" class="bg-slate-100 text-slate-600 font-bold px-4 py-2 rounded-lg border border-slate-200 hover:bg-primary hover:text-white transition">Relatório</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            } catch(e) { tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-red-500 font-bold">Erro ao puxar dados. Verifique as Regras do Firebase.</td></tr>'; }
+        };
+
+        window.showMistakesModal = function(studentId) {
+            const student = window.allStudentsCache.find(s => s.id === studentId);
+            if (!student) return;
+
+            document.getElementById('modal-student-name').textContent = `Aluno(a): ${student.name} | Turma: ${student.class}`;
+            
+            const listContainer = document.getElementById('mistakes-list');
+            listContainer.innerHTML = '';
+
+            const mistakes = student.mistakes || [];
+
+            if (mistakes.length === 0) {
+                listContainer.innerHTML = `
+                    <div class="text-center py-10">
+                        <i class="fas fa-star text-5xl text-yellow-400 mb-4 drop-shadow-sm"></i>
+                        <h4 class="text-xl font-black text-slate-700">Perfeito!</h4>
+                        <p class="text-slate-500 font-medium">Este aluno não registrou nenhum erro.</p>
+                    </div>
+                `;
+            } else {
+                mistakes.forEach(err => {
+                    const block = document.createElement('div');
+                    block.className = 'bg-white p-5 rounded-2xl border border-red-100 shadow-sm mb-4';
+                    block.innerHTML = `
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="bg-red-100 text-red-600 font-black text-xs px-2 py-1 rounded">MISSÃO ${err.level}</span>
+                        </div>
+                        <h4 class="font-bold text-slate-800 mb-3 leading-tight">${err.question}</h4>
+                        <div class="bg-red-50 border-l-4 border-red-400 p-3 mb-3 rounded-r-lg">
+                            <span class="text-xs font-bold text-red-400 uppercase">O que o aluno marcou:</span>
+                            <p class="text-red-700 font-medium text-sm mt-1">${err.wrongAnswer}</p>
+                        </div>
+                        <div class="bg-green-50 border-l-4 border-green-400 p-3 rounded-r-lg">
+                            <span class="text-xs font-bold text-green-500 uppercase">A explicação correta:</span>
+                            <p class="text-green-700 font-medium text-sm mt-1">${err.explanation}</p>
+                        </div>
+                    `;
+                    listContainer.appendChild(block);
+                });
+            }
+
             const modal = document.getElementById('mistakes-modal');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
@@ -25,8 +763,27 @@
             modal.classList.remove('flex');
         };
 
-        window.copyGameLink = function() {
-<!-- ... existing code ... -->
-```
-
-Faça o teste de **criar um aluno novo e errar uma pergunta de propósito**. Tenho certeza de que o relatório vai aparecer lindo e detalhado no seu painel! Me conte se conseguiu ver o pop-up com o erro que o aluno marcou!
+        async function saveProgressToDb() {
+            const data = {
+                name: state.student.name, school: state.student.school, class: state.student.class,
+                avatar: state.student.avatar, level: state.student.level, 
+                acertos: state.student.acertos, erros: state.student.erros, mistakes: state.student.mistakes,
+                timestamp: new Date().toISOString()
+            };
+            try {
+                if (!state.student.docId) {
+                    const response = await fetch(`${DB_URL}/artifacts/${APP_ID}/students.json`, {
+                        method: 'POST', body: JSON.stringify(data)
+                    });
+                    const result = await response.json();
+                    state.student.docId = result.name; 
+                } else {
+                    await fetch(`${DB_URL}/artifacts/${APP_ID}/students/${state.student.docId}.json`, {
+                        method: 'PATCH', body: JSON.stringify(data)
+                    });
+                }
+            } catch (e) { console.error("Falha ao salvar no Firebase.", e); }
+        }
+    </script>
+</body>
+</html>
