@@ -290,6 +290,7 @@
                 <input type="email" id="t-login-email" placeholder="Seu E-mail" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
                 <input type="password" id="t-login-pwd" placeholder="Senha" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
                 <button onclick="window.teacherLogin()" class="w-full bg-primary text-white font-black text-lg py-4 rounded-xl hover:bg-blue-600 transition mt-4 shadow-lg shadow-blue-500/20">Entrar no Painel</button>
+                <button onclick="window.showRecoverPassword()" class="w-full text-slate-400 text-sm font-bold hover:text-white transition mt-4 pb-2">Esqueci minha senha</button>
             </div>
 
             <div id="form-register" class="space-y-4 hidden">
@@ -298,6 +299,18 @@
                 <input type="email" id="t-reg-email" placeholder="E-mail" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
                 <input type="password" id="t-reg-pwd" placeholder="Crie uma Senha" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
                 <button onclick="window.teacherRegister()" class="w-full bg-secondary text-slate-900 font-black text-lg py-4 rounded-xl hover:bg-yellow-500 transition mt-4 shadow-lg shadow-yellow-500/20">Cadastrar Escola</button>
+            </div>
+
+            <div id="form-recover" class="space-y-4 hidden">
+                <div class="text-center mb-4">
+                    <h3 class="text-xl font-black text-white">Recuperar Senha</h3>
+                    <p class="text-xs text-slate-400 mt-1">Confirme seus dados para criar uma nova senha</p>
+                </div>
+                <input type="email" id="t-rec-email" placeholder="Seu E-mail" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <input type="text" id="t-rec-school" placeholder="Nome exato da Escola" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <input type="password" id="t-rec-pwd" placeholder="Nova Senha" class="w-full p-4 bg-slate-900 border-2 border-slate-700 rounded-xl focus:border-primary outline-none text-white font-medium">
+                <button onclick="window.teacherRecoverPassword()" class="w-full bg-green-500 text-white font-black text-lg py-4 rounded-xl hover:bg-green-600 transition mt-4 shadow-lg shadow-green-500/20">Salvar Nova Senha</button>
+                <button onclick="window.switchTeacherTab('login')" class="w-full text-slate-400 text-sm font-bold hover:text-white transition mt-4">Voltar ao Login</button>
             </div>
 
             <div class="mt-8 text-center">
@@ -602,17 +615,67 @@
         window.switchTeacherTab = function(tab) {
             const loginForm = document.getElementById('form-login');
             const regForm = document.getElementById('form-register');
+            const recForm = document.getElementById('form-recover');
             const tabLogin = document.getElementById('tab-login');
             const tabReg = document.getElementById('tab-register');
 
+            loginForm.classList.add('hidden'); 
+            regForm.classList.add('hidden');
+            if(recForm) recForm.classList.add('hidden');
+
             if (tab === 'login') {
-                loginForm.classList.remove('hidden'); regForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
                 tabLogin.className = 'flex-1 py-3 text-sm font-bold rounded-lg bg-primary text-white transition';
                 tabReg.className = 'flex-1 py-3 text-sm font-bold rounded-lg text-slate-400 hover:text-white transition';
-            } else {
-                loginForm.classList.add('hidden'); regForm.classList.remove('hidden');
+            } else if (tab === 'register') {
+                regForm.classList.remove('hidden');
                 tabReg.className = 'flex-1 py-3 text-sm font-bold rounded-lg bg-primary text-white transition';
                 tabLogin.className = 'flex-1 py-3 text-sm font-bold rounded-lg text-slate-400 hover:text-white transition';
+            } else if (tab === 'recover') {
+                recForm.classList.remove('hidden');
+                tabLogin.className = 'flex-1 py-3 text-sm font-bold rounded-lg text-slate-400 hover:text-white transition';
+                tabReg.className = 'flex-1 py-3 text-sm font-bold rounded-lg text-slate-400 hover:text-white transition';
+            }
+        }
+
+        window.showRecoverPassword = function() {
+            window.switchTeacherTab('recover');
+        }
+
+        window.teacherRecoverPassword = async function() {
+            const email = document.getElementById('t-rec-email').value.trim().toLowerCase();
+            const school = document.getElementById('t-rec-school').value.trim();
+            const newPwd = document.getElementById('t-rec-pwd').value.trim();
+
+            if(!email || !school || !newPwd) { alert("Preencha todos os campos!"); return; }
+
+            let teachers = [];
+            try {
+                if (typeof window.firebaseFetchTeachers === 'function' && !window.useMockDb) {
+                    teachers = await window.firebaseFetchTeachers();
+                } else { teachers = window.mockTeachers; }
+            } catch(e) { window.useMockDb = true; teachers = window.mockTeachers; }
+
+            const found = teachers.find(t => t.email === email && t.school.toLowerCase() === school.toLowerCase());
+            
+            if (found) {
+                try {
+                    if (typeof window.firebaseUpdateTeacher === 'function' && !window.useMockDb) {
+                        await window.firebaseUpdateTeacher(found.id, { pwd: newPwd });
+                    } else {
+                        found.pwd = newPwd; 
+                    }
+                    alert("Senha alterada com sucesso! Faça o login.");
+                    document.getElementById('t-login-email').value = email;
+                    document.getElementById('t-rec-email').value = '';
+                    document.getElementById('t-rec-school').value = '';
+                    document.getElementById('t-rec-pwd').value = '';
+                    window.switchTeacherTab('login');
+                } catch(e) {
+                    alert("Erro ao atualizar senha no banco de dados.");
+                }
+            } else {
+                alert("Cadastro não encontrado com este e-mail e escola!");
             }
         }
 
@@ -851,6 +914,13 @@
                 });
             }
             return data;
+        };
+
+        window.firebaseUpdateTeacher = async function(id, data) {
+            if (window.useMockDb) throw new Error("Mock ativo");
+            const hasAuth = await initAuth(); if (!hasAuth) throw new Error("Sem auth");
+            
+            await update(ref(db, `artifacts/${window.appId}/teachers/${id}`), data);
         };
     </script>
 </body>
